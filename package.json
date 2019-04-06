@@ -1,0 +1,10 @@
+{
+  "name": "@ianwalter/bff",
+  "description": "You should be best friends with your test runner/framework",
+  "dependencies": {
+    "common-tags": "^1.8.0",
+    "expect": "^24.7.1",
+    "signale": "^1.4.0",
+    "workerpool": "^3.1.2"
+  }
+}
