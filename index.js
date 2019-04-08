@@ -1,21 +1,36 @@
-const { join } = require('path')
+const path = require('path')
 const workerpool = require('workerpool')
-const test = require('./tests/fail.test.js')
+const globby = require('globby')
+const { print } = require('@ianwalter/print')
 
-let pool = workerpool.pool(join(__dirname, 'worker.js'))
+let pool = workerpool.pool(path.join(__dirname, 'worker.js'))
+
+function toTests (acc, file) {
+  file = path.resolve(file)
+  return acc.concat(Object.keys(require(file)).map(name => ({ name, file })))
+}
 
 module.exports = function run () {
   return new Promise(async resolve => {
-    const results = []
-    Object.keys(test).forEach(async name => {
+    const results = { pass: 0, fail: 0 }
+    const files = await globby(['tests.js', 'tests/**/*.tests.js'])
+
+    // Reduce all of the test files to individual tests and add them to the
+    // worker pool to be executed.
+    files.reduce(toTests, []).forEach(async ({ file, name }) => {
       try {
-        await pool.exec('test', [join(__dirname, 'tests/fail.test.js'), name])
-        results.push({ status: 'success', name })
-      } catch (error) {
-        results.push({ status: 'error', error })
+        await pool.exec('test', [file, name])
+        results.pass++
+        print.success(name)
+      } catch (err) {
+        results.fail++
+        print.error(err)
       }
     })
 
+    // Continually check the status of the worker pool to see when it's done
+    // running tests so that the pool can be terminated and the run can return
+    // the results.
     const interval = setInterval(() => {
       const stats = pool.stats()
       if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
