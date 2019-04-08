@@ -17,7 +17,7 @@ async function run () {
   const { pass, fail } = await bff()
 
   // Log the results of running the tests.
-  console.log('\n')
+  console.log('')
   print.info(`${pass} tests passed. ${fail} tests failed.`)
 
   // Exit with the failed test count as the exit code so that the process exits

@@ -1,4 +1,4 @@
-const { oneLine: test } = require('common-tags')
+const test = require('../test')
 
 exports[test`strict equality`] = ({ expect }) => {
   const thing = 1

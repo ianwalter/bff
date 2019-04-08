@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff",
   "description": "A test runner/framework that is your development best friend",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,8 @@
   "files": [
     "cli.js",
     "index.js",
-    "worker.js"
+    "worker.js",
+    "test.js"
   ],
   "repository": {
     "type": "git",
