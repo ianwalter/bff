@@ -1,10 +1,11 @@
 {
   "name": "@ianwalter/bff",
   "description": "You should be best friends with your test runner/framework",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
+    "@ianwalter/print": "^2.0.2",
     "common-tags": "^1.8.0",
     "expect": "^24.7.1",
-    "signale": "^1.4.0",
     "workerpool": "^3.1.2"
   }
 }

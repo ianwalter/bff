@@ -11,12 +11,3 @@ exports[`
   expect(ok).toBeTruthy()
 }
 
-exports[`parsing the ints... slowly`] = ({ expect }) => {
-  const ok = '1'
-  return new Promise(resolve => {
-    setTimeout(() => {
-      expect(parseInt(ok, 10)).toBe(1)
-      resolve()
-    }, 1000)
-  })
-}

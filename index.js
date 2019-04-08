@@ -1,23 +1,28 @@
 const { join } = require('path')
 const workerpool = require('workerpool')
-const test = require('./test')
-const { oneLine } = require('common-tags')
-const signale = require('signale')
+const test = require('./tests/fail.test.js')
 
-const pool = workerpool.pool(join(__dirname, 'worker.js'))
+let pool = workerpool.pool(join(__dirname, 'worker.js'))
 
-async function run () {
-  Object.keys(test).forEach(async name => {
-    try {
-      console.log(pool.stats())
-      await pool.exec('test', [join(__dirname, 'test.js'), name])
-      signale.success(oneLine(name))
-      console.log(pool.stats())
-    } catch (err) {
-      console.error('error', err)
-    }
+module.exports = function run () {
+  return new Promise(async resolve => {
+    const results = []
+    Object.keys(test).forEach(async name => {
+      try {
+        await pool.exec('test', [join(__dirname, 'tests/fail.test.js'), name])
+        results.push({ status: 'success', name })
+      } catch (error) {
+        results.push({ status: 'error', error })
+      }
+    })
+
+    const interval = setInterval(() => {
+      const stats = pool.stats()
+      if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
+        clearInterval(interval)
+        pool.terminate()
+        resolve(results)
+      }
+    }, 1)
   })
-  pool.terminate()
 }
-
-run()
