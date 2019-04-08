@@ -1,7 +1,9 @@
 {
   "name": "@ianwalter/bff",
-  "description": "You should be best friends with your test runner/framework",
+  "description": "A test runner/framework that is your development best friend",
+  "version": "1.0.0",
   "license": "SEE LICENSE IN LICENSE",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint ."
   },
@@ -13,6 +15,22 @@
     "index.js",
     "worker.js"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianwalter/bff.git"
+  },
+  "keywords": [
+    "testing",
+    "test",
+    "runner",
+    "framework",
+    "tdd"
+  ],
+  "author": "Ian Walter <public@iankwalter.com> (https://iankwalter.com)",
+  "bugs": {
+    "url": "https://github.com/ianwalter/bff/issues"
+  },
+  "homepage": "https://github.com/ianwalter/bff#readme",
   "dependencies": {
     "@ianwalter/print": "^2.0.2",
     "common-tags": "^1.8.0",
