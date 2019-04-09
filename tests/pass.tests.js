@@ -1,11 +1,22 @@
 const test = require('../test')
 
-exports[test`strict equality`] = ({ expect }) => {
+test(`
+  A
+  test
+  with
+  a
+  multiline
+  name
+`)(ctx => {
+  ctx.expect('ok').toBeTruthy()
+})
+
+test('strict equality', ({ expect }) => {
   const thing = 1
   expect(thing).toBe(1)
-}
+})
 
-exports[test`parsing an int after a 1 second timeout`] = ({ expect }) => {
+test('parseInt after a 1 second timeout', ({ expect }) => {
   const one = '1'
   return new Promise(resolve => {
     setTimeout(() => {
@@ -13,4 +24,4 @@ exports[test`parsing an int after a 1 second timeout`] = ({ expect }) => {
       resolve()
     }, 1000)
   })
-}
+})

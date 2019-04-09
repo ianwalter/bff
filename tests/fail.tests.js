@@ -1,8 +1,8 @@
 const test = require('../test')
 
-exports[test`that a test with no assertions fails`] = () => true
+test('no assertions', () => true)
 
-exports[test`parseInt with the wrong base fails`] = ({ expect }) => {
+test('parseInt with the wrong base', ({ expect }) => {
   const two = '2'
   expect(parseInt(two, 2)).toBe(2)
-}
+})
