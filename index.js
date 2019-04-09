@@ -2,6 +2,7 @@ const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
 const { print } = require('@ianwalter/print')
+const { oneLine } = require('common-tags')
 
 // For registering individual tests exported from test files.
 const registrationPool = workerpool.pool(path.join(__dirname, 'worker.js'))
@@ -29,7 +30,7 @@ function terminatePool (pool, callback) {
  * Collects tests names from tests files and assigns them to a worker in a
  * worker pool to be executed.
  */
-module.exports = function run () {
+function run () {
   return new Promise(async resolve => {
     const results = { pass: 0, fail: 0 }
     const files = await globby(['tests.js', 'tests/**/*.tests.js'])
@@ -67,3 +68,17 @@ module.exports = function run () {
     })
   })
 }
+
+function test (name, fn) {
+  // Prevent caching of this module so module.parent is always accurate. Thanks
+  // sindresorhus/meow.
+  delete require.cache[__filename]
+
+  if (fn) {
+    module.parent.exports[oneLine(name)] = fn
+  } else {
+    return fn => (module.parent.exports[oneLine(name)] = fn)
+  }
+}
+
+module.exports = { run, test }

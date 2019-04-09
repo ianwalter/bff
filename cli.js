@@ -2,7 +2,7 @@
 
 // const meow = require('meow')
 const { print } = require('@ianwalter/print')
-const bff = require('.')
+const { run: bff } = require('.')
 
 async function run () {
   // const cli = meow(
