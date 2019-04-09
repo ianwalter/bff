@@ -5,7 +5,8 @@
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "./cli.js tests/pass.tests.js"
   },
   "bin": {
     "bff": "cli.js"
