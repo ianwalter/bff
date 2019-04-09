@@ -1,6 +1,6 @@
 workflow "CI" {
   on = "push"
-  resolves = ["Install"]
+  resolves = ["Lint"]
   # resolves = ["Lint", "Test"]
 }
 
@@ -9,12 +9,12 @@ action "Install" {
   runs = "yarn"
 }
 
-# action "Lint" {
-#   uses = "docker://node:11-alpine"
-#   needs = ["Install"]
-#   runs = "yarn"
-#   args = "lint"
-# }
+action "Lint" {
+  uses = "docker://node:11-alpine"
+  needs = ["Install"]
+  runs = "yarn"
+  args = "lint"
+}
 
 # action "Test" {
 #   uses = "docker://node:11-alpine"
