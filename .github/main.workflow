@@ -16,9 +16,9 @@ action "Lint" {
   args = "lint"
 }
 
-# action "Test" {
-#   uses = "docker://node:11-alpine"
-#   needs = ["Install"]
-#   runs = "yarn"
-#   args = "test"
-# }
+action "Test" {
+  uses = "docker://node:11-alpine"
+  needs = ["Install"]
+  runs = "yarn"
+  args = "test tests/pass.tests.js"
+}

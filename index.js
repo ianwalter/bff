@@ -30,10 +30,10 @@ function terminatePool (pool, callback) {
  * Collects tests names from tests files and assigns them to a worker in a
  * worker pool to be executed.
  */
-function run () {
+function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
   return new Promise(async resolve => {
     const results = { pass: 0, fail: 0 }
-    const files = await globby(['tests.js', 'tests/**/*.tests.js'])
+    const files = await globby(tests)
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
