@@ -1,5 +1,20 @@
 const { worker } = require('workerpool')
 const expect = require('expect')
+const {
+  addSerializer,
+  toMatchSnapshot,
+  toMatchInlineSnapshot,
+  toThrowErrorMatchingSnapshot,
+  toThrowErrorMatchingInlineSnapshot
+} = require('jest-snapshot')
+
+expect.extend({
+  toMatchInlineSnapshot,
+  toMatchSnapshot,
+  toThrowErrorMatchingInlineSnapshot,
+  toThrowErrorMatchingSnapshot
+})
+expect.addSnapshotSerializer = addSerializer
 
 worker({
   register (file) {
