@@ -25,3 +25,5 @@ test('parseInt after a 1 second timeout', ({ expect }) => {
     }, 1000)
   })
 })
+
+test('manual pass', ({ pass }) => pass())
