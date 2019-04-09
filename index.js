@@ -25,19 +25,15 @@ module.exports = function run () {
       } catch (err) {
         results.fail++
         print.error(err)
+      } finally {
+        // Check the status of the worker pool and terminate it if all of the
+        // tasks have completed.
+        const stats = pool.stats()
+        if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
+          pool.terminate()
+          resolve(results)
+        }
       }
     })
-
-    // Continually check the status of the worker pool to see when it's done
-    // running tests so that the pool can be terminated and the run can return
-    // the results.
-    const interval = setInterval(() => {
-      const stats = pool.stats()
-      if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
-        clearInterval(interval)
-        pool.terminate()
-        resolve(results)
-      }
-    }, 1)
   })
 }
