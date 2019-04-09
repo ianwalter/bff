@@ -2,6 +2,10 @@ const { worker } = require('workerpool')
 const expect = require('expect')
 
 worker({
+  register (file) {
+    // Return all of the names of the tests exported by the test file.
+    return Object.keys(require(file))
+  },
   async test (file, name) {
     // Load the test file.
     const test = require(file)
