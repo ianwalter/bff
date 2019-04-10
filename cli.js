@@ -21,13 +21,13 @@ async function run () {
   )
 
   // Run the tests and wait for a response with the pass/fail counts.
-  const { pass, fail } = await bff({
+  const { pass, fail, skip } = await bff({
     tests: cli.input.length ? cli.input : undefined
   })
 
   // Log the results of running the tests.
   console.log('')
-  print.info(`${pass} tests passed. ${fail} tests failed.`)
+  print.info(`${pass} passed. ${fail} failed. ${skip} skipped.`)
 
   // Exit with the failed test count as the exit code so that the process exits
   // with a non-zero code when tests have failed.

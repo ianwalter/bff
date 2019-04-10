@@ -9,12 +9,18 @@ worker({
   test (file, name) {
     return new Promise(async (resolve, reject) => {
       try {
-        // Load the test file.
-        const test = require(file)
+        // Load the test file and extract the test object.
+        const tests = require(file)
+        const { test, skip } = tests[name]
+
+        // Don't execute the test if it's marked with a skip modifier.
+        if (skip) {
+          return resolve({ skip: true })
+        }
 
         // Perform the given test within the test file and make the expect
         // assertion library available to it.
-        await test[name]({
+        await test({
           expect,
           fail: r => reject(r || new Error(`Manual failure in test '${name}'`)),
           pass: resolve

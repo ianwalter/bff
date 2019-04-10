@@ -32,7 +32,7 @@ function terminatePool (pool, callback) {
  */
 function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
   return new Promise(async resolve => {
-    const results = { pass: 0, fail: 0 }
+    const results = { pass: 0, fail: 0, skip: 0 }
     const files = await globby(tests)
 
     // For each test file found, pass the filename to a registration pool worker
@@ -46,9 +46,14 @@ function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
         // that the test can be run and it's results can be reported.
         names.forEach(async name => {
           try {
-            await executionPool.exec('test', [file, name])
-            results.pass++
-            print.success(name)
+            const response = await executionPool.exec('test', [file, name])
+            if (response && response.skip) {
+              results.skip++
+              print.log('🛌', name)
+            } else {
+              results.pass++
+              print.success(name)
+            }
           } catch (err) {
             results.fail++
             print.error(err)
@@ -75,10 +80,18 @@ function test (name, fn) {
   delete require.cache[__filename]
 
   if (fn) {
-    module.parent.exports[oneLine(name)] = fn
+    const test = typeof fn === 'function' ? { test: fn } : fn
+    module.parent.exports[oneLine(name)] = test
   } else {
-    return fn => (module.parent.exports[oneLine(name)] = fn)
+    return fn => {
+      const test = typeof fn === 'function' ? { test: fn } : fn
+      module.parent.exports[oneLine(name)] = test
+    }
   }
+}
+
+test.skip = function skip (name, test) {
+  this(name, { test, skip: true })
 }
 
 module.exports = { run, test }
