@@ -50,7 +50,7 @@ function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
             if (response && response.skip) {
               results.skip++
               print.log('🛌', name)
-            } else {
+            } else if (!response || !response.excluded) {
               results.pass++
               print.success(name)
             }
@@ -92,6 +92,10 @@ function test (name, fn) {
 
 test.skip = function skip (name, test) {
   this(name, { test, skip: true })
+}
+
+test.only = function only (name, test) {
+  this(name, { test, only: true })
 }
 
 module.exports = { run, test }

@@ -11,11 +11,17 @@ worker({
       try {
         // Load the test file and extract the test object.
         const tests = require(file)
-        const { test, skip } = tests[name]
+        const { test, skip, only } = tests[name]
 
         // Don't execute the test if it's marked with a skip modifier.
         if (skip) {
           return resolve({ skip: true })
+        }
+
+        // Don't execute the test if there is a test in the test file marked
+        // with the only modifier and it's not this test.
+        if (!only && Object.values(tests).some(test => test.only)) {
+          return resolve({ excluded: true })
         }
 
         // Perform the given test within the test file and make the expect
