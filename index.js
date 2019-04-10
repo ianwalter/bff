@@ -82,20 +82,40 @@ function test (name, fn) {
   if (fn) {
     const test = typeof fn === 'function' ? { test: fn } : fn
     module.parent.exports[oneLine(name)] = test
+    return test
   } else {
     return fn => {
       const test = typeof fn === 'function' ? { test: fn } : fn
       module.parent.exports[oneLine(name)] = test
+      return test
     }
   }
 }
 
 test.skip = function skip (name, test) {
-  this(name, { test, skip: true })
+  let val = this(name, test)
+  if (test) {
+    val.skip = true
+    return val
+  }
+  return fn => {
+    val = val(fn)
+    val.skip = true
+    return val
+  }
 }
 
 test.only = function only (name, test) {
-  this(name, { test, only: true })
+  let val = this(name, test)
+  if (test) {
+    val.only = true
+    return val
+  }
+  return fn => {
+    val = val(fn)
+    val.only = true
+    return val
+  }
 }
 
 module.exports = { run, test }
