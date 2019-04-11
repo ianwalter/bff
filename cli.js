@@ -4,6 +4,21 @@ const meow = require('meow')
 const { print } = require('@ianwalter/print')
 const { run: bff } = require('.')
 
+// "bff": {
+//   "before": [
+//     "./tests/helpers/before.js"
+//   ],
+//   "after": [
+//     "./tests/helpers/after.js"
+//   ],
+//   "beforeEach": [
+//     "./tests/helpers/beforeEach.js"
+//   ],
+//   "afterEach": [
+//     "./tests/helpers/afterEach.js"
+//   ]
+// },
+
 async function run () {
   const cli = meow(
     `

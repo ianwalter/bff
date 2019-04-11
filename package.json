@@ -46,20 +46,6 @@
     "@ianwalter/eslint-config": "^1.1.2",
     "np": "^4.0.2"
   },
-  "bff": {
-    "before": [
-      "./tests/helpers/before.js"
-    ],
-    "after": [
-      "./tests/helpers/after.js"
-    ],
-    "beforeEach": [
-      "./tests/helpers/beforeEach.js"
-    ],
-    "afterEach": [
-      "./tests/helpers/afterEach.js"
-    ]
-  },
   "eslintConfig": {
     "root": true,
     "extends": [
