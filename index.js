@@ -3,12 +3,8 @@ const workerpool = require('workerpool')
 const globby = require('globby')
 const { print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
-
-// For registering individual tests exported from test files.
-const registrationPool = workerpool.pool(path.join(__dirname, 'worker.js'))
-
-// For actually executing the tests.
-const executionPool = workerpool.pool(path.join(__dirname, 'worker.js'))
+const pSeries = require('p-series')
+const { toAsyncExec } = require('./utilities')
 
 /**
  * Checks the status of the given worker pool and terminates it if there are no
@@ -30,15 +26,34 @@ function terminatePool (pool, callback) {
  * Collects tests names from tests files and assigns them to a worker in a
  * worker pool to be executed.
  */
-function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
+function run ({ tests = ['tests.js', 'tests/**/*.tests.js'], pkg = {} }) {
   return new Promise(async resolve => {
-    const results = { pass: 0, fail: 0, skip: 0 }
-    const files = await globby(tests)
+    // Create the run context.
+    const files = (await globby(tests)).map(file => path.resolve(file))
+    const context = { files, pass: 0, fail: 0, skip: 0 }
+
+    // Extract hooks.
+    const before = pkg.bff && pkg.bff.before
+    const after = pkg.bff && pkg.bff.after
+    const beforeEach = pkg.bff && pkg.bff.beforeEach
+    const afterEach = pkg.bff && pkg.bff.afterEach
+
+    // Execute each function with the run context exported by the files
+    // configured to be called before a run.
+    if (before && before.length) {
+      await pSeries(before.map(toAsyncExec(context)))
+    }
+
+    // For registering individual tests exported from test files.
+    const registrationPool = workerpool.pool(path.join(__dirname, 'worker.js'))
+
+    // For actually executing the tests.
+    const executionPool = workerpool.pool(path.join(__dirname, 'worker.js'))
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
     // pool worker to be run.
-    files.map(file => path.resolve(file)).forEach(async file => {
+    context.files.forEach(async file => {
       try {
         const names = await registrationPool.exec('register', [file])
 
@@ -46,21 +61,31 @@ function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
         // that the test can be run and it's results can be reported.
         names.forEach(async name => {
           try {
-            const response = await executionPool.exec('test', [file, name])
+            const params = [file, name, beforeEach, afterEach]
+            const response = await executionPool.exec('test', params)
             if (response && response.skip) {
-              results.skip++
+              context.skip++
               print.log('🛌', name)
             } else if (!response || !response.excluded) {
-              results.pass++
+              context.pass++
               print.success(name)
             }
           } catch (err) {
-            results.fail++
+            context.fail++
             print.error(err)
           } finally {
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.
-            terminatePool(executionPool, () => resolve(results))
+            terminatePool(executionPool, async () => {
+              // Execute each function with the run context exported by the
+              // files configured to be called after a run.
+              if (after && after.length) {
+                await pSeries(after.map(toAsyncExec(context)))
+              }
+
+              // Resolve the run Promise with the run context.
+              resolve(context)
+            })
           }
         })
       } catch (err) {

@@ -15,7 +15,7 @@
     "cli.js",
     "index.js",
     "worker.js",
-    "test.js"
+    "utilities.js"
   ],
   "repository": {
     "type": "git",
@@ -38,11 +38,26 @@
     "common-tags": "^1.8.0",
     "expect": "^24.7.1",
     "globby": "^9.2.0",
+    "p-series": "^2.1.0",
     "workerpool": "^3.1.2"
   },
   "devDependencies": {
     "@ianwalter/eslint-config": "^1.1.2",
     "np": "^4.0.2"
+  },
+  "bff": {
+    "before": [
+      "./tests/helpers/before.js"
+    ],
+    "after": [
+      "./tests/helpers/after.js"
+    ],
+    "beforeEach": [
+      "./tests/helpers/beforeEach.js"
+    ],
+    "afterEach": [
+      "./tests/helpers/afterEach.js"
+    ]
   },
   "eslintConfig": {
     "root": true,

@@ -22,7 +22,8 @@ async function run () {
 
   // Run the tests and wait for a response with the pass/fail counts.
   const { pass, fail, skip } = await bff({
-    tests: cli.input.length ? cli.input : undefined
+    tests: cli.input.length ? cli.input : undefined,
+    pkg: cli.pkg
   })
 
   // Log the results of running the tests.
