@@ -1,45 +1,14 @@
 #!/usr/bin/env node
 
-const meow = require('meow')
+const cli = require('@ianwalter/cli')
 const { print } = require('@ianwalter/print')
 const { run: bff } = require('.')
 
-// "bff": {
-//   "before": [
-//     "./tests/helpers/before.js"
-//   ],
-//   "after": [
-//     "./tests/helpers/after.js"
-//   ],
-//   "beforeEach": [
-//     "./tests/helpers/beforeEach.js"
-//   ],
-//   "afterEach": [
-//     "./tests/helpers/afterEach.js"
-//   ]
-// },
-
 async function run () {
-  const cli = meow(
-    `
-      Usage
-        bff <filename/glob?>
-
-      Examples
-        bff
-        ✅  cloning an Array
-        ✅  clone has Object setter when proto is true
-        ✅  cloning Vuex store state when proto is false
-
-        💁  3 tests passed. 0 tests failed.
-    `
-  )
+  const config = cli({ name: 'bff' })
 
   // Run the tests and wait for a response with the pass/fail counts.
-  const { pass, fail, skip } = await bff({
-    tests: cli.input.length ? cli.input : undefined,
-    pkg: cli.pkg
-  })
+  const { pass, fail, skip } = await bff(config)
 
   // Log the results of running the tests.
   console.log('')

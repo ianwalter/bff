@@ -26,17 +26,16 @@ function terminatePool (pool, callback) {
  * Collects tests names from tests files and assigns them to a worker in a
  * worker pool to be executed.
  */
-function run ({ tests = ['tests.js', 'tests/**/*tests.js'], pkg = {} }) {
+function run (config) {
   return new Promise(async resolve => {
+    const tests = config._.length
+      ? config._
+      : config.tests || ['tests.js', 'tests/**/*tests.js']
+    const { before, after, beforeEach, afterEach } = config
+
     // Create the run context.
     const files = (await globby(tests)).map(file => path.resolve(file))
     const context = { files, pass: 0, fail: 0, skip: 0 }
-
-    // Extract hooks.
-    const before = pkg.bff && pkg.bff.before
-    const after = pkg.bff && pkg.bff.after
-    const beforeEach = pkg.bff && pkg.bff.beforeEach
-    const afterEach = pkg.bff && pkg.bff.afterEach
 
     // Execute each function with the run context exported by the files
     // configured to be called before a run.
