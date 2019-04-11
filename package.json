@@ -64,6 +64,9 @@
     ],
     "afterEach": [
       "./tests/helpers/afterEach.js"
+    ],
+    "registration": [
+      "./tests/helpers/registration.js"
     ]
   }
 }

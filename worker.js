@@ -4,19 +4,32 @@ const pSeries = require('p-series')
 const { toAsyncExec } = require('./utilities')
 
 worker({
-  register (file) {
-    // Return all of the names of the tests exported by the test file.
-    return Object.keys(require(file))
+  register (file, registration) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Return all of the names of the tests exported by the test file.
+        const names = Object.keys(require(file))
+        const context = { tests: names.map(name => ({ key: name, name })) }
+
+        if (registration && registration.length) {
+          await pSeries(registration.map(toAsyncExec(context)))
+        }
+
+        resolve(context.tests)
+      } catch (err) {
+        reject(err)
+      }
+    })
   },
-  test (file, name, beforeEachFiles, afterEachFiles) {
+  test (file, test, beforeEachFiles, afterEachFiles) {
     return new Promise(async (resolve, reject) => {
       // Create the context object that provides data and utilities to tests.
       const context = {
+        ...test,
         file,
-        name,
         expect,
         fail (msg) {
-          throw new Error(msg || `Manual failure in test '${name}'`)
+          throw new Error(msg || `Manual failure in test '${test.name}'`)
         },
         pass: resolve
       }
@@ -24,7 +37,7 @@ worker({
       try {
         // Load the test file and extract the test object.
         const tests = require(file)
-        const { test, skip, only } = tests[name]
+        const { testFn, skip, only } = tests[test.key]
 
         // Don't execute the test if it's marked with a skip modifier.
         if (skip) {
@@ -45,11 +58,11 @@ worker({
 
         // Perform the given test within the test file and make the expect
         // assertion library available to it.
-        await test(context)
+        await testFn(context)
 
         // If there were no assertions executed, fail the test.
         if (expect.getState().assertionCalls === 0) {
-          throw new Error(`No assertions in test '${name}'`)
+          throw new Error(`No assertions in test '${test.name}'`)
         }
       } catch (err) {
         context.failed = err

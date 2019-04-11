@@ -30,8 +30,8 @@ function run (config) {
   return new Promise(async resolve => {
     const tests = config._.length
       ? config._
-      : config.tests || ['tests.js', 'tests/**/*tests.js']
-    const { before, after, beforeEach, afterEach } = config
+      : (config.tests || ['tests.js', 'tests/**/*tests.js'])
+    const { before, after, beforeEach, afterEach, registration } = config
 
     // Create the run context.
     const files = (await globby(tests)).map(file => path.resolve(file))
@@ -54,20 +54,21 @@ function run (config) {
     // pool worker to be run.
     context.files.forEach(async file => {
       try {
-        const names = await registrationPool.exec('register', [file])
+        const params = [file, registration]
+        const tests = await registrationPool.exec('register', params)
 
         // Send each test name and test filename to an exection pool worker so
         // that the test can be run and it's results can be reported.
-        names.forEach(async name => {
+        tests.forEach(async test => {
           try {
-            const params = [file, name, beforeEach, afterEach]
+            const params = [file, test, beforeEach, afterEach]
             const response = await executionPool.exec('test', params)
             if (response && response.skip) {
               context.skip++
-              print.log('🛌', name)
+              print.log('🛌', test.name)
             } else if (!response || !response.excluded) {
               context.pass++
-              print.success(name)
+              print.success(test.name)
             }
           } catch (err) {
             context.fail++
@@ -98,18 +99,18 @@ function run (config) {
   })
 }
 
-function test (name, fn) {
+function test (name, testFn) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
 
-  if (fn) {
-    const test = typeof fn === 'function' ? { test: fn } : fn
+  if (testFn) {
+    const test = typeof testFn === 'function' ? { testFn } : testFn
     module.parent.exports[oneLine(name)] = test
     return test
   } else {
-    return fn => {
-      const test = typeof fn === 'function' ? { test: fn } : fn
+    return testFn => {
+      const test = typeof testFn === 'function' ? { testFn } : testFn
       module.parent.exports[oneLine(name)] = test
       return test
     }
