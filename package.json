@@ -1,6 +1,6 @@
 {
   "name": "@ianwalter/bff",
-  "description": "A test runner/framework that is your development best friend",
+  "description": "A friendly test runner/framework",
   "version": "2.7.0",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
