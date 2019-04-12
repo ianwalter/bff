@@ -5,7 +5,15 @@ const { print } = require('@ianwalter/print')
 const { run: bff } = require('.')
 
 async function run () {
-  const config = cli({ name: 'bff' })
+  const config = cli({
+    name: 'bff',
+    opts: {
+      alias: {
+        concurrency: 'c',
+        update: 'u'
+      }
+    }
+  })
 
   // Run the tests and wait for a response with the pass/fail counts.
   const { pass, fail, skip } = await bff(config)

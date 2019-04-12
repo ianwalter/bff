@@ -1,4 +1,5 @@
 const { test } = require('..')
+const { html } = require('common-tags')
 
 test(`
   A
@@ -31,3 +32,19 @@ test('manual pass', ({ pass }) => pass())
 test('beforeEach', ({ pass }) => pass())
 
 test('registration', ({ pass }) => pass())
+
+test('snapshot pass', ({ expect }) => {
+  const markup = html`
+    <html>
+      <head>
+        <title>Demo</title>
+      </head>
+      <body>
+        <main>
+          <h1>Demo</h1>
+        </main>
+      </body>
+    </html>
+  `
+  expect(markup).toMatchSnapshot()
+})

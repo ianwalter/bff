@@ -31,6 +31,7 @@ function run (config) {
     const tests = config._.length
       ? config._
       : (config.tests || ['tests.js', 'tests/**/*tests.js'])
+    const update = config.update ? 'all' : 'none'
     const { before, after, beforeEach, afterEach, registration } = config
 
     // Create the run context.
@@ -67,7 +68,7 @@ function run (config) {
         // that the test can be run and it's results can be reported.
         tests.forEach(async test => {
           try {
-            const params = [file, test, beforeEach, afterEach]
+            const params = [file, test, beforeEach, afterEach, update]
             const response = await executionPool.exec('test', params)
             if (response && response.skip) {
               context.skip++
