@@ -24,10 +24,12 @@ worker({
   register (file, registration) {
     return new Promise(async (resolve, reject) => {
       try {
-        // Return all of the names of the tests exported by the test file.
+        // Collect the names of the tests exported by the test file.
         const names = Object.keys(require(file))
         const context = { tests: names.map(name => ({ key: name, name })) }
 
+        // Execute each function with the test names exported by the files
+        // configured to be called during test registration.
         if (registration && registration.length) {
           await pSeries(registration.map(toAsyncExec(context)))
         }
@@ -67,11 +69,14 @@ worker({
           return resolve({ excluded: true })
         }
 
-        //
+        // Initialize the snapshot state with a path to the snapshot file and
+        // the updateSnapshot setting.
         const snapshotsDir = join(dirname(file), 'snapshots')
         const snapshotFilename = basename(file).replace('.js', '.snap')
         const snapshotPath = join(snapshotsDir, snapshotFilename)
         context.snapshot = new SnapshotState(snapshotPath, { updateSnapshot })
+
+        // Update expect's state with the snapshot state and the test name.
         expect.setState({
           snapshotState: context.snapshot,
           currentTestName: context.name
@@ -95,7 +100,7 @@ worker({
           throw new Error(`No assertions in test '${test.name}'`)
         }
 
-        // If expect has a suppressed error (e.g., a snapshot did not match)
+        // If expect has a suppressed error (e.g. a snapshot did not match)
         // then throw the error so that the test can be marked as having failed.
         if (suppressedErrors.length) {
           throw suppressedErrors[0]

@@ -12,7 +12,7 @@ test('manual fail', ({ fail }) => fail())
 
 test('afterEach', ({ fail }) => fail())
 
-test.only('snapshot fail', ({ expect }) => {
+test('snapshot fail', ({ expect }) => {
   const markup = html`
     <html>
       <head>

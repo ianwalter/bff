@@ -33,7 +33,7 @@ test('beforeEach', ({ pass }) => pass())
 
 test('registration', ({ pass }) => pass())
 
-test.only('snapshot pass', ({ expect }) => {
+test('snapshot pass', ({ expect }) => {
   const markup = html`
     <html>
       <head>

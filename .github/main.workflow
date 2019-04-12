@@ -19,5 +19,5 @@ action "Test" {
   uses = "docker://node:11-alpine"
   needs = ["Install"]
   runs = "yarn"
-  args = "test"
+  args = "test:all"
 }

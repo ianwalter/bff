@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bff 1`] = `
+"💬  before executed
+💬  afterEach executed
+✅  A test with a multiline name
+✅  strict equality
+✅  manual pass
+✅  registration [TWO]
+✅  registration [ONE]
+✅  only
+💬  beforeEach executed
+🛌  skip no assertions
+✅  beforeEach
+✅  only with test specified after name
+✅  snapshot pass
+🛌  skip with test specified after name
+✅  parseInt after a 1 second timeout
+💬  after executed with context
+
+💁  10 passed. 5 failed. 2 skipped.
+"
+`;
+
+exports[`bff 2`] = `
+"🚫  No assertions in test 'no assertions' 
+    at Promise (/Users/iwalter/ianwalter/bff/worker.js:100:17)
+    at processTicksAndRejections (internal/process/next_tick.js:81:5)
+🚫  Manual failure in test 'afterEach' 
+    at fail (/Users/iwalter/ianwalter/bff/worker.js:51:17)
+    at test (/Users/iwalter/ianwalter/bff/tests/fail.tests.js:13:33)
+    at Promise (/Users/iwalter/ianwalter/bff/worker.js:93:15)
+    at processTicksAndRejections (internal/process/next_tick.js:81:5)
+🚫  Manual failure in test 'manual fail' 
+    at fail (/Users/iwalter/ianwalter/bff/worker.js:51:17)
+    at test (/Users/iwalter/ianwalter/bff/tests/fail.tests.js:11:35)
+    at Promise (/Users/iwalter/ianwalter/bff/worker.js:93:15)
+    at processTicksAndRejections (internal/process/next_tick.js:81:5)
+🚫  expect(received).toBe(expected) // Object.is equality    
+    Expected: 2
+    Received: NaN 
+    at test (/Users/iwalter/ianwalter/bff/tests/fail.tests.js:8:28)
+    at Promise (/Users/iwalter/ianwalter/bff/worker.js:93:15)
+    at processTicksAndRejections (internal/process/next_tick.js:81:5)
+🚫  expect(received).toMatchSnapshot()    
+    Snapshot name: \`snapshot fail 1\`
+    
+    - Snapshot
+    + Received
+    
+    @@ -1,8 +1,8 @@
+    \\"<html>
+    <head>
+    -     <title>Demo</title>
+    +     <title>Dema</title>
+    </head>
+    <body>
+    <main>
+    <h1>Demo</h1>
+    </main> 
+    at test (/Users/iwalter/ianwalter/bff/tests/fail.tests.js:28:18)
+    at Promise (/Users/iwalter/ianwalter/bff/worker.js:93:15)
+    at processTicksAndRejections (internal/process/next_tick.js:81:5)
+"
+`;
