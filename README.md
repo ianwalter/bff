@@ -1,5 +1,5 @@
 # @ianwalter/bff
-> A friendly test runner/framework
+> Your friendly test runner/framework
 
 [![npm page][npmImage]][npmUrl]
 
