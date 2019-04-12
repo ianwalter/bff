@@ -27,3 +27,7 @@ test('parseInt after a 1 second timeout', ({ expect }) => {
 })
 
 test('manual pass', ({ pass }) => pass())
+
+test('beforeEach', ({ pass }) => pass())
+
+test('registration', ({ pass }) => pass())

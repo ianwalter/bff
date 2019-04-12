@@ -1,12 +1,12 @@
 {
   "name": "@ianwalter/bff",
-  "description": "A test runner/framework that is your development best friend",
-  "version": "2.1.0",
+  "description": "A friendly test runner/framework",
+  "version": "2.7.0",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "./cli.js tests/bff.js"
+    "test": "./cli.js tests/pass.tests.js tests/skip.tests.js tests/only.tests.js"
   },
   "bin": {
     "bff": "cli.js"
@@ -15,7 +15,7 @@
     "cli.js",
     "index.js",
     "worker.js",
-    "test.js"
+    "utilities.js"
   ],
   "repository": {
     "type": "git",
@@ -34,11 +34,13 @@
   },
   "homepage": "https://github.com/ianwalter/bff#readme",
   "dependencies": {
+    "@ianwalter/cli": "^1.0.0",
     "@ianwalter/print": "^2.0.2",
     "common-tags": "^1.8.0",
     "expect": "^24.7.1",
     "globby": "^9.2.0",
     "jest-snapshot": "^24.7.1",
+    "p-series": "^2.1.0",
     "workerpool": "^3.1.2"
   },
   "devDependencies": {
@@ -50,6 +52,23 @@
     "root": true,
     "extends": [
       "@ianwalter"
+    ]
+  },
+  "bff": {
+    "before": [
+      "./tests/helpers/before.js"
+    ],
+    "after": [
+      "./tests/helpers/after.js"
+    ],
+    "beforeEach": [
+      "./tests/helpers/beforeEach.js"
+    ],
+    "afterEach": [
+      "./tests/helpers/afterEach.js"
+    ],
+    "registration": [
+      "./tests/helpers/registration.js"
     ]
   }
 }

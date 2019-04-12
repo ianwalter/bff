@@ -3,12 +3,8 @@ const workerpool = require('workerpool')
 const globby = require('globby')
 const { print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
-
-// For registering individual tests exported from test files.
-const registrationPool = workerpool.pool(path.join(__dirname, 'worker.js'))
-
-// For actually executing the tests.
-const executionPool = workerpool.pool(path.join(__dirname, 'worker.js'))
+const pSeries = require('p-series')
+const { toAsyncExec } = require('./utilities')
 
 /**
  * Checks the status of the given worker pool and terminates it if there are no
@@ -30,32 +26,72 @@ function terminatePool (pool, callback) {
  * Collects tests names from tests files and assigns them to a worker in a
  * worker pool to be executed.
  */
-function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
+function run (config) {
   return new Promise(async resolve => {
-    const results = { pass: 0, fail: 0 }
-    const files = await globby(tests)
+    const tests = config._.length
+      ? config._
+      : (config.tests || ['tests.js', 'tests/**/*tests.js'])
+    const { before, after, beforeEach, afterEach, registration } = config
+
+    // Create the run context.
+    const files = (await globby(tests)).map(file => path.resolve(file))
+    const context = { files, pass: 0, fail: 0, skip: 0 }
+
+    // Execute each function with the run context exported by the files
+    // configured to be called before a run.
+    if (before && before.length) {
+      await pSeries(before.map(toAsyncExec(context)))
+    }
+
+    const poolOptions = {
+      ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
+    }
+
+    const workerPath = path.join(__dirname, 'worker.js')
+
+    // For registering individual tests exported from test files.
+    const registrationPool = workerpool.pool(workerPath, poolOptions)
+
+    // For actually executing the tests.
+    const executionPool = workerpool.pool(workerPath, poolOptions)
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
     // pool worker to be run.
-    files.map(file => path.resolve(file)).forEach(async file => {
+    context.files.forEach(async file => {
       try {
-        const names = await registrationPool.exec('register', [file])
+        const params = [file, registration]
+        const tests = await registrationPool.exec('register', params)
 
         // Send each test name and test filename to an exection pool worker so
         // that the test can be run and it's results can be reported.
-        names.forEach(async name => {
+        tests.forEach(async test => {
           try {
-            await executionPool.exec('test', [file, name])
-            results.pass++
-            print.success(name)
+            const params = [file, test, beforeEach, afterEach]
+            const response = await executionPool.exec('test', params)
+            if (response && response.skip) {
+              context.skip++
+              print.log('🛌', test.name)
+            } else if (!response || !response.excluded) {
+              context.pass++
+              print.success(test.name)
+            }
           } catch (err) {
-            results.fail++
+            context.fail++
             print.error(err)
           } finally {
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.
-            terminatePool(executionPool, () => resolve(results))
+            terminatePool(executionPool, async () => {
+              // Execute each function with the run context exported by the
+              // files configured to be called after a run.
+              if (after && after.length) {
+                await pSeries(after.map(toAsyncExec(context)))
+              }
+
+              // Resolve the run Promise with the run context.
+              resolve(context)
+            })
           }
         })
       } catch (err) {
@@ -69,15 +105,47 @@ function run ({ tests = ['tests.js', 'tests/**/*.tests.js'] }) {
   })
 }
 
-function test (name, fn) {
+function test (name, testFn) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
 
-  if (fn) {
-    module.parent.exports[oneLine(name)] = fn
+  if (testFn) {
+    const test = typeof testFn === 'function' ? { testFn } : testFn
+    module.parent.exports[oneLine(name)] = test
+    return test
   } else {
-    return fn => (module.parent.exports[oneLine(name)] = fn)
+    return testFn => {
+      const test = typeof testFn === 'function' ? { testFn } : testFn
+      module.parent.exports[oneLine(name)] = test
+      return test
+    }
+  }
+}
+
+test.skip = function skip (name, test) {
+  let val = this(name, test)
+  if (test) {
+    val.skip = true
+    return val
+  }
+  return fn => {
+    val = val(fn)
+    val.skip = true
+    return val
+  }
+}
+
+test.only = function only (name, test) {
+  let val = this(name, test)
+  if (test) {
+    val.only = true
+    return val
+  }
+  return fn => {
+    val = val(fn)
+    val.only = true
+    return val
   }
 }
 

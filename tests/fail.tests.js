@@ -8,3 +8,5 @@ test('parseInt with the wrong base', ({ expect }) => {
 })
 
 test('manual fail', ({ fail }) => fail())
+
+test('afterEach', ({ fail }) => fail())
