@@ -43,11 +43,17 @@ function run (config) {
       await pSeries(before.map(toAsyncExec(context)))
     }
 
+    const poolOptions = {
+      ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
+    }
+
+    const workerPath = path.join(__dirname, 'worker.js')
+
     // For registering individual tests exported from test files.
-    const registrationPool = workerpool.pool(path.join(__dirname, 'worker.js'))
+    const registrationPool = workerpool.pool(workerPath, poolOptions)
 
     // For actually executing the tests.
-    const executionPool = workerpool.pool(path.join(__dirname, 'worker.js'))
+    const executionPool = workerpool.pool(workerPath, poolOptions)
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
