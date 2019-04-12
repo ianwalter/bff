@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+"<html>
+  <head>
+    <title>Demo</title>
+  </head>
+  <body>
+    <main>
+      <h1>Demo</h1>
+    </main>
+  </body>
+</html>"
+`;

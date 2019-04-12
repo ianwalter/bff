@@ -1,3 +1,4 @@
+const { join, dirname, basename } = require('path')
 const { worker } = require('workerpool')
 const expect = require('expect')
 const pSeries = require('p-series')
@@ -7,7 +8,8 @@ const {
   toMatchSnapshot,
   toMatchInlineSnapshot,
   toThrowErrorMatchingSnapshot,
-  toThrowErrorMatchingInlineSnapshot
+  toThrowErrorMatchingInlineSnapshot,
+  SnapshotState
 } = require('jest-snapshot')
 
 expect.extend({
@@ -36,7 +38,7 @@ worker({
       }
     })
   },
-  test (file, test, beforeEachFiles, afterEachFiles) {
+  test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot) {
     return new Promise(async (resolve, reject) => {
       // Create the context object that provides data and utilities to tests.
       const context = {
@@ -65,6 +67,13 @@ worker({
           return resolve({ excluded: true })
         }
 
+        //
+        const snapshotsDir = join(dirname(file), 'snapshots')
+        const snapshotFilename = basename(file).replace('.js', '.snap')
+        const snapshotPath = join(snapshotsDir, snapshotFilename)
+        context.snapshot = new SnapshotState(snapshotPath, { updateSnapshot })
+        expect.setState({ snapshotState: context.snapshot, testPath: file })
+
         // Execute each function with the test context exported by the files
         // configured to be called before each test.
         if (beforeEachFiles && beforeEachFiles.length) {
@@ -88,6 +97,16 @@ worker({
           if (afterEachFiles && afterEachFiles.length) {
             await pSeries(afterEachFiles.map(toAsyncExec(context)))
           }
+
+          if (context.failed) {
+            context.snapshot.markSnapshotsAsCheckedForTest(context.name)
+          }
+
+          if (context.snapshot.getUncheckedCount()) {
+            context.snapshot.removeUncheckedKeys()
+          }
+
+          context.snapshot.save()
 
           if (context.failed) {
             reject(context.failed)
