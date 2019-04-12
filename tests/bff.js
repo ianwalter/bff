@@ -1,8 +1,7 @@
 const { test } = require('..')
 const execa = require('execa')
 
-test('bff', async ({ expect }) => {
+test('bff', async ({ expect, fail }) => {
   const { stdout, stderr } = await execa('./cli.js', { reject: false })
-  expect(stdout).toMatchSnapshot()
-  expect(stderr).toMatchSnapshot()
+  fail('TODO: figure out how to assert test results.')
 })
