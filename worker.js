@@ -72,7 +72,10 @@ worker({
         const snapshotFilename = basename(file).replace('.js', '.snap')
         const snapshotPath = join(snapshotsDir, snapshotFilename)
         context.snapshot = new SnapshotState(snapshotPath, { updateSnapshot })
-        expect.setState({ snapshotState: context.snapshot, testPath: file })
+        expect.setState({
+          snapshotState: context.snapshot,
+          currentTestName: context.name
+        })
 
         // Execute each function with the test context exported by the files
         // configured to be called before each test.
@@ -84,9 +87,18 @@ worker({
         // assertion library available to it.
         await testFn(context)
 
+        // Extract expect's state after running the test.
+        const { suppressedErrors, assertionCalls } = expect.getState()
+
         // If there were no assertions executed, fail the test.
-        if (expect.getState().assertionCalls === 0) {
+        if (assertionCalls === 0) {
           throw new Error(`No assertions in test '${test.name}'`)
+        }
+
+        // If expect has a suppressed error (e.g., a snapshot did not match)
+        // then throw the error so that the test can be marked as having failed.
+        if (suppressedErrors.length) {
+          throw suppressedErrors[0]
         }
       } catch (err) {
         context.failed = err
@@ -98,14 +110,19 @@ worker({
             await pSeries(afterEachFiles.map(toAsyncExec(context)))
           }
 
+          // If the test failed before the snapshot was matched, mark it as
+          // checked so that jest-snapshot doesn't think it's obsolete.
           if (context.failed) {
             context.snapshot.markSnapshotsAsCheckedForTest(context.name)
           }
 
+          // The snapshot tests that weren't checked are obsolete and can be
+          // removed from the snpashot tests.
           if (context.snapshot.getUncheckedCount()) {
             context.snapshot.removeUncheckedKeys()
           }
 
+          // Save the snapshot changes.
           context.snapshot.save()
 
           if (context.failed) {

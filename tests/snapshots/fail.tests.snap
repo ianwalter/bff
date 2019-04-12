@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`snapshot pass 1`] = `
+exports[`snapshot fail 1`] = `
 "<html>
   <head>
     <title>Demo</title>
