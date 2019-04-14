@@ -70,30 +70,31 @@ function run (config) {
 
         // Send each test name and test filename to an exection pool worker so
         // that the test can be run and it's results can be reported.
-        tests.forEach(async ({ name, skip, only }) => {
+        tests.forEach(async test => {
           try {
             // TODO: update comment
             // Don't execute the test if it's marked with a skip modifier.
             // Don't execute the test if there is a test in the test file marked
             // with the only modifier and it's not this test.
-            if (skip || (hasOnly && !only)) {
+            if (test.skip || (hasOnly && !test.only)) {
               // TODO: comment
-              context.snapshotState.markSnapshotsAsCheckedForTest(name)
+              context.snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
-              if (skip) {
+              if (test.skip) {
                 context.skip++
-                print.log('🛌', name)
+                print.log('🛌', test.name)
               }
             } else {
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
-              console.log(response)
+              // TODO: add snapshot data to snapshotState.
+
               context.pass++
-              print.success(name)
+              print.success(test.name)
             }
           } catch (err) {
             // TODO: comment
-            context.snapshotState.markSnapshotsAsCheckedForTest(name)
+            context.snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
             context.fail++
             print.error(err)
