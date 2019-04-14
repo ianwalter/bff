@@ -1,47 +1,44 @@
-const { join, dirname, basename } = require('path')
 const { worker } = require('workerpool')
-const expect = require('expect')
 const pSeries = require('p-series')
-const { toAsyncExec } = require('./utilities')
-const {
-  addSerializer,
-  toMatchSnapshot,
-  toMatchInlineSnapshot,
-  toThrowErrorMatchingSnapshot,
-  toThrowErrorMatchingInlineSnapshot,
-  SnapshotState
-} = require('jest-snapshot')
-
-expect.extend({
-  toMatchInlineSnapshot,
-  toMatchSnapshot,
-  toThrowErrorMatchingInlineSnapshot,
-  toThrowErrorMatchingSnapshot
-})
-expect.addSnapshotSerializer = addSerializer
 
 worker({
-  register (file, registration) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        // Collect the names of the tests exported by the test file.
-        const names = Object.keys(require(file))
-        const context = { tests: names.map(name => ({ key: name, name })) }
+  async register (file, registration) {
+    const { toAsyncExec } = require('./lib')
 
-        // Execute each function with the test names exported by the files
-        // configured to be called during test registration.
-        if (registration && registration.length) {
-          await pSeries(registration.map(toAsyncExec(context)))
-        }
+    // TODO: updare comment.
+    // Collect the names of the tests exported by the test file.
+    const toTest = ([name, { skip, only }]) => ({ key: name, name, skip, only })
+    const context = { tests: Object.entries(require(file)).map(toTest) }
 
-        resolve(context.tests)
-      } catch (err) {
-        reject(err)
-      }
-    })
+    // Execute each function with the test names exported by the files
+    // configured to be called during test registration.
+    if (registration && registration.length) {
+      await pSeries(registration.map(toAsyncExec(context)))
+    }
+
+    return context.tests
   },
   test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot) {
     return new Promise(async (resolve, reject) => {
+      const expect = require('expect')
+      const {
+        addSerializer,
+        toMatchSnapshot,
+        toMatchInlineSnapshot,
+        toThrowErrorMatchingSnapshot,
+        toThrowErrorMatchingInlineSnapshot
+      } = require('jest-snapshot')
+      const { getSnapshotState, toAsyncExec } = require('./lib')
+
+      // TODO: comment.
+      expect.extend({
+        toMatchInlineSnapshot,
+        toMatchSnapshot,
+        toThrowErrorMatchingInlineSnapshot,
+        toThrowErrorMatchingSnapshot
+      })
+      expect.addSnapshotSerializer = addSerializer
+
       // Create the context object that provides data and utilities to tests.
       const context = {
         ...test,
@@ -55,30 +52,11 @@ worker({
 
       try {
         // Load the test file and extract the test object.
-        const tests = require(file)
-        const { testFn, skip, only } = tests[test.key]
-
-        // Don't execute the test if it's marked with a skip modifier.
-        if (skip) {
-          return resolve({ skip: true })
-        }
-
-        // Don't execute the test if there is a test in the test file marked
-        // with the only modifier and it's not this test.
-        if (!only && Object.values(tests).some(test => test.only)) {
-          return resolve({ excluded: true })
-        }
-
-        // Initialize the snapshot state with a path to the snapshot file and
-        // the updateSnapshot setting.
-        const snapshotsDir = join(dirname(file), 'snapshots')
-        const snapshotFilename = basename(file).replace('.js', '.snap')
-        const snapshotPath = join(snapshotsDir, snapshotFilename)
-        context.snapshot = new SnapshotState(snapshotPath, { updateSnapshot })
+        const { testFn } = require(file)[test.key]
 
         // Update expect's state with the snapshot state and the test name.
         expect.setState({
-          snapshotState: context.snapshot,
+          snapshotState: getSnapshotState(file, updateSnapshot),
           currentTestName: context.name
         })
 
@@ -115,25 +93,11 @@ worker({
             await pSeries(afterEachFiles.map(toAsyncExec(context)))
           }
 
-          // If the test failed before the snapshot was matched, mark it as
-          // checked so that jest-snapshot doesn't think it's obsolete.
-          if (context.failed) {
-            context.snapshot.markSnapshotsAsCheckedForTest(context.name)
-          }
-
-          // The snapshot tests that weren't checked are obsolete and can be
-          // removed from the snpashot tests.
-          if (context.snapshot.getUncheckedCount()) {
-            context.snapshot.removeUncheckedKeys()
-          }
-
-          // Save the snapshot changes.
-          context.snapshot.save()
-
           if (context.failed) {
             reject(context.failed)
           } else {
-            resolve()
+            console.log(expect.getState())
+            resolve(expect.getState())
           }
         } catch (err) {
           reject(err)

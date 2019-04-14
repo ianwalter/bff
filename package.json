@@ -16,7 +16,7 @@
     "cli.js",
     "index.js",
     "worker.js",
-    "utilities.js"
+    "lib.js"
   ],
   "repository": {
     "type": "git",

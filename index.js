@@ -4,7 +4,7 @@ const globby = require('globby')
 const { print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toAsyncExec } = require('./utilities')
+const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
  * Checks the status of the given worker pool and terminates it if there are no
@@ -31,7 +31,7 @@ function run (config) {
     const tests = config._.length
       ? config._
       : (config.tests || ['tests.js', 'tests/**/*tests.js'])
-    const update = config.update ? 'all' : 'none'
+    const updateSnapshot = config.updateSnapshot ? 'all' : 'none'
     const { before, after, beforeEach, afterEach, registration } = config
 
     // Create the run context.
@@ -63,24 +63,49 @@ function run (config) {
       try {
         const params = [file, registration]
         const tests = await registrationPool.exec('register', params)
+        const hasOnly = Object.values(tests).some(test => test.only)
+
+        //
+        context.snapshotState = getSnapshotState(file, updateSnapshot)
 
         // Send each test name and test filename to an exection pool worker so
         // that the test can be run and it's results can be reported.
-        tests.forEach(async test => {
+        tests.forEach(async ({ name, skip, only }) => {
           try {
-            const params = [file, test, beforeEach, afterEach, update]
-            const response = await executionPool.exec('test', params)
-            if (response && response.skip) {
-              context.skip++
-              print.log('🛌', test.name)
-            } else if (!response || !response.excluded) {
+            // TODO: update comment
+            // Don't execute the test if it's marked with a skip modifier.
+            // Don't execute the test if there is a test in the test file marked
+            // with the only modifier and it's not this test.
+            if (skip || (hasOnly && !only)) {
+              // TODO: comment
+              context.snapshotState.markSnapshotsAsCheckedForTest(name)
+
+              if (skip) {
+                context.skip++
+                print.log('🛌', name)
+              }
+            } else {
+              const params = [file, test, beforeEach, afterEach, updateSnapshot]
+              const response = await executionPool.exec('test', params)
               context.pass++
               print.success(test.name)
             }
           } catch (err) {
+            // TODO: comment
+            context.snapshotState.markSnapshotsAsCheckedForTest(name)
+
             context.fail++
             print.error(err)
           } finally {
+            // The snapshot tests that weren't checked are obsolete and can be
+            // removed from the snapshot file.
+            if (context.snapshotState.getUncheckedCount()) {
+              context.snapshotState.removeUncheckedKeys()
+            }
+
+            // Save the snapshot changes.
+            context.snapshotState.save()
+
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.
             terminatePool(executionPool, async () => {
