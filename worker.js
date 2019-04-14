@@ -96,8 +96,7 @@ worker({
           if (context.failed) {
             reject(context.failed)
           } else {
-            console.log(expect.getState())
-            resolve(expect.getState())
+            resolve(expect.getState().snapshotState)
           }
         } catch (err) {
           reject(err)

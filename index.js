@@ -65,7 +65,7 @@ function run (config) {
         const tests = await registrationPool.exec('register', params)
         const hasOnly = Object.values(tests).some(test => test.only)
 
-        //
+        // TODO: comment
         context.snapshotState = getSnapshotState(file, updateSnapshot)
 
         // Send each test name and test filename to an exection pool worker so
@@ -87,8 +87,9 @@ function run (config) {
             } else {
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
+              console.log(response)
               context.pass++
-              print.success(test.name)
+              print.success(name)
             }
           } catch (err) {
             // TODO: comment

@@ -1,5 +1,4 @@
 const { join, dirname, basename } = require('path')
-const expect = require('expect')
 const { SnapshotState } = require('jest-snapshot')
 
 function getSnapshotState (file, updateSnapshot) {
@@ -13,4 +12,4 @@ function getSnapshotState (file, updateSnapshot) {
 
 const toAsyncExec = context => file => async () => require(file)(context)
 
-module.exports = { expect, getSnapshotState, toAsyncExec }
+module.exports = { getSnapshotState, toAsyncExec }
