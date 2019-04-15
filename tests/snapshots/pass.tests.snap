@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`second snapshot pass 1`] = `
+"export default () => {
+  console.log('Hello World!')
+}"
+`;
+
+exports[`second snapshot pass 2`] = `
+"export default () => {
+  console.log('Hello Universe!')
+}"
+`;
+
 exports[`snapshot pass 1`] = `
 "<html>
   <head>

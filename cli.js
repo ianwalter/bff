@@ -10,7 +10,7 @@ async function run () {
     opts: {
       alias: {
         concurrency: 'c',
-        update: 'u'
+        updateSnapshot: 'u'
       }
     }
   })

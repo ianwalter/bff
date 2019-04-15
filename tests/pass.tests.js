@@ -34,7 +34,7 @@ test('beforeEach', ({ pass }) => pass())
 test('registration', ({ pass }) => pass())
 
 test('snapshot pass', ({ expect }) => {
-  const markup = html`
+  const source = html`
     <html>
       <head>
         <title>Demo</title>
@@ -46,5 +46,15 @@ test('snapshot pass', ({ expect }) => {
       </body>
     </html>
   `
-  expect(markup).toMatchSnapshot()
+  expect(source).toMatchSnapshot()
+})
+
+test('second snapshot pass', ({ expect }) => {
+  const source = html`
+    export default () => {
+      console.log('Hello World!')
+    }
+  `
+  expect(source).toMatchSnapshot()
+  expect(source.replace('World', 'Universe')).toMatchSnapshot()
 })

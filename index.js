@@ -4,7 +4,7 @@ const globby = require('globby')
 const { print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toAsyncExec } = require('./utilities')
+const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
  * Checks the status of the given worker pool and terminates it if there are no
@@ -31,7 +31,7 @@ function run (config) {
     const tests = config._.length
       ? config._
       : (config.tests || ['tests.js', 'tests/**/*tests.js'])
-    const update = config.update ? 'all' : 'none'
+    const updateSnapshot = config.updateSnapshot ? 'all' : 'none'
     const { before, after, beforeEach, afterEach, registration } = config
 
     // Create the run context.
@@ -44,63 +44,141 @@ function run (config) {
       await pSeries(before.map(toAsyncExec(context)))
     }
 
+    // Set the worker pool options. For now, it only sets the maximum amount of
+    // workers used if the concurrency setting is set.
     const poolOptions = {
       ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
     }
 
+    // Set the path to the file used to create a worker.
     const workerPath = path.join(__dirname, 'worker.js')
 
     // For registering individual tests exported from test files.
     const registrationPool = workerpool.pool(workerPath, poolOptions)
 
+    // Initialize a count for each time a test file has been registered so that
+    // the run can figure out when registration has completed and the worker
+    // pool can be terminated.
+    let registrationCount = 0
+
     // For actually executing the tests.
     const executionPool = workerpool.pool(workerPath, poolOptions)
+
+    // Initialize counts for the number of total tests and the numbers of tests
+    // that have been executed so that the run can figure out when all tests
+    // have completed and the worker pool can be terminated.
+    let testCount = 0
+    let executionCount = 0
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
     // pool worker to be run.
     context.files.forEach(async file => {
       try {
+        // Perform registration on the test file to collect the tests that need
+        // to be executed.
         const params = [file, registration]
         const tests = await registrationPool.exec('register', params)
 
-        // Send each test name and test filename to an exection pool worker so
-        // that the test can be run and it's results can be reported.
-        tests.forEach(async test => {
+        // Increment the registration count now that registration has completed
+        // for the current test file.
+        registrationCount++
+
+        // Add the number of tests returned by test registration to the running
+        // total of all tests that need to be executed.
+        testCount += tests.length
+
+        // Determine if any of the tests in the test file have the .only
+        // modifier so that tests can be excluded from being executed.
+        const hasOnly = Object.values(tests).some(test => test.only)
+
+        // Get the snapshot state for the current test file.
+        const snapshotState = getSnapshotState(file, updateSnapshot)
+
+        // Iterate through all tests in the test file.
+        const runAllTestsInFile = Promise.all(tests.map(async test => {
           try {
-            const params = [file, test, beforeEach, afterEach, update]
-            const response = await executionPool.exec('test', params)
-            if (response && response.skip) {
-              context.skip++
-              print.log('🛌', test.name)
-            } else if (!response || !response.excluded) {
-              context.pass++
-              print.success(test.name)
-            }
-          } catch (err) {
-            context.fail++
-            print.error(err)
-          } finally {
-            // Terminate the execution pool if all tests have been run and
-            // resolve the returned Promise with the tests' pass/fail counts.
-            terminatePool(executionPool, async () => {
-              // Execute each function with the run context exported by the
-              // files configured to be called after a run.
-              if (after && after.length) {
-                await pSeries(after.map(toAsyncExec(context)))
+            // Mark all tests as having been checked for snapshot changes so
+            // that tests that have been removed can have their associated
+            // snapshots removed as well when the snapshots are checked for this
+            // test file.
+            snapshotState.markSnapshotsAsCheckedForTest(test.name)
+
+            // Don't execute the test if there is a test in the test file marked
+            // with the only modifier and it's not this test or if the test
+            // is marked with the skip modifier.
+            if (test.skip || (hasOnly && !test.only)) {
+              if (test.skip) {
+                // Output the test name and increment the skip count to remind
+                // the user that some tests are being skipped.
+                print.log('🛌', test.name)
+                context.skip++
+              }
+            } else {
+              // Send the test to a worker in the execution pool to be executed.
+              const params = [file, test, beforeEach, afterEach, updateSnapshot]
+              const response = await executionPool.exec('test', params)
+
+              // Update the snapshot state with the snapshot data received from
+              // the worker.
+              if (response && (response.added || response.updated)) {
+                snapshotState._dirty = true
+                snapshotState._counters = new Map(response.counters)
+                Object.assign(snapshotState._snapshotData, response.snapshots)
+                snapshotState.added += response.added
+                snapshotState.updated += response.updated
               }
 
-              // Resolve the run Promise with the run context.
-              resolve(context)
-            })
+              // Output the test name and increment the pass count since the
+              // test didn't throw and error indicating a failure.
+              print.success(test.name)
+              context.pass++
+            }
+          } catch (err) {
+            print.error(err)
+            context.fail++
+          } finally {
+            // Increment the execution count now that the test has completed.
+            executionCount++
+
+            // Terminate the execution pool if all tests have been run and
+            // resolve the returned Promise with the tests' pass/fail counts.
+            const registrationDone = registrationCount === context.files.length
+            if (registrationDone && executionCount === testCount) {
+              terminatePool(executionPool, async () => {
+                // Execute each function with the run context exported by the
+                // files configured to be called after a run.
+                if (after && after.length) {
+                  await pSeries(after.map(toAsyncExec(context)))
+                }
+
+                // Resolve the run Promise with the run context.
+                resolve(context)
+              })
+            }
           }
+        }))
+
+        // Update the snapshots only after all tests in the associated file have
+        // completed.
+        runAllTestsInFile.then(() => {
+          // The snapshot tests that weren't checked are obsolete and can be
+          // removed from the snapshot file.
+          if (snapshotState.getUncheckedCount()) {
+            snapshotState.removeUncheckedKeys()
+          }
+
+          // Save the snapshot changes.
+          snapshotState.save()
         })
       } catch (err) {
         print.error(err)
       } finally {
         // Terminate the registration pool if all the test files have been
         // registered.
-        terminatePool(registrationPool)
+        if (registrationCount === context.files.length) {
+          terminatePool(registrationPool)
+        }
       }
     })
   })
