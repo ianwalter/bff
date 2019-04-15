@@ -8,17 +8,13 @@ const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
  * Checks the status of the given worker pool and terminates it if there are no
- * active or pending tasks to execute and calls the given callback if defined.
+ * active or pending tasks to execute.
  * @param {WorkerPool} pool
- * @param {Function} callback
  */
-function terminatePool (pool, callback) {
+function terminatePool (pool) {
   const stats = pool.stats()
   if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
     pool.terminate()
-    if (callback) {
-      callback()
-    }
   }
 }
 
@@ -141,20 +137,20 @@ function run (config) {
             // Increment the execution count now that the test has completed.
             executionCount++
 
-            // Terminate the execution pool if all tests have been run and
-            // resolve the returned Promise with the tests' pass/fail counts.
             const registrationDone = registrationCount === context.files.length
             if (registrationDone && executionCount === testCount) {
-              terminatePool(executionPool, async () => {
-                // Execute each function with the run context exported by the
-                // files configured to be called after a run.
-                if (after && after.length) {
-                  await pSeries(after.map(toAsyncExec(context)))
-                }
+              // Execute each function with the run context exported by the
+              // files configured to be called after a run.
+              if (after && after.length) {
+                await pSeries(after.map(toAsyncExec(context)))
+              }
 
-                // Resolve the run Promise with the run context.
-                resolve(context)
-              })
+              // Terminate the execution pool if all tests have been run.
+              terminatePool(executionPool)
+
+              // Resolve the run Promise with the run context which contains the
+              // tests' pass/fail/skip counts.
+              resolve(context)
             }
           }
         }))
