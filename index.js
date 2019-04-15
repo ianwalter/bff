@@ -44,18 +44,29 @@ function run (config) {
       await pSeries(before.map(toAsyncExec(context)))
     }
 
+    // Set the pool options which only sets the maximum amount of workers used
+    // if the concurrency setting is set right now.
     const poolOptions = {
       ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
     }
 
+    // Set the path to the file used to create a worker.
     const workerPath = path.join(__dirname, 'worker.js')
 
     // For registering individual tests exported from test files.
     const registrationPool = workerpool.pool(workerPath, poolOptions)
+
+    // Initialize a count for each time a test file has been registered so that
+    // the run can figure out when registration has completed and the worker
+    // pool can be terminated.
     let registrationCount = 0
 
     // For actually executing the tests.
     const executionPool = workerpool.pool(workerPath, poolOptions)
+
+    // Initialize counts for the number of total tests and the numbers of tests
+    // that have been executed so that the run can figure out when all tests
+    // have completed and the worker pool can be terminated.
     let testCount = 0
     let executionCount = 0
 
@@ -64,28 +75,41 @@ function run (config) {
     // pool worker to be run.
     context.files.forEach(async file => {
       try {
-        // TODO: comment
+        // Perform registration on the test file to collect the tests that need
+        // to be executed.
         const params = [file, registration]
         const tests = await registrationPool.exec('register', params)
+
+        // Increment the registration count now that registration has completed
+        // for the current test file.
         registrationCount++
+
+        // Add the number of tests returned by test registration to the running
+        // total of all tests that need to be executed.
         testCount += tests.length
 
-        // TODO: comment
+        // Determine if any of the tests in the test file have the .only
+        // modifier so that tests can be excluded from being executed.
         const hasOnly = Object.values(tests).some(test => test.only)
 
-        // TODO: comment
+        // Get the snapshot state for the current test file.
         const snapshotState = getSnapshotState(file, updateSnapshot)
 
         // TODO: update comment
         // Send each test name and test filename to an exection pool worker so
         // that the test can be run and it's results can be reported.
+
+        // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
           try {
-            // TODO: comment
+            // Mark all tests as having been checked for snapshot changes so
+            // that tests that have been removed can have their associated
+            // snapshots removed as well when the snapshots are checked for this
+            // test file.
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
             // TODO: update comment
-            // Don't execute the test if it's marked with a skip modifier.
+
             // Don't execute the test if there is a test in the test file marked
             // with the only modifier and it's not this test.
             if (test.skip || (hasOnly && !test.only)) {
@@ -97,17 +121,18 @@ function run (config) {
               // TODO: comment
               executionCount++
             } else {
+              // Send the test to a worker in the execution pool to be executed.
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
 
-              // TODO: comment
+              // Increment the execution count
               executionCount++
 
               // TODO: add snapshot data to snapshotState.
               if (response && (response.added || response.updated)) {
                 snapshotState._dirty = true
                 snapshotState._counters = new Map(response.counters)
-                snapshotState._snapshotData[response.key] = response.snapshot
+                Object.assign(snapshotState._snapshotData, response.snapshots)
                 snapshotState.added += response.added
                 snapshotState.updated += response.updated
               }

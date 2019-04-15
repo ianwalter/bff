@@ -87,14 +87,15 @@ worker({
 
         const { snapshotState } = expect.getState()
         if (snapshotState.added || snapshotState.updated) {
-          const count = snapshotState._counters.get(context.name)
-          const key = utils.testNameToKey(context.name, count)
           context.response = {
-            key,
-            snapshot: snapshotState._snapshotData[key],
             counters: Array.from(snapshotState._counters),
+            snapshots: {},
             added: snapshotState.added,
             updated: snapshotState.updated
+          }
+          for (let i = snapshotState._counters.get(context.name); i > 0; i--) {
+            const key = utils.testNameToKey(context.name, i)
+            context.response.snapshots[key] = snapshotState._snapshotData[key]
           }
         }
       } catch (err) {

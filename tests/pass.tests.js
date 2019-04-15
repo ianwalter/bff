@@ -56,4 +56,5 @@ test('second snapshot pass', ({ expect }) => {
     }
   `
   expect(source).toMatchSnapshot()
+  expect(source.replace('World', 'Universe')).toMatchSnapshot()
 })
