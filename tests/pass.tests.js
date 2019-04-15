@@ -52,7 +52,7 @@ test('snapshot pass', ({ expect }) => {
 test('second snapshot pass', ({ expect }) => {
   const source = html`
     export default () => {
-      console.log('Hello Peeps!')
+      console.log('Hello World!')
     }
   `
   expect(source).toMatchSnapshot()

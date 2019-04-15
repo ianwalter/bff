@@ -4,6 +4,7 @@ const globby = require('globby')
 const { print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
+const merge = require('@ianwalter/merge')
 const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
@@ -81,40 +82,31 @@ function run (config) {
             // Don't execute the test if there is a test in the test file marked
             // with the only modifier and it's not this test.
             if (test.skip || (hasOnly && !test.only)) {
-              // TODO: comment
-              snapshotState.markSnapshotsAsCheckedForTest(test.name)
-
               if (test.skip) {
                 print.log('🛌', test.name)
                 context.skip++
               }
+
+              // TODO: comment
+              snapshotState.markSnapshotsAsCheckedForTest(test.name)
             } else {
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
               // TODO: add snapshot data to snapshotState.
               if (response) {
-                Object.assign(snapshotState, response)
+                merge(snapshotState, response)
               }
 
               print.success(test.name)
               context.pass++
             }
           } catch (err) {
-            // TODO: comment
-            snapshotState.markSnapshotsAsCheckedForTest(test.name)
-
             print.error(err)
             context.fail++
+
+            // TODO: comment
+            snapshotState.markSnapshotsAsCheckedForTest(test.name)
           } finally {
-            // The snapshot tests that weren't checked are obsolete and can be
-            // removed from the snapshot file.
-            if (snapshotState.getUncheckedCount()) {
-              snapshotState.removeUncheckedKeys()
-            }
-
-            // Save the snapshot changes.
-            snapshotState.save()
-
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.
             terminatePool(executionPool, async () => {
