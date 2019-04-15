@@ -44,8 +44,8 @@ function run (config) {
       await pSeries(before.map(toAsyncExec(context)))
     }
 
-    // Set the pool options which only sets the maximum amount of workers used
-    // if the concurrency setting is set right now.
+    // Set the worker pool options. For now, it only sets the maximum amount of
+    // workers used if the concurrency setting is set.
     const poolOptions = {
       ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
     }
