@@ -53,9 +53,12 @@ function run (config) {
 
     // For registering individual tests exported from test files.
     const registrationPool = workerpool.pool(workerPath, poolOptions)
+    let registrationCount = 0
 
     // For actually executing the tests.
     const executionPool = workerpool.pool(workerPath, poolOptions)
+    let testCount = 0
+    let executionCount = 0
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
@@ -65,6 +68,8 @@ function run (config) {
         // TODO: comment
         const params = [file, registration]
         const tests = await registrationPool.exec('register', params)
+        registrationCount++
+        testCount += tests.length
 
         // TODO: comment
         const hasOnly = Object.values(tests).some(test => test.only)
@@ -88,10 +93,17 @@ function run (config) {
               }
 
               // TODO: comment
+              executionCount++
+
+              // TODO: comment
               snapshotState.markSnapshotsAsCheckedForTest(test.name)
             } else {
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
+
+              // TODO: comment
+              executionCount++
+
               // TODO: add snapshot data to snapshotState.
               if (response) {
                 merge(snapshotState, response)
@@ -105,20 +117,26 @@ function run (config) {
             context.fail++
 
             // TODO: comment
+            executionCount++
+
+            // TODO: comment
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
           } finally {
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.
-            terminatePool(executionPool, async () => {
-              // Execute each function with the run context exported by the
-              // files configured to be called after a run.
-              if (after && after.length) {
-                await pSeries(after.map(toAsyncExec(context)))
-              }
+            const registrationDone = registrationCount === context.files.length
+            if (registrationDone && executionCount === testCount) {
+              terminatePool(executionPool, async () => {
+                // Execute each function with the run context exported by the
+                // files configured to be called after a run.
+                if (after && after.length) {
+                  await pSeries(after.map(toAsyncExec(context)))
+                }
 
-              // Resolve the run Promise with the run context.
-              resolve(context)
-            })
+                // Resolve the run Promise with the run context.
+                resolve(context)
+              })
+            }
           }
         }))
 
@@ -138,7 +156,9 @@ function run (config) {
       } finally {
         // Terminate the registration pool if all the test files have been
         // registered.
-        terminatePool(registrationPool)
+        if (registrationCount === context.files.length) {
+          terminatePool(registrationPool)
+        }
       }
     })
   })
