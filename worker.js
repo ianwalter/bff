@@ -5,8 +5,8 @@ worker({
   async register (file, registration) {
     const { toAsyncExec } = require('./lib')
 
-    // TODO: updare comment.
-    // Collect the names of the tests exported by the test file.
+    // Create the registration context with the list of tests that are intended
+    // to be executed.
     const toTest = ([name, { skip, only }]) => ({ key: name, name, skip, only })
     const context = { tests: Object.entries(require(file)).map(toTest) }
 
@@ -31,7 +31,7 @@ worker({
       } = require('jest-snapshot')
       const { getSnapshotState, toAsyncExec } = require('./lib')
 
-      // TODO: comment.
+      // Extend the expect with jest-snapshot to allow snapshot testing.
       expect.extend({
         toMatchInlineSnapshot,
         toMatchSnapshot,

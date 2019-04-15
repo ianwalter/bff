@@ -95,10 +95,6 @@ function run (config) {
         // Get the snapshot state for the current test file.
         const snapshotState = getSnapshotState(file, updateSnapshot)
 
-        // TODO: update comment
-        // Send each test name and test filename to an exection pool worker so
-        // that the test can be run and it's results can be reported.
-
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
           try {
@@ -108,27 +104,23 @@ function run (config) {
             // test file.
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
-            // TODO: update comment
-
             // Don't execute the test if there is a test in the test file marked
-            // with the only modifier and it's not this test.
+            // with the only modifier and it's not this test or if the test
+            // is marked with the skip modifier.
             if (test.skip || (hasOnly && !test.only)) {
               if (test.skip) {
+                // Output the test name and increment the skip count to remind
+                // the user that some tests are being skipped.
                 print.log('🛌', test.name)
                 context.skip++
               }
-
-              // TODO: comment
-              executionCount++
             } else {
               // Send the test to a worker in the execution pool to be executed.
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
 
-              // Increment the execution count
-              executionCount++
-
-              // TODO: add snapshot data to snapshotState.
+              // Update the snapshot state with the snapshot data received from
+              // the worker.
               if (response && (response.added || response.updated)) {
                 snapshotState._dirty = true
                 snapshotState._counters = new Map(response.counters)
@@ -137,16 +129,18 @@ function run (config) {
                 snapshotState.updated += response.updated
               }
 
+              // Output the test name and increment the pass count since the
+              // test didn't throw and error indicating a failure.
               print.success(test.name)
               context.pass++
             }
           } catch (err) {
             print.error(err)
             context.fail++
-
-            // TODO: comment
-            executionCount++
           } finally {
+            // Increment the execution count now that the test has completed.
+            executionCount++
+
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.
             const registrationDone = registrationCount === context.files.length
@@ -165,7 +159,8 @@ function run (config) {
           }
         }))
 
-        // TODO: comment
+        // Update the snapshots only after all tests in the associated file have
+        // completed.
         runAllTestsInFile.then(() => {
           // The snapshot tests that weren't checked are obsolete and can be
           // removed from the snapshot file.
