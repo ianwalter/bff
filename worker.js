@@ -26,7 +26,8 @@ worker({
         toMatchSnapshot,
         toMatchInlineSnapshot,
         toThrowErrorMatchingSnapshot,
-        toThrowErrorMatchingInlineSnapshot
+        toThrowErrorMatchingInlineSnapshot,
+        utils
       } = require('jest-snapshot')
       const { getSnapshotState, toAsyncExec } = require('./lib')
 
@@ -75,13 +76,26 @@ worker({
 
         // If there were no assertions executed, fail the test.
         if (assertionCalls === 0) {
-          throw new Error(`No assertions in test '${test.name}'`)
+          throw new Error(`No assertions in test '${context.name}'`)
         }
 
         // If expect has a suppressed error (e.g. a snapshot did not match)
         // then throw the error so that the test can be marked as having failed.
         if (suppressedErrors.length) {
           throw suppressedErrors[0]
+        }
+
+        const { snapshotState } = expect.getState()
+        if (snapshotState.added || snapshotState.updated) {
+          const count = snapshotState._counters.get(context.name)
+          const key = utils.testNameToKey(context.name, count)
+          context.response = {
+            key,
+            snapshot: snapshotState._snapshotData[key],
+            counters: Array.from(snapshotState._counters),
+            added: snapshotState.added,
+            updated: snapshotState.updated
+          }
         }
       } catch (err) {
         context.failed = err
@@ -96,7 +110,7 @@ worker({
           if (context.failed) {
             reject(context.failed)
           } else {
-            resolve(expect.getState().snapshotState)
+            resolve(context.response)
           }
         } catch (err) {
           reject(err)

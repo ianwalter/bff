@@ -4,7 +4,6 @@ const globby = require('globby')
 const { print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const merge = require('@ianwalter/merge')
 const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
@@ -82,6 +81,9 @@ function run (config) {
         // that the test can be run and it's results can be reported.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
           try {
+            // TODO: comment
+            snapshotState.markSnapshotsAsCheckedForTest(test.name)
+
             // TODO: update comment
             // Don't execute the test if it's marked with a skip modifier.
             // Don't execute the test if there is a test in the test file marked
@@ -94,9 +96,6 @@ function run (config) {
 
               // TODO: comment
               executionCount++
-
-              // TODO: comment
-              snapshotState.markSnapshotsAsCheckedForTest(test.name)
             } else {
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
               const response = await executionPool.exec('test', params)
@@ -105,8 +104,12 @@ function run (config) {
               executionCount++
 
               // TODO: add snapshot data to snapshotState.
-              if (response) {
-                merge(snapshotState, response)
+              if (response && (response.added || response.updated)) {
+                snapshotState._dirty = true
+                snapshotState._counters = new Map(response.counters)
+                snapshotState._snapshotData[response.key] = response.snapshot
+                snapshotState.added += response.added
+                snapshotState.updated += response.updated
               }
 
               print.success(test.name)
@@ -118,9 +121,6 @@ function run (config) {
 
             // TODO: comment
             executionCount++
-
-            // TODO: comment
-            snapshotState.markSnapshotsAsCheckedForTest(test.name)
           } finally {
             // Terminate the execution pool if all tests have been run and
             // resolve the returned Promise with the tests' pass/fail counts.

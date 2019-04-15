@@ -2,7 +2,7 @@
 
 exports[`second snapshot pass 1`] = `
 "export default () => {
-  console.log('Hello Peeps!')
+  console.log('Hello World!')
 }"
 `;
 
