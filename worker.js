@@ -48,7 +48,9 @@ worker({
         fail (msg) {
           throw new Error(msg || `Manual failure in test '${test.name}'`)
         },
-        pass: resolve
+        pass () {
+          context.passed = true
+        }
       }
 
       try {
@@ -75,7 +77,7 @@ worker({
         const { suppressedErrors, assertionCalls } = expect.getState()
 
         // If there were no assertions executed, fail the test.
-        if (assertionCalls === 0) {
+        if (!context.passed && assertionCalls === 0) {
           throw new Error(`No assertions in test '${context.name}'`)
         }
 
