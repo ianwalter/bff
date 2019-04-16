@@ -1,8 +1,16 @@
+const { relative } = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
+const { Print } = require('@ianwalter/print')
+const { threadId } = require('worker_threads')
+
+// TODO: Get log level from main process.
+const print = new Print({ level: 'info' })
 
 worker({
   async register (file, registration) {
+    const filePath = relative(process.cwd(), file)
+    print.debug(`Registration worker ${threadId} -`, filePath)
     const { toAsyncExec } = require('./lib')
 
     // Create the registration context with the list of tests that are intended
@@ -19,6 +27,8 @@ worker({
     return context.tests
   },
   test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot) {
+    const filePath = relative(process.cwd(), file)
+    print.debug(`Test worker ${threadId} -`, filePath, '-', test.name)
     return new Promise(async (resolve, reject) => {
       const expect = require('expect')
       const {
@@ -111,6 +121,10 @@ worker({
           }
 
           if (context.failed) {
+            // Delete the matcher result property of the error since it can't be
+            // sent over postMessage.
+            delete context.failed.matcherResult
+
             reject(context.failed)
           } else {
             resolve(context.response)
