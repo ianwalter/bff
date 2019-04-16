@@ -1,7 +1,7 @@
 const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
-const { print } = require('@ianwalter/print')
+const { Print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { toAsyncExec, getSnapshotState } = require('./lib')
@@ -11,10 +11,10 @@ const { toAsyncExec, getSnapshotState } = require('./lib')
  * active or pending tasks to execute.
  * @param {WorkerPool} pool
  */
-function terminatePool (pool) {
+async function terminatePool (pool) {
   const stats = pool.stats()
   if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
-    pool.terminate()
+    return pool.terminate()
   }
 }
 
@@ -29,6 +29,10 @@ function run (config) {
       : (config.tests || ['tests.js', 'tests/**/*tests.js'])
     const updateSnapshot = config.updateSnapshot ? 'all' : 'none'
     const { before, after, beforeEach, afterEach, registration } = config
+    const { logLevel = 'info' } = config
+
+    // Create the print instance with the given log level.
+    const print = new Print({ level: logLevel })
 
     // Create the run context.
     const files = (await globby(tests)).map(file => path.resolve(file))
@@ -49,7 +53,7 @@ function run (config) {
     // Set the path to the file used to create a worker.
     const workerPath = path.join(__dirname, 'worker.js')
 
-    // For registering individual tests exported from test files.
+    // For registering individual tests exported from test files:
     const registrationPool = workerpool.pool(workerPath, poolOptions)
 
     // Initialize a count for each time a test file has been registered so that
@@ -57,7 +61,7 @@ function run (config) {
     // pool can be terminated.
     let registrationCount = 0
 
-    // For actually executing the tests.
+    // For actually executing the tests:
     const executionPool = workerpool.pool(workerPath, poolOptions)
 
     // Initialize counts for the number of total tests and the numbers of tests
@@ -136,6 +140,20 @@ function run (config) {
           } finally {
             // Increment the execution count now that the test has completed.
             executionCount++
+          }
+        }))
+
+        // After all the tests in the test file have been executed...
+        runAllTestsInFile.then(async () => {
+          try {
+            // The snapshot tests that weren't checked are obsolete and can be
+            // removed from the snapshot file.
+            if (snapshotState.getUncheckedCount()) {
+              snapshotState.removeUncheckedKeys()
+            }
+
+            // Save the snapshot changes.
+            snapshotState.save()
 
             const registrationDone = registrationCount === context.files.length
             if (registrationDone && executionCount === testCount) {
@@ -147,25 +165,15 @@ function run (config) {
 
               // Terminate the execution pool if all tests have been run.
               terminatePool(executionPool)
+                .then(() => print.debug('Execution pool terminated'))
 
-              // Resolve the run Promise with the run context which contains the
-              // tests' pass/fail/skip counts.
+              // Resolve the run Promise with the run context which contains
+              // the tests' pass/fail/skip counts.
               resolve(context)
             }
+          } catch (err) {
+            print.error(err)
           }
-        }))
-
-        // Update the snapshots only after all tests in the associated file have
-        // completed.
-        runAllTestsInFile.then(() => {
-          // The snapshot tests that weren't checked are obsolete and can be
-          // removed from the snapshot file.
-          if (snapshotState.getUncheckedCount()) {
-            snapshotState.removeUncheckedKeys()
-          }
-
-          // Save the snapshot changes.
-          snapshotState.save()
         })
       } catch (err) {
         print.error(err)
@@ -174,6 +182,7 @@ function run (config) {
         // registered.
         if (registrationCount === context.files.length) {
           terminatePool(registrationPool)
+            .then(() => print.debug('Registration pool terminated'))
         }
       }
     })
