@@ -4,6 +4,7 @@ const globby = require('globby')
 const { Print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
+const pTimeout = require('p-timeout')
 const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
@@ -29,7 +30,7 @@ function run (config) {
       : (config.tests || ['tests.js', 'tests/**/*tests.js'])
     const updateSnapshot = config.updateSnapshot ? 'all' : 'none'
     const { before, after, beforeEach, afterEach, registration } = config
-    const { logLevel = 'info' } = config
+    const { logLevel = 'info', timeout = 60000 } = config
 
     // Create the print instance with the given log level.
     const print = new Print({ level: logLevel })
@@ -117,7 +118,10 @@ function run (config) {
             } else {
               // Send the test to a worker in the execution pool to be executed.
               const params = [file, test, beforeEach, afterEach, updateSnapshot]
-              const response = await executionPool.exec('test', params)
+              const response = await pTimeout(
+                executionPool.exec('test', params),
+                timeout
+              )
 
               // Update the snapshot state with the snapshot data received from
               // the worker.
@@ -135,7 +139,12 @@ function run (config) {
               context.pass++
             }
           } catch (err) {
-            print.error(err)
+            const isCancellation = err.name === 'CancellationError'
+            if (isCancellation && err.stack.includes('Timeout')) {
+              print.error(`Timeout in test '${test.name}'`)
+            } else {
+              print.error(err)
+            }
             context.fail++
           } finally {
             // Increment the execution count now that the test has completed.

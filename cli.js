@@ -11,7 +11,8 @@ async function run () {
       alias: {
         concurrency: 'c',
         updateSnapshot: 'u',
-        logLevel: 'l'
+        logLevel: 'l',
+        timeout: 't'
       }
     }
   })
