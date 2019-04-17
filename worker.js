@@ -5,8 +5,6 @@ const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 
 // TODO: Get log level from main process.
-chalk.enabled = true
-chalk.level = 1
 const print = new Print({ level: 'debug' })
 
 worker({
@@ -76,6 +74,7 @@ worker({
         // Update expect's state with the snapshot state and the test name.
         expect.setState({
           assertionCalls: 0,
+          suppressedErrors: [],
           snapshotState: getSnapshotState(file, updateSnapshot),
           currentTestName: context.name
         })
