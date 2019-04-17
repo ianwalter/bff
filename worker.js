@@ -5,7 +5,7 @@ const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 
 // TODO: Get log level from main process.
-const print = new Print({ level: 'debug' })
+const print = new Print({ level: 'info' })
 
 worker({
   async register (file, registration) {

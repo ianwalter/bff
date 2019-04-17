@@ -146,10 +146,10 @@
   resolved "https://registry.yarnpkg.com/@ianwalter/log/-/log-3.0.0.tgz#c85f7343e28e98d0a4c872a42e6bdd6d8b302e8d"
   integrity sha512-CAB1LaZUDUvQexuZYXmRhaFrpNqguIwA+ciB8+uvDm9dakNX3H+Yd7VIOisvx/y4GljH2hSrlTfCzhy14/0/YQ==
 
-"@ianwalter/print@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-2.2.0.tgz#4d73d4a43a0a5963536d59d60edc5615dddec392"
-  integrity sha512-iQa6p71VFnLr5qBB5PVNSsMkJjFhH+U5orY7/1uDCpHu9J6lMSLL7iIA5HDZ3CFNnVUcngbc1I/8i8bdRm9HZg==
+"@ianwalter/print@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-2.3.0.tgz#12e2a11ca3e622e98069f1ca824c6edb3f4c47cb"
+  integrity sha512-JBysj0+79suEX/GT14xtuc+3MaaShPvo6U4LFuxsldGRvClYJYfG+c4VqZMJ18TwDYrd3ImVKQ4apKSyAOmVHQ==
   dependencies:
     "@ianwalter/log" "^3.0.0"
     chalk "^2.4.2"
