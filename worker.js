@@ -1,6 +1,7 @@
 const { relative } = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
+const pTimeout = require('p-timeout')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 
@@ -26,7 +27,7 @@ worker({
 
     return context.tests
   },
-  test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot) {
+  test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot, timeout) {
     const filePath = relative(process.cwd(), file)
     print.debug(
       `Test worker ${threadId}`,
@@ -87,7 +88,15 @@ worker({
 
         // Perform the given test within the test file and make the expect
         // assertion library available to it.
-        await testFn(context)
+        const promise = new Promise(async (resolve, reject) => {
+          try {
+            await testFn(context)
+            resolve()
+          } catch (err) {
+            reject(err)
+          }
+        })
+        await pTimeout(promise, timeout)
 
         // Extract expect's state after running the test.
         const { suppressedErrors, assertionCalls } = expect.getState()

@@ -4,7 +4,6 @@ const globby = require('globby')
 const { Print } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const pTimeout = require('p-timeout')
 const { toAsyncExec, getSnapshotState } = require('./lib')
 
 /**
@@ -119,10 +118,9 @@ function run (config) {
               }
             } else {
               // Send the test to a worker in the execution pool to be executed.
-              const params = [file, test, beforeEach, afterEach, updateSnapshot]
-              const response = await pTimeout(
-                executionPool.exec('test', params),
-                timeout
+              const response = await executionPool.exec(
+                'test',
+                [file, test, beforeEach, afterEach, updateSnapshot, timeout]
               )
 
               // Update the snapshot state with the snapshot data received from
