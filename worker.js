@@ -7,7 +7,7 @@ const { threadId } = require('worker_threads')
 // TODO: Get log level from main process.
 chalk.enabled = true
 chalk.level = 1
-const print = new Print({ level: 'info' })
+const print = new Print({ level: 'debug' })
 
 worker({
   async register (file, registration) {
@@ -75,6 +75,7 @@ worker({
 
         // Update expect's state with the snapshot state and the test name.
         expect.setState({
+          assertionCalls: 0,
           snapshotState: getSnapshotState(file, updateSnapshot),
           currentTestName: context.name
         })
