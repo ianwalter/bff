@@ -1,16 +1,18 @@
 const { relative } = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
-const { Print } = require('@ianwalter/print')
+const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 
 // TODO: Get log level from main process.
+chalk.enabled = true
+chalk.level = 1
 const print = new Print({ level: 'info' })
 
 worker({
   async register (file, registration) {
     const filePath = relative(process.cwd(), file)
-    print.debug(`Registration worker ${threadId} -`, filePath)
+    print.debug(`Registration worker ${threadId}`, chalk.gray(filePath))
     const { toAsyncExec } = require('./lib')
 
     // Create the registration context with the list of tests that are intended
@@ -28,7 +30,11 @@ worker({
   },
   test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot) {
     const filePath = relative(process.cwd(), file)
-    print.debug(`Test worker ${threadId} -`, filePath, '-', test.name)
+    print.debug(
+      `Test worker ${threadId}`,
+      chalk.cyan(test.name),
+      chalk.gray(filePath)
+    )
     return new Promise(async (resolve, reject) => {
       const expect = require('expect')
       const {
