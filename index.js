@@ -47,9 +47,10 @@ function run (config) {
 
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
+    const finiteMaxWorkers = config.concurrency !== 0
     const poolOptions = {
       nodeWorker: 'auto',
-      ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
+      ...(finiteMaxWorkers ? { maxWorkers: config.concurrency || 8 } : {})
     }
 
     // Set the path to the file used to create a worker.
