@@ -39,7 +39,7 @@ function run (config) {
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
 
-    // Add the test files to the run context.
+    // Add the absolute paths of the test files to the run context.
     context.files = (await globby(context.tests)).map(f => path.resolve(f))
 
     // Execute each function with the run context exported by the files

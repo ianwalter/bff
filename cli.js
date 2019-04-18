@@ -22,7 +22,8 @@ async function run () {
   config.tests = config._.length ? config._ : config.tests
   delete config._
 
-  // Run the tests and wait for a response with the pass/fail counts.
+  // Run the tests and wait for a response with the passed/failed/skipped
+  // counts.
   const { passed, failed, skipped } = await bff(config)
 
   // Log the results of running the tests.
