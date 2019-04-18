@@ -18,7 +18,7 @@ yarn add @ianwalter/bff --dev
 Declare a test by calling the test function with a name and a function:
 
 ```js
-const { test } = require('@ianwalter/test')
+const { test } = require('@ianwalter/bff')
 const someFunctionality = require('./someFunctionality')
 
 test('some functionality', ({ expect }) => {

@@ -1,22 +1,10 @@
 const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
-const { Print } = require('@ianwalter/print')
+const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { toAsyncExec, getSnapshotState } = require('./lib')
-
-/**
- * Checks the status of the given worker pool and terminates it if there are no
- * active or pending tasks to execute.
- * @param {WorkerPool} pool
- */
-async function terminatePool (pool) {
-  const stats = pool.stats()
-  if (stats.activeTasks === 0 && stats.pendingTasks === 0) {
-    return pool.terminate()
-  }
-}
 
 /**
  * Collects tests names from tests files and assigns them to a worker in a
@@ -46,10 +34,9 @@ function run (config) {
 
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
-    const finiteMaxWorkers = config.concurrency !== 0
     const poolOptions = {
       nodeWorker: 'auto',
-      ...(finiteMaxWorkers ? { maxWorkers: config.concurrency || 8 } : {})
+      ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
     }
 
     // Set the path to the file used to create a worker.
@@ -139,9 +126,11 @@ function run (config) {
               context.pass++
             }
           } catch (err) {
-            const isCancellation = err.name === 'CancellationError'
-            if (isCancellation && err.stack.includes('Timeout')) {
-              print.error(`Timeout in test '${test.name}'`)
+            if (err.name === 'TimeoutError') {
+              print.error(
+                `Timeout in test '${test.name}'`,
+                chalk.gray(path.relative(process.cwd(), file))
+              )
             } else {
               print.error(err)
             }
@@ -173,7 +162,7 @@ function run (config) {
               }
 
               // Terminate the execution pool if all tests have been run.
-              terminatePool(executionPool)
+              executionPool.terminate()
                 .then(() => print.debug('Execution pool terminated'))
 
               // Resolve the run Promise with the run context which contains
@@ -190,7 +179,7 @@ function run (config) {
         // Terminate the registration pool if all the test files have been
         // registered.
         if (registrationCount === context.files.length) {
-          terminatePool(registrationPool)
+          registrationPool.terminate()
             .then(() => print.debug('Registration pool terminated'))
         }
       }
