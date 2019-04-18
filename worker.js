@@ -1,8 +1,17 @@
+const { relative } = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
+const pTimeout = require('p-timeout')
+const { Print, chalk } = require('@ianwalter/print')
+const { threadId } = require('worker_threads')
+
+// TODO: Get log level from main process.
+const print = new Print({ level: 'info' })
 
 worker({
   async register (file, registration) {
+    const filePath = relative(process.cwd(), file)
+    print.debug(`Registration worker ${threadId}`, chalk.gray(filePath))
     const { toAsyncExec } = require('./lib')
 
     // Create the registration context with the list of tests that are intended
@@ -18,7 +27,13 @@ worker({
 
     return context.tests
   },
-  test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot) {
+  test (file, test, beforeEachFiles, afterEachFiles, updateSnapshot, timeout) {
+    const filePath = relative(process.cwd(), file)
+    print.debug(
+      `Test worker ${threadId}`,
+      chalk.cyan(test.name),
+      chalk.gray(filePath)
+    )
     return new Promise(async (resolve, reject) => {
       const expect = require('expect')
       const {
@@ -48,7 +63,9 @@ worker({
         fail (msg) {
           throw new Error(msg || `Manual failure in test '${test.name}'`)
         },
-        pass: resolve
+        pass () {
+          context.passed = true
+        }
       }
 
       try {
@@ -57,6 +74,8 @@ worker({
 
         // Update expect's state with the snapshot state and the test name.
         expect.setState({
+          assertionCalls: 0,
+          suppressedErrors: [],
           snapshotState: getSnapshotState(file, updateSnapshot),
           currentTestName: context.name
         })
@@ -69,13 +88,21 @@ worker({
 
         // Perform the given test within the test file and make the expect
         // assertion library available to it.
-        await testFn(context)
+        const promise = new Promise(async (resolve, reject) => {
+          try {
+            await testFn(context)
+            resolve()
+          } catch (err) {
+            reject(err)
+          }
+        })
+        await pTimeout(promise, timeout)
 
         // Extract expect's state after running the test.
         const { suppressedErrors, assertionCalls } = expect.getState()
 
         // If there were no assertions executed, fail the test.
-        if (assertionCalls === 0) {
+        if (!context.passed && assertionCalls === 0) {
           throw new Error(`No assertions in test '${context.name}'`)
         }
 
@@ -109,6 +136,10 @@ worker({
           }
 
           if (context.failed) {
+            // Delete the matcher result property of the error since it can't be
+            // sent over postMessage.
+            delete context.failed.matcherResult
+
             reject(context.failed)
           } else {
             resolve(context.response)

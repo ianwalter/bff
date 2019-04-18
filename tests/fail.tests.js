@@ -27,3 +27,5 @@ test('snapshot fail', ({ expect }) => {
   `
   expect(markup).toMatchSnapshot()
 })
+
+test('timeout', () => new Promise(() => {}))

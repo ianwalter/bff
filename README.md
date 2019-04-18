@@ -9,6 +9,52 @@
 yarn add @ianwalter/bff --dev
 ```
 
+## CLI Usage
+
+## Configuration
+
+## Writing tests
+
+Declare a test by calling the test function with a name and a function:
+
+```js
+const { test } = require('@ianwalter/bff')
+const someFunctionality = require('./someFunctionality')
+
+test('some functionality', ({ expect }) => {
+  expect(someFunctionality()).toBeTruthy()
+})
+```
+
+If the test name/description is really long, you can also pass the test function
+in a second call:
+
+```js
+test(`
+  some functionality when some environment variable is set, the user has some
+  localStorage value, and some query parameter has a certain value
+`)(({ expect }) => {
+  expect(scenario).toMatchSnapshot()
+})
+```
+
+You can skip individual tests by adding the `.skip` modifier:
+
+```js
+test.skip('something', ({ expect }) => {
+  expect(something).toBe(somethingElse)
+})
+```
+
+You can also have only designated tests in a test file executed with the
+`.only` modifier:
+
+```js
+test.only('focus', ({ expect }) => {
+  expect({}).toEqual({})
+})
+```
+
 ## License
 
 Apache 2.0 with Commons Clause - See [LICENSE][licenseUrl]
