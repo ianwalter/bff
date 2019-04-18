@@ -17,19 +17,19 @@ async function run () {
   })
 
   // TODO: comment.
-  config.tests = config._ || config.tests
+  config.tests = config._.length ? config._ : config.tests
   delete config._
 
   // Run the tests and wait for a response with the pass/fail counts.
-  const { pass, fail, skip } = await bff(config)
+  const { passed, failed, skipped } = await bff(config)
 
   // Log the results of running the tests.
   console.log('')
-  print.info(`${pass} passed. ${fail} failed. ${skip} skipped.`)
+  print.info(`${passed} passed. ${failed} failed. ${skipped} skipped.`)
 
   // Exit with the failed test count as the exit code so that the process exits
   // with a non-zero code when tests have failed.
-  process.exit(fail)
+  process.exit(failed)
 }
 
 try {
