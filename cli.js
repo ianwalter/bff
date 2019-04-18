@@ -16,7 +16,9 @@ async function run () {
     }
   })
 
-  // TODO: comment.
+  // Set tests as whatever paths were passed as input to the CLI or whatever
+  // is configured and delete the _ (input) attribute to get rid of duplicate
+  // data.
   config.tests = config._.length ? config._ : config.tests
   delete config._
 

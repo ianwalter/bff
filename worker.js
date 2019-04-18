@@ -5,11 +5,9 @@ const pTimeout = require('p-timeout')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 
-// TODO: Get log level from main process.
-const print = new Print({ level: 'info' })
-
 worker({
   async register (file, context) {
+    const print = new Print({ level: context.logLevel })
     const filePath = relative(process.cwd(), file)
     print.debug(`Registration worker ${threadId}`, chalk.gray(filePath))
     const { toHookExec } = require('./lib')
@@ -31,6 +29,7 @@ worker({
     return context.registrationContext.tests
   },
   test (file, test, context) {
+    const print = new Print({ level: context.logLevel })
     print.debug(
       `Test worker ${threadId}`,
       chalk.cyan(test.name),

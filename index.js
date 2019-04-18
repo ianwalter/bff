@@ -15,19 +15,20 @@ function run (config) {
     // Create the run context using the passed configuration and defaults.
     const context = {
       ...config,
-      // TODO: update comment.
       // Initialize a count for each time a test file has been registered so
       // that the run can figure out when registration has completed and the
       // worker pool can be terminated.
       filesRegistered: 0,
-      // TODO: update comment.
-      // Initialize counts for the number of total tests and the numbers of
-      // tests that have been executed so that the run can figure out when all
-      // tests have completed and the worker pool can be terminated.
+      // Initialize a count for the total number of tests registered from all of
+      // the test files.
       testsRegistered: 0,
+      // Initialize counts for how many tests passed, failed, or were skipped.
       passed: 0,
       failed: 0,
       skipped: 0,
+      // Initialize a count for the total number of tests that have been
+      // executed so that the run can figure out when all tests have completed
+      // and the worker pool can be terminated.
       executed: 0
     }
     context.tests = config.tests || ['tests.js', 'tests/**/*tests.js']
