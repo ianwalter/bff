@@ -10,6 +10,6 @@ function getSnapshotState (file, updateSnapshot) {
   return new SnapshotState(snapshotPath, { updateSnapshot })
 }
 
-const toAsyncExec = context => file => async () => require(file)(context)
+const toHookExec = (hook, context) => f => async () => require(f)(hook, context)
 
-module.exports = { getSnapshotState, toAsyncExec }
+module.exports = { getSnapshotState, toHookExec }

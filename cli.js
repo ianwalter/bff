@@ -10,11 +10,15 @@ async function run () {
     opts: {
       alias: {
         concurrency: 'c',
-        updateSnapshot: 'u',
+        updateSnapshots: 'u',
         logLevel: 'l'
       }
     }
   })
+
+  // TODO: comment.
+  config.tests = config._ || config.tests
+  delete config._
 
   // Run the tests and wait for a response with the pass/fail counts.
   const { pass, fail, skip } = await bff(config)
