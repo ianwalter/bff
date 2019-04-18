@@ -10,22 +10,29 @@ async function run () {
     opts: {
       alias: {
         concurrency: 'c',
-        updateSnapshot: 'u',
+        updateSnapshots: 'u',
         logLevel: 'l'
       }
     }
   })
 
-  // Run the tests and wait for a response with the pass/fail counts.
-  const { pass, fail, skip } = await bff(config)
+  // Set tests as whatever paths were passed as input to the CLI or whatever
+  // is configured and delete the _ (input) attribute to get rid of duplicate
+  // data.
+  config.tests = config._.length ? config._ : config.tests
+  delete config._
+
+  // Run the tests and wait for a response with the passed/failed/skipped
+  // counts.
+  const { passed, failed, skipped } = await bff(config)
 
   // Log the results of running the tests.
   console.log('')
-  print.info(`${pass} passed. ${fail} failed. ${skip} skipped.`)
+  print.info(`${passed} passed. ${failed} failed. ${skipped} skipped.`)
 
   // Exit with the failed test count as the exit code so that the process exits
   // with a non-zero code when tests have failed.
-  process.exit(fail)
+  process.exit(failed)
 }
 
 try {

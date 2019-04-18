@@ -4,7 +4,7 @@ const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toAsyncExec, getSnapshotState } = require('./lib')
+const { toHookExec, getSnapshotState } = require('./lib')
 
 /**
  * Collects tests names from tests files and assigns them to a worker in a
@@ -12,31 +12,47 @@ const { toAsyncExec, getSnapshotState } = require('./lib')
  */
 function run (config) {
   return new Promise(async resolve => {
-    const tests = config._.length
-      ? config._
-      : (config.tests || ['tests.js', 'tests/**/*tests.js'])
-    const updateSnapshot = config.updateSnapshot ? 'all' : 'none'
-    const { before, after, beforeEach, afterEach, registration } = config
-    const { logLevel = 'info', timeout = 60000 } = config
+    // Create the run context using the passed configuration and defaults.
+    const context = {
+      ...config,
+      // Initialize a count for each time a test file has been registered so
+      // that the run can figure out when registration has completed and the
+      // worker pool can be terminated.
+      filesRegistered: 0,
+      // Initialize a count for the total number of tests registered from all of
+      // the test files.
+      testsRegistered: 0,
+      // Initialize counts for how many tests passed, failed, or were skipped.
+      passed: 0,
+      failed: 0,
+      skipped: 0,
+      // Initialize a count for the total number of tests that have been
+      // executed so that the run can figure out when all tests have completed
+      // and the worker pool can be terminated.
+      executed: 0
+    }
+    context.tests = config.tests || ['tests.js', 'tests/**/*tests.js']
+    context.updateSnapshot = config.updateSnapshot ? 'all' : 'none'
+    context.logLevel = config.logLevel || 'info'
+    context.timeout = config.timeout || 60000
 
     // Create the print instance with the given log level.
-    const print = new Print({ level: logLevel })
+    const print = new Print({ level: context.logLevel })
 
-    // Create the run context.
-    const files = (await globby(tests)).map(file => path.resolve(file))
-    const context = { files, pass: 0, fail: 0, skip: 0 }
+    // Add the absolute paths of the test files to the run context.
+    context.files = (await globby(context.tests)).map(f => path.resolve(f))
 
     // Execute each function with the run context exported by the files
     // configured to be called before a run.
-    if (before && before.length) {
-      await pSeries(before.map(toAsyncExec(context)))
+    if (context.before && context.before.length) {
+      await pSeries(context.before.map(toHookExec('before', context)))
     }
 
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
     const poolOptions = {
       nodeWorker: 'auto',
-      ...(config.concurrency ? { maxWorkers: config.concurrency } : {})
+      ...(context.concurrency ? { maxWorkers: context.concurrency } : {})
     }
 
     // Set the path to the file used to create a worker.
@@ -45,19 +61,8 @@ function run (config) {
     // For registering individual tests exported from test files:
     const registrationPool = workerpool.pool(workerPath, poolOptions)
 
-    // Initialize a count for each time a test file has been registered so that
-    // the run can figure out when registration has completed and the worker
-    // pool can be terminated.
-    let registrationCount = 0
-
     // For actually executing the tests:
     const executionPool = workerpool.pool(workerPath, poolOptions)
-
-    // Initialize counts for the number of total tests and the numbers of tests
-    // that have been executed so that the run can figure out when all tests
-    // have completed and the worker pool can be terminated.
-    let testCount = 0
-    let executionCount = 0
 
     // For each test file found, pass the filename to a registration pool worker
     // so that the tests within it can be collected and given to a execution
@@ -66,23 +71,22 @@ function run (config) {
       try {
         // Perform registration on the test file to collect the tests that need
         // to be executed.
-        const params = [file, registration]
-        const tests = await registrationPool.exec('register', params)
+        const tests = await registrationPool.exec('register', [file, context])
 
         // Increment the registration count now that registration has completed
         // for the current test file.
-        registrationCount++
+        context.filesRegistered++
 
         // Add the number of tests returned by test registration to the running
         // total of all tests that need to be executed.
-        testCount += tests.length
+        context.testsRegistered += tests.length
 
         // Determine if any of the tests in the test file have the .only
         // modifier so that tests can be excluded from being executed.
         const hasOnly = Object.values(tests).some(test => test.only)
 
         // Get the snapshot state for the current test file.
-        const snapshotState = getSnapshotState(file, updateSnapshot)
+        const snapshotState = getSnapshotState(file, context.updateSnapshots)
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
@@ -101,29 +105,29 @@ function run (config) {
                 // Output the test name and increment the skip count to remind
                 // the user that some tests are being skipped.
                 print.log('🛌', test.name)
-                context.skip++
+                context.skipped++
               }
             } else {
               // Send the test to a worker in the execution pool to be executed.
-              const response = await executionPool.exec(
+              const result = await executionPool.exec(
                 'test',
-                [file, test, beforeEach, afterEach, updateSnapshot, timeout]
+                [file, test, context]
               )
 
               // Update the snapshot state with the snapshot data received from
               // the worker.
-              if (response && (response.added || response.updated)) {
+              if (result && (result.added || result.updated)) {
                 snapshotState._dirty = true
-                snapshotState._counters = new Map(response.counters)
-                Object.assign(snapshotState._snapshotData, response.snapshots)
-                snapshotState.added += response.added
-                snapshotState.updated += response.updated
+                snapshotState._counters = new Map(result.counters)
+                Object.assign(snapshotState._snapshotData, result.snapshots)
+                snapshotState.added += result.added
+                snapshotState.updated += result.updated
               }
 
               // Output the test name and increment the pass count since the
               // test didn't throw and error indicating a failure.
               print.success(test.name)
-              context.pass++
+              context.passed++
             }
           } catch (err) {
             if (err.name === 'TimeoutError') {
@@ -134,10 +138,10 @@ function run (config) {
             } else {
               print.error(err)
             }
-            context.fail++
+            context.failed++
           } finally {
             // Increment the execution count now that the test has completed.
-            executionCount++
+            context.executed++
           }
         }))
 
@@ -153,12 +157,14 @@ function run (config) {
             // Save the snapshot changes.
             snapshotState.save()
 
-            const registrationDone = registrationCount === context.files.length
-            if (registrationDone && executionCount === testCount) {
+            if (
+              context.filesRegistered === context.files.length &&
+              context.executed === context.testsRegistered
+            ) {
               // Execute each function with the run context exported by the
               // files configured to be called after a run.
-              if (after && after.length) {
-                await pSeries(after.map(toAsyncExec(context)))
+              if (context.after && context.after.length) {
+                await pSeries(context.after.map(toHookExec('after', context)))
               }
 
               // Terminate the execution pool if all tests have been run.
@@ -178,7 +184,7 @@ function run (config) {
       } finally {
         // Terminate the registration pool if all the test files have been
         // registered.
-        if (registrationCount === context.files.length) {
+        if (context.filesRegistered === context.files.length) {
           registrationPool.terminate()
             .then(() => print.debug('Registration pool terminated'))
         }
