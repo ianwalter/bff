@@ -86,7 +86,7 @@ function run (config) {
         const hasOnly = Object.values(tests).some(test => test.only)
 
         // Get the snapshot state for the current test file.
-        const snapshotState = getSnapshotState(file, context.updateSnapshots)
+        const snapshotState = getSnapshotState(file, context.updateSnapshot)
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {

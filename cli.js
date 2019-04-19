@@ -10,8 +10,10 @@ async function run () {
     opts: {
       alias: {
         concurrency: 'c',
-        updateSnapshots: 'u',
-        logLevel: 'l'
+        updateSnapshot: 'u',
+        logLevel: 'l',
+        tags: 't',
+        timeout: 'T'
       }
     }
   })
