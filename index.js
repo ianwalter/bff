@@ -39,15 +39,6 @@ function run (config) {
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
 
-    // Add the absolute paths of the test files to the run context.
-    context.files = (await globby(context.tests)).map(f => path.resolve(f))
-
-    // Execute each function with the run context exported by the files
-    // configured to be called before a run.
-    if (context.before && context.before.length) {
-      await pSeries(context.before.map(toHookExec('before', context)))
-    }
-
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
     const poolOptions = {
@@ -64,11 +55,20 @@ function run (config) {
     // For actually executing the tests:
     const executionPool = workerpool.pool(workerPath, poolOptions)
 
-    // For each test file found, pass the filename to a registration pool worker
-    // so that the tests within it can be collected and given to a execution
-    // pool worker to be run.
-    context.files.forEach(async file => {
-      try {
+    try {
+      // Add the absolute paths of the test files to the run context.
+      context.files = (await globby(context.tests)).map(f => path.resolve(f))
+
+      // Execute each function with the run context exported by the files
+      // configured to be called before a run.
+      if (context.before && context.before.length) {
+        await pSeries(context.before.map(toHookExec('before', context)))
+      }
+
+      // For each test file found, pass the filename to a registration pool
+      // worker so that the tests within it can be collected and given to a
+      // execution pool worker to be run.
+      context.files.forEach(async file => {
         // Perform registration on the test file to collect the tests that need
         // to be executed.
         const tests = await registrationPool.exec('register', [file, context])
@@ -179,17 +179,17 @@ function run (config) {
             print.error(err)
           }
         })
-      } catch (err) {
-        print.error(err)
-      } finally {
-        // Terminate the registration pool if all the test files have been
-        // registered.
-        if (context.filesRegistered === context.files.length) {
-          registrationPool.terminate()
-            .then(() => print.debug('Registration pool terminated'))
-        }
+      })
+    } catch (err) {
+      print.error(err)
+    } finally {
+      // Terminate the registration pool if all the test files have been
+      // registered.
+      if (context.filesRegistered === context.files.length) {
+        registrationPool.terminate()
+          .then(() => print.debug('Registration pool terminated'))
       }
-    })
+    }
   })
 }
 
