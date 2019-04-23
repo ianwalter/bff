@@ -63,7 +63,7 @@ worker({
         ...test,
         expect,
         fail (msg) {
-          throw new Error(msg || `Manual failure in test '${test.name}'`)
+          throw new Error(msg || 'manual failure')
         },
         pass () {
           result.passed = true
@@ -107,7 +107,7 @@ worker({
 
         // If there were no assertions executed, fail the test.
         if (!result.passed && assertionCalls === 0) {
-          throw new Error(`No assertions in test '${test.name}'`)
+          throw new Error('no assertions made')
         }
 
         // If expect has a suppressed error (e.g. a snapshot did not match)

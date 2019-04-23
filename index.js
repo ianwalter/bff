@@ -132,11 +132,11 @@ function run (config) {
           } catch (err) {
             if (err.name === 'TimeoutError') {
               print.error(
-                `Timeout in test '${test.name}'`,
+                `${test.name}: timeout`,
                 chalk.gray(path.relative(process.cwd(), file))
               )
             } else {
-              print.error(err)
+              print.error(`${test.name}:`, err)
             }
             context.failed++
           } finally {
