@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff",
   "description": "Your friendly test runner/framework",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
