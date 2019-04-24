@@ -204,7 +204,7 @@ function run (config) {
               }
 
               // Terminate the execution pool if all tests have been run.
-              executionPool.terminate()
+              executionPool.terminate(context.hasFastFailure)
                 .then(() => print.debug('Execution pool terminated'))
 
               // Resolve the run Promise with the run context which contains
