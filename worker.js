@@ -64,18 +64,19 @@ worker({
       expect.addSnapshotSerializer = addSerializer
 
       // Create the context object that provides data and utilities to tests.
-      let result = {}
-      context.testContext = {
-        file,
+      const testContext = {
         ...test,
+        file,
+        result: {},
         expect,
-        fail (msg) {
-          throw new Error(msg || 'manual failure')
+        fail (reason = 'manual failure') {
+          throw new Error(reason)
         },
-        pass () {
-          result.passed = true
+        pass (reason = 'manual pass') {
+          testContext.result.passed = reason
         }
       }
+      context.testContext = testContext
 
       try {
         // Load the test file and extract the test object.
@@ -101,7 +102,7 @@ worker({
         // assertion library available to it.
         const promise = new Promise(async (resolve, reject) => {
           try {
-            await testFn(context.testContext)
+            await testFn(testContext)
             resolve()
           } catch (err) {
             reject(err)
@@ -113,7 +114,7 @@ worker({
         const { suppressedErrors, assertionCalls } = expect.getState()
 
         // If there were no assertions executed, fail the test.
-        if (!result.passed && assertionCalls === 0) {
+        if (!testContext.result.passed && assertionCalls === 0) {
           throw new Error('no assertions made')
         }
 
@@ -125,7 +126,7 @@ worker({
 
         const { snapshotState } = expect.getState()
         if (snapshotState.added || snapshotState.updated) {
-          result = {
+          testContext.result = {
             counters: Array.from(snapshotState._counters),
             snapshots: {},
             added: snapshotState.added,
@@ -133,11 +134,11 @@ worker({
           }
           for (let i = snapshotState._counters.get(test.name); i > 0; i--) {
             const key = utils.testNameToKey(test.name, i)
-            result.snapshots[key] = snapshotState._snapshotData[key]
+            testContext.result.snapshots[key] = snapshotState._snapshotData[key]
           }
         }
       } catch (err) {
-        result.failed = err
+        testContext.result.failed = err
       } finally {
         try {
           // Execute each function with the test context exported by the files
@@ -148,14 +149,14 @@ worker({
             )
           }
 
-          if (result.failed) {
+          if (testContext.result.failed) {
             // Delete the matcher result property of the error since it can't be
             // sent over postMessage.
-            delete result.failed.matcherResult
+            delete testContext.result.failed.matcherResult
 
-            reject(result.failed)
+            reject(testContext.result.failed)
           } else {
-            resolve(result)
+            resolve(testContext.result)
           }
         } catch (err) {
           reject(err)
