@@ -168,7 +168,7 @@ function run (config) {
             // failure" and try to cancel any in-progress executions.
             if (context.failFast) {
               context.hasFastFailure = true
-              await Promise.all(inProgress.map(async exec => exec.cancel()))
+              inProgress.forEach(exec => exec.cancel())
             }
           } finally {
             // Increment the execution count now that the test has completed.
