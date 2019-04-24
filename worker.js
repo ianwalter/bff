@@ -14,8 +14,15 @@ worker({
 
     // Create the registration context with the list of tests that are intended
     // to be executed.
-    const toTest = ([name, { skip, only }]) => ({ key: name, name, skip, only })
-    const tests = Object.entries(require(file)).map(toTest)
+    const needsTag = context.tags && context.tags.length
+    const toTests = (acc, [name, { skip, only, tags }]) => {
+      const test = { key: name, name, skip, only, tags }
+      if (!needsTag || (needsTag && tags.some(t => context.tags.includes(t)))) {
+        acc.push(test)
+      }
+      return acc
+    }
+    const tests = Object.entries(require(file)).reduce(toTests, [])
     context.registrationContext = { file, tests }
 
     // Execute each function with the test names exported by the files

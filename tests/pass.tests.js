@@ -58,3 +58,10 @@ test('second snapshot pass', ({ expect }) => {
   expect(source).toMatchSnapshot()
   expect(source.replace('World', 'Universe')).toMatchSnapshot()
 })
+
+test(
+  'tags second call',
+  'qa'
+)(({ expect }) => {
+  expect(['one', 'two', 'three']).toContain('two')
+})

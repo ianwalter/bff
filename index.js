@@ -193,48 +193,35 @@ function run (config) {
   })
 }
 
-function test (name, testFn) {
+function handleTestArgs (name, tags, test = {}) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
 
-  if (testFn) {
-    const test = typeof testFn === 'function' ? { testFn } : testFn
+  const testFn = tags.pop()
+  if (testFn && typeof testFn === 'function') {
+    Object.assign(test, { testFn, tags })
     module.parent.exports[oneLine(name)] = test
     return test
   } else {
-    return testFn => {
-      const test = typeof testFn === 'function' ? { testFn } : testFn
+    return fn => {
+      Object.assign(test, { testFn: fn, tags: testFn ? [...tags, testFn] : [] })
       module.parent.exports[oneLine(name)] = test
       return test
     }
   }
 }
 
-test.skip = function skip (name, test) {
-  let val = this(name, test)
-  if (test) {
-    val.skip = true
-    return val
-  }
-  return fn => {
-    val = val(fn)
-    val.skip = true
-    return val
-  }
+function test (name, ...tags) {
+  return handleTestArgs(name, tags)
 }
 
-test.only = function only (name, test) {
-  let val = this(name, test)
-  if (test) {
-    val.only = true
-    return val
-  }
-  return fn => {
-    val = val(fn)
-    val.only = true
-    return val
-  }
+test.skip = function skip (name, ...tags) {
+  return handleTestArgs(name, tags, { skip: true })
+}
+
+test.only = function only (name, ...tags) {
+  return handleTestArgs(name, tags, { only: true })
 }
 
 module.exports = { run, test }

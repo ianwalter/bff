@@ -29,3 +29,5 @@ test('snapshot fail', ({ expect }) => {
 })
 
 test('timeout', () => new Promise(() => {}))
+
+test('tags', 'dev', 'qa', ({ expect }) => expect([1, 2]).toContain(3))
