@@ -89,7 +89,7 @@ function run (config) {
         const snapshotState = getSnapshotState(file, context.updateSnapshot)
 
         // Collect the execution promises in an array so that they can be
-        // cancelled if need be (e.g. on fastFail before pool termination).
+        // cancelled if need be (e.g. on failFast before pool termination).
         const inProgress = []
 
         // Iterate through all tests in the test file.
@@ -107,9 +107,9 @@ function run (config) {
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
             if (context.hasFastFailure) {
-              // Don't execute the test if the fastFail option is set and there
+              // Don't execute the test if the failFast option is set and there
               // has been a test failure.
-              print.debug('Skipping test because of fastFail flag:', test.name)
+              print.debug('Skipping test because of failFast flag:', test.name)
             } else if (hasOnly && !test.only) {
               // Don't execute the test if there is a test in the current test
               // file marked with the only modifier and it's not this test.
@@ -124,7 +124,7 @@ function run (config) {
               execution = executionPool.exec('test', [file, test, context])
 
               // Push the execution promise to the inProgress collection so
-              // that, if need be, it can be cancelled later (e.g. on fastFail).
+              // that, if need be, it can be cancelled later (e.g. on failFast).
               inProgress.push(execution)
 
               // Wait for the execution promise to complete so that the test
