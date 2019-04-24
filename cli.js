@@ -13,7 +13,8 @@ async function run () {
         updateSnapshot: 'u',
         logLevel: 'l',
         tags: 't',
-        timeout: 'T'
+        timeout: 'T',
+        failFast: 'f'
       }
     }
   })
