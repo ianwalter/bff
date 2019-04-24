@@ -88,8 +88,17 @@ function run (config) {
         // Get the snapshot state for the current test file.
         const snapshotState = getSnapshotState(file, context.updateSnapshot)
 
+        // Collect the execution promises in an array so that they can be
+        // cancelled if need be (e.g. on failFast before pool termination).
+        const inProgress = []
+
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
+          // Define the execution promise outside of try-catch-finally so that
+          // it can be referenced when it needs to be removed from the
+          // inProgress collection.
+          let execution
+
           try {
             // Mark all tests as having been checked for snapshot changes so
             // that tests that have been removed can have their associated
@@ -97,22 +106,30 @@ function run (config) {
             // test file.
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
-            // Don't execute the test if there is a test in the test file marked
-            // with the only modifier and it's not this test or if the test
-            // is marked with the skip modifier.
-            if (test.skip || (hasOnly && !test.only)) {
-              if (test.skip) {
-                // Output the test name and increment the skip count to remind
-                // the user that some tests are being skipped.
-                print.log('🛌', test.name)
-                context.skipped++
-              }
+            if (context.hasFastFailure) {
+              // Don't execute the test if the failFast option is set and there
+              // has been a test failure.
+              print.debug('Skipping test because of failFast flag:', test.name)
+            } else if (hasOnly && !test.only) {
+              // Don't execute the test if there is a test in the current test
+              // file marked with the only modifier and it's not this test.
+              print.debug('Skipping test because of only modifier:', test.name)
+            } else if (test.skip) {
+              // Output the test name and increment the skip count to remind
+              // the user that some tests are being explicitly skipped.
+              print.log('🛌', test.name)
+              context.skipped++
             } else {
               // Send the test to a worker in the execution pool to be executed.
-              const result = await executionPool.exec(
-                'test',
-                [file, test, context]
-              )
+              execution = executionPool.exec('test', [file, test, context])
+
+              // Push the execution promise to the inProgress collection so
+              // that, if need be, it can be cancelled later (e.g. on failFast).
+              inProgress.push(execution)
+
+              // Wait for the execution promise to complete so that the test
+              // results can be handled.
+              const result = await execution
 
               // Update the snapshot state with the snapshot data received from
               // the worker.
@@ -130,7 +147,11 @@ function run (config) {
               context.passed++
             }
           } catch (err) {
-            if (err.name === 'TimeoutError') {
+            if (context.hasFastFailure) {
+              // Ignore new thrown errors when a "fast failure" has been
+              // recorded.
+              return
+            } else if (err.name === 'TimeoutError') {
               print.error(
                 `${test.name}: timeout`,
                 chalk.gray(path.relative(process.cwd(), file))
@@ -138,10 +159,24 @@ function run (config) {
             } else {
               print.error(`${test.name}:`, err)
             }
+
+            // Increment the failure count since the test threw an error
+            // indicating a test failure.
             context.failed++
+
+            // If the failFast option is set, record that there's been a "fast
+            // failure" and try to cancel any in-progress executions.
+            if (context.failFast) {
+              context.hasFastFailure = true
+              inProgress.forEach(exec => exec.cancel())
+            }
           } finally {
             // Increment the execution count now that the test has completed.
             context.executed++
+
+            // Remove the current execution promise from the inProgress
+            // collection.
+            inProgress.splice(inProgress.indexOf(execution), 1)
           }
         }))
 
@@ -158,8 +193,9 @@ function run (config) {
             snapshotState.save()
 
             if (
-              context.filesRegistered === context.files.length &&
-              context.executed === context.testsRegistered
+              context.hasFastFailure ||
+              (context.filesRegistered === context.files.length &&
+              context.executed === context.testsRegistered)
             ) {
               // Execute each function with the run context exported by the
               // files configured to be called after a run.
@@ -168,11 +204,11 @@ function run (config) {
               }
 
               // Terminate the execution pool if all tests have been run.
-              executionPool.terminate()
+              executionPool.terminate(context.hasFastFailure)
                 .then(() => print.debug('Execution pool terminated'))
 
               // Resolve the run Promise with the run context which contains
-              // the tests' pass/fail/skip counts.
+              // the tests' passed/failed/skipped counts.
               resolve(context)
             }
           } catch (err) {
