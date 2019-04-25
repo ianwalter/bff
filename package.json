@@ -58,20 +58,8 @@
   },
   "bff": {
     "timeout": 5000,
-    "before": [
-      "./tests/helpers/before.js"
-    ],
-    "after": [
-      "./tests/helpers/after.js"
-    ],
-    "beforeEach": [
-      "./tests/helpers/beforeEach.js"
-    ],
-    "afterEach": [
-      "./tests/helpers/afterEach.js"
-    ],
-    "registration": [
-      "./tests/helpers/registration.js"
+    "plugins": [
+      "tests/helpers/plugin.js"
     ]
   }
 }

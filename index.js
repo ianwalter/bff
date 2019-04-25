@@ -61,8 +61,8 @@ function run (config) {
 
       // Execute each function with the run context exported by the files
       // configured to be called before a run.
-      if (context.before && context.before.length) {
-        await pSeries(context.before.map(toHookExec('before', context)))
+      if (context.plugins && context.plugins.length) {
+        await pSeries(context.plugins.map(toHookExec('before', context)))
       }
 
       // For each test file found, pass the filename to a registration pool
@@ -199,8 +199,8 @@ function run (config) {
             ) {
               // Execute each function with the run context exported by the
               // files configured to be called after a run.
-              if (context.after && context.after.length) {
-                await pSeries(context.after.map(toHookExec('after', context)))
+              if (context.plugins && context.plugins.length) {
+                await pSeries(context.plugins.map(toHookExec('after', context)))
               }
 
               // Terminate the execution pool if all tests have been run.

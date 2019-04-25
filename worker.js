@@ -27,9 +27,9 @@ worker({
 
     // Execute each function with the test names exported by the files
     // configured to be called during test registration.
-    if (context.registration && context.registration.length) {
+    if (context.plugins && context.plugins.length) {
       await pSeries(
-        context.registration.map(toHookExec('registration', context))
+        context.plugins.map(toHookExec('registration', context))
       )
     }
 
@@ -92,9 +92,9 @@ worker({
 
         // Execute each function with the test context exported by the files
         // configured to be called before each test.
-        if (context.beforeEach && context.beforeEach.length) {
+        if (context.plugins && context.plugins.length) {
           await pSeries(
-            context.beforeEach.map(toHookExec('beforeEach', context))
+            context.plugins.map(toHookExec('beforeEach', context))
           )
         }
 
@@ -143,9 +143,9 @@ worker({
         try {
           // Execute each function with the test context exported by the files
           // configured to be called after each test.
-          if (context.afterEach && context.afterEach.length) {
+          if (context.plugins && context.plugins.length) {
             await pSeries(
-              context.afterEach.map(toHookExec('afterEach', context))
+              context.plugins.map(toHookExec('afterEach', context))
             )
           }
 

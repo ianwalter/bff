@@ -1,4 +1,4 @@
-const { join, dirname, basename } = require('path')
+const { join, dirname, basename, resolve } = require('path')
 const { SnapshotState } = require('jest-snapshot')
 
 function getSnapshotState (file, updateSnapshot) {
@@ -10,6 +10,14 @@ function getSnapshotState (file, updateSnapshot) {
   return new SnapshotState(snapshotPath, { updateSnapshot })
 }
 
-const toHookExec = (hook, context) => f => async () => require(f)(hook, context)
+function toHookExec (hookName, context) {
+  return file => async () => {
+    const plugin = require(resolve(file))
+    const hook = plugin[hookName]
+    if (hook) {
+      await hook(context)
+    }
+  }
+}
 
 module.exports = { getSnapshotState, toHookExec }
