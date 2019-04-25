@@ -12,7 +12,13 @@ function getSnapshotState (file, updateSnapshot) {
 
 function toHookExec (hookName, context) {
   return file => async () => {
-    const plugin = require(resolve(file))
+    let plugin
+    try {
+      plugin = require(file)
+    } catch (err) {
+      // Don't need to handle this error.
+    }
+    plugin = plugin || require(resolve(file))
     const hook = plugin[hookName]
     if (hook) {
       await hook(context)
