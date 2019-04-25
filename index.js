@@ -55,6 +55,28 @@ function run (config) {
     // For actually executing the tests:
     const executionPool = workerpool.pool(workerPath, poolOptions)
 
+    // Collect the execution promises in an array so that they can be
+    // cancelled if need be (e.g. on failFast before pool termination).
+    const inProgress = []
+
+    // Catch an interrupt signal (SIGINT, CTRL+C) so that plugin after hooks can
+    // still run before the process exits (as they may be running cleanup logic)
+    // but still allow the user to force the process to exit immediately if they
+    // press CTRL+C a second time.
+    process.on('SIGINT', () => {
+      if (context.hasFastFailure) {
+        process.exit(130)
+      } else {
+        process.stdout.write('\n')
+        print.warn(
+          'Cancelling tests and running plugin after hooks', '\n',
+          'Hit CTRL+C again to have the process exit immediately'
+        )
+        context.hasFastFailure = true
+        inProgress.forEach(exec => exec.cancel())
+      }
+    })
+
     try {
       // Add the absolute paths of the test files to the run context.
       context.files = (await globby(context.tests)).map(f => path.resolve(f))
@@ -87,10 +109,6 @@ function run (config) {
 
         // Get the snapshot state for the current test file.
         const snapshotState = getSnapshotState(file, context.updateSnapshot)
-
-        // Collect the execution promises in an array so that they can be
-        // cancelled if need be (e.g. on failFast before pool termination).
-        const inProgress = []
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {

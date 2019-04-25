@@ -33,9 +33,10 @@ async function run () {
   console.log('')
   print.info(`${passed} passed. ${failed} failed. ${skipped} skipped.`)
 
-  // Exit with the failed test count as the exit code so that the process exits
-  // with a non-zero code when tests have failed.
-  process.exit(failed)
+  // If any tests failed, exit with a non-zero exit code.
+  if (failed) {
+    process.exit(1)
+  }
 }
 
 try {
