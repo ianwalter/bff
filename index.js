@@ -11,7 +11,7 @@ const { toHookExec, getSnapshotState } = require('./lib')
  * worker pool to be executed.
  */
 function run (config) {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     // Create the run context using the passed configuration and defaults.
     const context = {
       ...config,
@@ -98,6 +98,13 @@ function run (config) {
         // Increment the registration count now that registration has completed
         // for the current test file.
         context.filesRegistered++
+
+        // Terminate the registration pool if all the test files have been
+        // registered.
+        if (context.filesRegistered === context.files.length) {
+          registrationPool.terminate()
+            .then(() => print.debug('Registration pool terminated'))
+        }
 
         // Add the number of tests returned by test registration to the running
         // total of all tests that need to be executed.
@@ -230,19 +237,12 @@ function run (config) {
               resolve(context)
             }
           } catch (err) {
-            print.error(err)
+            reject(err)
           }
         })
       })
     } catch (err) {
-      print.error(err)
-    } finally {
-      // Terminate the registration pool if all the test files have been
-      // registered.
-      if (context.filesRegistered === context.files.length) {
-        registrationPool.terminate()
-          .then(() => print.debug('Registration pool terminated'))
-      }
+      reject(err)
     }
   })
 }

@@ -30,17 +30,16 @@ async function run () {
   const { passed, failed, skipped } = await bff(config)
 
   // Log the results of running the tests.
-  console.log('')
+  process.stdout.write('\n')
   print.info(`${passed} passed. ${failed} failed. ${skipped} skipped.`)
 
   // If any tests failed, exit with a non-zero exit code.
-  if (failed) {
-    process.exit(1)
-  }
+  process.exit(failed ? 1 : 0)
 }
 
 try {
   run()
 } catch (err) {
   print.error(err)
+  process.exit(1)
 }
