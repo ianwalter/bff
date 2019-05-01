@@ -14,7 +14,8 @@ async function run () {
         logLevel: 'l',
         tags: 't',
         timeout: 'T',
-        failFast: 'f'
+        failFast: 'f',
+        puppeteer: 'p'
       }
     }
   })

@@ -6,6 +6,13 @@ const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { toHookExec, getSnapshotState } = require('./lib')
 
+const defaultFiles = [
+  'tests.js',
+  'pptr.js',
+  'tests/**/*tests.js',
+  'tests/**/*pptr.js'
+]
+
 /**
  * Collects tests names from tests files and assigns them to a worker in a
  * worker pool to be executed.
@@ -31,7 +38,7 @@ function run (config) {
       // and the worker pool can be terminated.
       executed: 0
     }
-    context.tests = config.tests || ['tests.js', 'tests/**/*tests.js']
+    context.tests = config.tests || defaultFiles
     context.updateSnapshot = config.updateSnapshot ? 'all' : 'none'
     context.logLevel = config.logLevel || 'info'
     context.timeout = config.timeout || 60000
