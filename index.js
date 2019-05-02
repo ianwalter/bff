@@ -14,49 +14,71 @@ const defaultFiles = [
 ]
 
 // TODO:
-function createResultHandler (runContext, mainContext, snapshotState) {
+function createResultHandler (runContext, mainContext, file, snapshotState) {
   return async result => {
-    let execution = result
-    if (result.then) {
-      result = await execution
-    }
+    if (result.hasFastFailure) {
+      // Don't execute the test if the failFast option is set and
+      // there has been a test failure.
+      mainContext.print.debug(
+        'Skipping test because of failFast flag:',
+        test.name
+      )
+    } else if (result.excluded) {
+      // Don't execute the test if there is a test in the current test file
+      // marked with the only modifier and it's not this test.
+      mainContext.print.debug(
+        'Skipping test because of only modifier:',
+        test.name
+      )
+    } else if (result.skipped) {
+      // Output the test name and increment the skip count to remind the user
+      // that some tests are being explicitly skipped.
+      mainContext.print.log('🛌', test.name)
+      runContext.skipped++
+    } else if (result.execution) {
+      // TODO: update comment
+      // Wait for the execution promise to complete so that the test
+      // results can be handled.
+      try {
+        result = await result.execution
+      } catch (err) {
+        result.failed = err
+      }
 
-    // Update the snapshot state with the snapshot data received
-    // from the worker.
-    if (result && (result.added || result.updated)) {
-      snapshotState._dirty = true
-      snapshotState._counters = new Map(result.counters)
-      Object.assign(mainContext.snapshotState._snapshotData, result.snapshots)
-      snapshotState.added += result.added
-      snapshotState.updated += result.updated
-    }
+      // Update the snapshot state with the snapshot data received
+      // from the worker.
+      if (result.added || result.updated) {
+        snapshotState._dirty = true
+        snapshotState._counters = new Map(result.counters)
+        Object.assign(mainContext.snapshotState._snapshotData, result.snapshots)
+        snapshotState.added += result.added
+        snapshotState.updated += result.updated
+      }
 
-    if (result.failed) {
-      if (result.failed.name === 'TimeoutError') {
-        // TODO:
-        // mainContext.print.error(
-        //   `${test.name}: timeout`,
-        //   chalk.gray(path.relative(process.cwd(), file))
-        // )
+      if (result.failed) {
+        if (result.failed.name === 'TimeoutError') {
+          const filePath = chalk.gray(path.relative(process.cwd(), file))
+          mainContext.print.error(`${result.name}: timeout`, filePath)
+        } else {
+          mainContext.print.error(`${result.name}:`, result.failed)
+        }
+
+        // Increment the failure count since the test threw an error
+        // indicating a test failure.
+        runContext.failed++
+
+        // If the failFast option is set, record that there's been a "fast
+        // failure" and try to cancel any in-progress executions.
+        if (runContext.failFast) {
+          runContext.hasFastFailure = true
+          mainContext.inProgress.forEach(exec => exec.cancel())
+        }
       } else {
-        mainContext.print.error(`${result.name}:`, result.failed)
+        // Output the test name and increment the pass count since the
+        // test didn't throw and error indicating a failure.
+        mainContext.print.success(result.name)
+        runContext.passed++
       }
-
-      // Increment the failure count since the test threw an error
-      // indicating a test failure.
-      runContext.failed++
-
-      // If the failFast option is set, record that there's been a "fast
-      // failure" and try to cancel any in-progress executions.
-      if (runContext.failFast) {
-        runContext.hasFastFailure = true
-        mainContext.inProgress.forEach(exec => exec.cancel())
-      }
-    } else {
-      // Output the test name and increment the pass count since the
-      // test didn't throw and error indicating a failure.
-      mainContext.print.success(test.name)
-      runContext.passed++
     }
 
     // Increment the execution count now that the test has completed.
@@ -64,8 +86,10 @@ function createResultHandler (runContext, mainContext, snapshotState) {
 
     // Remove the current execution promise from the inProgress
     // collection.
-    // TODO:
-    // mainContext.inProgress.splice(mainContext.inProgress.indexOf(execution), 1)
+    if (result.execution) {
+      const index = mainContext.inProgress.indexOf(result.execution)
+      mainContext.inProgress.splice(index, 1)
+    }
   }
 }
 
@@ -162,30 +186,30 @@ function run (config) {
         // Get the snapshot state for the current test file.
         const snapshotState = getSnapshotState(file, runContext.updateSnapshot)
 
-        //
-        const handleResult = createResultHandler(
-          runContext,
-          mainContext,
-          snapshotState
-        )
+        // TODO:
+        const handlerArgs = [runContext, mainContext, file, snapshotState]
+        const handleResult = createResultHandler(...handlerArgs)
+
+        // TODO:
+        const workerArgs = [file, runContext]
 
         let runAllTestsInFile
         if (usePuppeteer || file.match(/pptr\.js$/)) {
-          //
+          // TODO:
           runContext.testsRegistered++
 
           // TODO:
-          const execution = executionPool.exec('pptr', [file, runContext])
+          const results = await executionPool.exec('pptr', workerArgs)
 
-          //
-          runContext.testsRegistered += execution.count - 1
+          // TODO:
+          runContext.testsRegistered += results.length - 1
 
-          //
-          execution.results.forEach(handleResult)
+          // TODO:
+          runAllTestsInFile = Promise.all(results.map(handleResult))
         } else {
           // Perform registration on the test file to collect the tests that
           // need to be executed.
-          const tests = await registrationPool.exec('register', [file, runContext])
+          const tests = await registrationPool.exec('register', workerArgs)
 
           // Add the number of tests returned by test registration to the
           // running total of all tests that need to be executed.
@@ -197,60 +221,33 @@ function run (config) {
 
           // Iterate through all tests in the test file.
           runAllTestsInFile = Promise.all(tests.map(async test => {
-            // Define the execution promise outside of try-catch-finally so that
-            // it can be referenced when it needs to be removed from the
-            // inProgress collection.
-            let execution
+            // Mark all tests as having been checked for snapshot changes so
+            // that tests that have been removed can have their associated
+            // snapshots removed as well when the snapshots are checked for
+            // this test file.
+            snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
-            try {
-              // Mark all tests as having been checked for snapshot changes so
-              // that tests that have been removed can have their associated
-              // snapshots removed as well when the snapshots are checked for
-              // this test file.
-              snapshotState.markSnapshotsAsCheckedForTest(test.name)
+            let result = { ...test }
+            if (runContext.hasFastFailure) {
+              result.hasFastFailure = true
+            } else if (hasOnly && !test.only) {
+              result.excluded = true
+            } else if (test.skip) {
+              result.skipped = true
+            } else {
+              // Send the test to a worker in the execution pool to be
+              // executed.
+              const executionArgs = [file, test, runContext]
+              result.execution = executionPool.exec('test', executionArgs)
 
-              if (runContext.hasFastFailure) {
-                // Don't execute the test if the failFast option is set and
-                // there has been a test failure.
-                mainContext.print.debug(
-                  'Skipping test because of failFast flag:',
-                  test.name
-                )
-              } else if (hasOnly && !test.only) {
-                // Don't execute the test if there is a test in the current test
-                // file marked with the only modifier and it's not this test.
-                mainContext.print.debug(
-                  'Skipping test because of only modifier:',
-                  test.name
-                )
-              } else if (test.skip) {
-                // Output the test name and increment the skip count to remind
-                // the user that some tests are being explicitly skipped.
-                mainContext.print.log('🛌', test.name)
-                runContext.skipped++
-              } else {
-                // Send the test to a worker in the execution pool to be
-                // executed.
-                execution = executionPool.exec('test', [file, test, runContext])
-
-                // Push the execution promise to the inProgress collection so
-                // that, if need be, it can be cancelled later (e.g. on
-                // failFast).
-                mainContext.inProgress.push(execution)
-
-                // TODO: update comment
-                // Wait for the execution promise to complete so that the test
-                // results can be handled.
-                handleResult(await execution)
-              }
-            } catch (err) {
-              // Ignore new thrown errors when a "fast failure" has been
-              // recorded.
-              if (!runContext.hasFastFailure) {
-                // TODO: comment
-                handleResult({ failed: err })
-              }
+              // Push the execution promise to the inProgress collection so
+              // that, if need be, it can be cancelled later (e.g. on
+              // failFast).
+              mainContext.inProgress.push(result.execution)
             }
+
+            // TODO:
+            handleResult(result)
           }))
         }
 
@@ -274,15 +271,18 @@ function run (config) {
               // Execute each function with the run runContext exported by the
               // files configured to be called after a run.
               if (runContext.plugins && runContext.plugins.length) {
-                await pSeries(runContext.plugins.map(toHookExec('after', runContext)))
+                await pSeries(
+                  runContext.plugins.map(toHookExec('after', runContext))
+                )
               }
 
               // Terminate the execution pool if all tests have been run.
-              executionPool.terminate(runContext.hasFastFailure)
-                .then(() => print.debug('Execution pool terminated'))
+              executionPool.terminate(runContext.hasFastFailure).then(
+                () => mainContext.print.debug('Execution pool terminated')
+              )
 
-              // Resolve the run Promise with the run runContext which contains the
-              // tests' passed/failed/skipped counts.
+              // Resolve the run Promise with the run runContext which contains
+              // the tests' passed/failed/skipped counts.
               resolve(runContext)
             }
           } catch (err) {
@@ -297,8 +297,9 @@ function run (config) {
         // Terminate the registration pool if all the test files have been
         // registered.
         if (runContext.filesRegistered === runContext.files.length) {
-          registrationPool.terminate()
-            .then(() => print.debug('Registration pool terminated'))
+          registrationPool.terminate().then(
+            () => mainContext.print.debug('Registration pool terminated')
+          )
         }
       })
     } catch (err) {
