@@ -55,6 +55,10 @@ test.only('focus', ({ expect }) => {
 })
 ```
 
+## Related
+
+* [`@ianwalter/bff-webdriver`][bffWebdriverUrl] - A bff plugin to enable WebDriver-based testing
+
 ## License
 
 Apache 2.0 with Commons Clause - See [LICENSE][licenseUrl]
@@ -65,5 +69,5 @@ Created by [Ian Walter](https://iankwalter.com)
 
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/bff.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/bff
+[bffWebdriverUrl]: https://github.com/ianwalter/bff-webdriver
 [licenseUrl]: https://github.com/ianwalter/bff/blob/master/LICENSE
-
