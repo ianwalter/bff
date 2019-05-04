@@ -247,7 +247,7 @@ function run (config) {
             }
 
             // TODO:
-            handleResult(result)
+            await handleResult(result)
           }))
         }
 
