@@ -54,7 +54,7 @@ worker({
         toThrowErrorMatchingInlineSnapshot,
         utils
       } = require('jest-snapshot')
-      const { getSnapshotState, toHookExec } = require('./src/lib')
+      const { toHookRun, createTestContext, runTest } = require('./src/lib')
 
       // Extend the expect with jest-snapshot to allow snapshot testing.
       expect.extend({
@@ -66,103 +66,35 @@ worker({
       expect.addSnapshotSerializer = addSerializer
 
       // Create the context object that provides data and utilities to tests.
-      context.testContext = {
-        ...test,
-        file,
-        result: {},
-        expect,
-        fail (reason = 'manual failure') {
-          throw new Error(reason)
-        },
-        pass (reason = 'manual pass') {
-          context.testContext.result.passed = reason
-        }
-      }
+      const testContext = createTestContext(expect, test, file, context)
 
-      try {
-        // Load the test file and extract the test object.
-        const { testFn } = require(file)[test.key]
-
-        // Update expect's state with the snapshot state and the test name.
-        expect.setState({
-          assertionCalls: 0,
-          suppressedErrors: [],
-          snapshotState: getSnapshotState(file, context.updateSnapshot),
-          currentTestName: test.name
-        })
-
-        // Execute each function with the test context exported by the files
-        // configured to be called before each test.
-        if (context.plugins && context.plugins.length) {
-          await pSeries(
-            context.plugins.map(toHookExec('beforeEach', context))
-          )
-        }
-
-        // Perform the given test within the test file and make the expect
-        // assertion library available to it.
-        const promise = new Promise(async (resolve, reject) => {
-          try {
-            await testFn(testContext)
-            resolve()
-          } catch (err) {
-            reject(err)
-          }
-        })
-        await pTimeout(promise, context.timeout)
-
-        // Extract expect's state after running the test.
-        const { suppressedErrors, assertionCalls } = expect.getState()
-
-        // If there were no assertions executed, fail the test.
-        if (!testContext.result.passed && assertionCalls === 0) {
-          throw new Error('no assertions made')
-        }
-
-        // If expect has a suppressed error (e.g. a snapshot did not match)
-        // then throw the error so that the test can be marked as having failed.
-        if (suppressedErrors.length) {
-          throw suppressedErrors[0]
-        }
-
-        const { snapshotState } = expect.getState()
-        if (snapshotState.added || snapshotState.updated) {
-          testContext.result = {
-            counters: Array.from(snapshotState._counters),
-            snapshots: {},
-            added: snapshotState.added,
-            updated: snapshotState.updated
-          }
-          for (let i = snapshotState._counters.get(test.name); i > 0; i--) {
-            const key = utils.testNameToKey(test.name, i)
-            testContext.result.snapshots[key] = snapshotState._snapshotData[key]
-          }
-        }
-      } catch (err) {
-        testContext.result.failed = err
-      } finally {
+      // Run beforeEach hooks from plugins.
+      if (context.plugins && context.plugins.length) {
         try {
-          // Execute each function with the test context exported by the files
-          // configured to be called after each test.
-          if (context.plugins && context.plugins.length) {
-            await pSeries(
-              context.plugins.map(toHookExec('afterEach', context))
-            )
-          }
-
-          if (testContext.result.failed) {
-            // Delete the matcher result property of the error since it can't be
-            // sent over postMessage.
-            delete testContext.result.failed.matcherResult
-
-            reject(testContext.result.failed)
-          } else {
-            resolve(testContext.result)
-          }
+          await pSeries(context.plugins.map(toHookRun('beforeEach', context)))
         } catch (err) {
-          reject(err)
+          print.error(err)
         }
       }
+
+      // Load the test file and extract the test function.
+      const { testFn } = require(file)[test.key]
+
+      // TODO:
+      await runTest({ ...test, testFn }, testContext, context.timeout)
+
+      // Run afterEach hooks from plugins.
+      if (context.plugins && context.plugins.length) {
+        try {
+          await pSeries(
+            context.plugins.map(toHookRun('afterEach', context))
+          )
+        } catch (err) {
+          print.error(err)
+        }
+      }
+
+      resolve(testContext.result)
     })
   },
   async pptr (file, context) {
