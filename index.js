@@ -4,7 +4,7 @@ const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toHookExec, getSnapshotState } = require('./lib')
+const { toHookExec, getSnapshotState } = require('./src/lib')
 
 const defaultFiles = [
   'tests.js',
