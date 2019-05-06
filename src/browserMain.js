@@ -1,7 +1,7 @@
 import workerpool from 'workerpool'
 import pSettle from 'p-settle'
 
-window.run = async function (file, context) {
+window.runTests = async function (context, fileContext) {
   // TODO:
   const pool = workerpool.pool(context.workerPath)
 
@@ -9,5 +9,6 @@ window.run = async function (file, context) {
   const tests = await import(file)
 
   // TODO:
-  return pSettle(tests.map(test => pool.execute('test', [test, file, context])))
+  const toExecute = test => pool.execute('test', [context, fileContext, test])
+  return pSettle(tests.map(toExecute))
 }

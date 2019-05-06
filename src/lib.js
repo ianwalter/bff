@@ -1,6 +1,5 @@
-const { join, dirname, basename, resolve } = require('path')
-const { SnapshotState } = require('jest-snapshot')
-
+const path = require('path')
+const { SnapshotState, utils } = require('jest-snapshot')
 
 function toHookRun (hookName, context) {
   return file => async () => {
@@ -10,7 +9,7 @@ function toHookRun (hookName, context) {
     } catch (err) {
       // Don't need to handle this error.
     }
-    plugin = plugin || require(resolve(file))
+    plugin = plugin || require(path.resolve(file))
     const hook = plugin[hookName]
     if (hook) {
       await hook(context)
@@ -18,13 +17,13 @@ function toHookRun (hookName, context) {
   }
 }
 
-function createTestContext (expect, test, file, context) {
+function createTestContext (context, fileContext, test, expect) {
   // Create the context object that provides data and utilities to tests.
   context.testContext = {
+    ...fileContext,
     ...test,
-    file,
-    result: {},
     expect,
+    result: {},
     fail (reason = 'manual failure') {
       throw new Error(reason)
     },
@@ -33,32 +32,28 @@ function createTestContext (expect, test, file, context) {
     }
   }
 
-  // Initialize the snapshot state with a path to the snapshot file and
-  // the updateSnapshot setting.
-  const snapshotsDir = join(dirname(file), 'snapshots')
-  const snapshotFilename = basename(file).replace('.js', '.snap')
-  const snapshotPath = join(snapshotsDir, snapshotFilename)
-  const updateSnapshot = context.updateSnapshot
-
   // Update expect's state with the snapshot state and the test name.
   expect.setState({
     assertionCalls: 0,
     suppressedErrors: [],
-    snapshotState: new SnapshotState(snapshotPath, { updateSnapshot }),
+    snapshotState: new SnapshotState(
+      fileContext.snapshotPath,
+      { updateSnapshot: context.updateSnapshot }
+    ),
     currentTestName: test.name
   })
 
   return context.testContext
 }
 
-async function runTest (test, testContext, timeout) {
+async function runTest (testContext, testFn, timeout) {
   const pTimeout = require('p-timeout')
   try {
     // Perform the given test within the test file and make the expect
     // assertion library available to it.
     const promise = new Promise(async (resolve, reject) => {
       try {
-        await test.testFn(testContext)
+        await testFn(testContext)
         resolve()
       } catch (err) {
         reject(err)
@@ -88,8 +83,8 @@ async function runTest (test, testContext, timeout) {
         added: snapshotState.added,
         updated: snapshotState.updated
       }
-      for (let i = snapshotState._counters.get(test.name); i > 0; i--) {
-        const key = utils.testNameToKey(test.name, i) // TODO:
+      for (let i = snapshotState._counters.get(testContext.name); i > 0; i--) {
+        const key = utils.testNameToKey(testContext.name, i) // TODO:
         testContext.result.snapshots[key] = snapshotState._snapshotData[key]
       }
     }

@@ -4,7 +4,8 @@ const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toHookExec, getSnapshotState } = require('./src/lib')
+const { toHookRun } = require('./src/lib')
+const { SnapshotState } = require('jest-snapshot')
 
 const defaultFiles = [
   'tests.js',
@@ -50,7 +51,7 @@ function createResultHandler (runContext, mainContext, file, snapshotState) {
       if (result.added || result.updated) {
         snapshotState._dirty = true
         snapshotState._counters = new Map(result.counters)
-        Object.assign(mainContext.snapshotState._snapshotData, result.snapshots)
+        Object.assign(snapshotState._snapshotData, result.snapshots)
         snapshotState.added += result.added
         snapshotState.updated += result.updated
       }
@@ -173,7 +174,7 @@ function run (config) {
       // Execute each function with the run runContext exported by the files
       // configured to be called before a run.
       if (runContext.plugins && runContext.plugins.length) {
-        await pSeries(runContext.plugins.map(toHookExec('before', runContext)))
+        await pSeries(runContext.plugins.map(toHookRun('before', runContext)))
       }
 
       // TODO: comment
@@ -183,15 +184,23 @@ function run (config) {
       // worker so that the tests within it can be collected and given to a
       // execution pool worker to be run.
       runContext.files.forEach(async file => {
-        // Get the snapshot state for the current test file.
-        const snapshotState = getSnapshotState(file, runContext.updateSnapshot)
+        // Initialize the snapshot state with a path to the snapshot file and
+        // the updateSnapshot setting.
+        const snapshotsDir = path.join(path.dirname(file), 'snapshots')
+        const snapshotFilename = path.basename(file).replace('.js', '.snap')
+        const snapshotPath = path.join(snapshotsDir, snapshotFilename)
+        const snapshotOptions = { updateSnapshot: runContext.updateSnapshot }
+        const snapshotState = new SnapshotState(snapshotPath, snapshotOptions)
 
         // TODO:
         const handlerArgs = [runContext, mainContext, file, snapshotState]
         const handleResult = createResultHandler(...handlerArgs)
 
+        //
+        const fileContext = { file, snapshotPath }
+
         // TODO:
-        const workerArgs = [file, runContext]
+        const workerArgs = [runContext, fileContext]
 
         let runAllTestsInFile
         if (usePuppeteer || file.match(/pptr\.js$/)) {
@@ -237,7 +246,7 @@ function run (config) {
             } else {
               // Send the test to a worker in the execution pool to be
               // executed.
-              const executionArgs = [file, test, runContext]
+              const executionArgs = [runContext, fileContext, test]
               result.execution = executionPool.exec('test', executionArgs)
 
               // Push the execution promise to the inProgress collection so
@@ -272,7 +281,7 @@ function run (config) {
               // files configured to be called after a run.
               if (runContext.plugins && runContext.plugins.length) {
                 await pSeries(
-                  runContext.plugins.map(toHookExec('after', runContext))
+                  runContext.plugins.map(toHookRun('after', runContext))
                 )
               }
 
