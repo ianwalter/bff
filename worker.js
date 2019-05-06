@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
@@ -9,7 +10,7 @@ worker({
     const print = new Print({ level: context.logLevel })
     const filePath = path.relative(process.cwd(), file)
     print.debug(`Registration worker ${threadId}`, chalk.gray(filePath))
-    const { toHookExec } = require('./src/lib')
+    const { toHookRun } = require('./src/lib')
 
     // Create the registration context with the list of tests that are intended
     // to be executed.
@@ -28,7 +29,7 @@ worker({
     // configured to be called during test registration.
     if (context.plugins && context.plugins.length) {
       await pSeries(
-        context.plugins.map(toHookExec('registration', context))
+        context.plugins.map(toHookRun('registration', context))
       )
     }
 
@@ -91,7 +92,7 @@ worker({
     }
 
     // TODO:
-    return testContext.result
+    return { ...test, ...testContext.result }
   },
   async pptr (context, fileContext) {
     const puppeteer = require('puppeteer')
@@ -113,11 +114,22 @@ worker({
     // Create an in-memory filesystem to use with Webpack.
     const mfs = new MemoryFileSystem()
 
+    // TODO:
+    const entry = `
+      ${fs.readFileSync(fileContext.file, 'utf8')}
+      export default test.test
+    `
+    mfs.writeFileSync('./test.js', entry)
+
     // Create the Webpack compiler.
     const options = {
       mode: 'development',
       target: 'web',
-      entry: 'main.js',
+      entry: './test.js',
+      output: {
+        path: path.dirname(fileContext.file),
+        filename: path.basename(fileContext.file)
+      },
       outputFileSystem: mfs
     }
     const compiler = webpack(merge(options, context.puppeteer.webpack))

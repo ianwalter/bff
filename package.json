@@ -4,11 +4,13 @@
   "version": "4.0.1",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
-  "browser": "browser.js",
+  "browser": "dist/browser.js",
   "scripts": {
     "lint": "eslint .",
     "bff": "./cli.js",
-    "pretest": "dist src/browserWorker.js --esm dist/browserWorker.js --inline",
+    "dist:browser": "dist src/browser.js --inline --browser dist/browser.js",
+    "dist:browserMain": "dist src/browserMain.js --inline --browser dist/browserMain.js",
+    "pretest": "npm run dist:browser && npm run dist:browserMain",
     "test": "./cli.js tests/pass.tests.js tests/skip.tests.js tests/only.tests.js"
   },
   "bin": {
