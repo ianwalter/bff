@@ -87,7 +87,7 @@ worker({
           assertionCalls: 0,
           suppressedErrors: [],
           snapshotState: getSnapshotState(file, context.updateSnapshot),
-          currentTestName: test.name
+          currentTestName: test.key
         })
 
         // Execute each function with the test context exported by the files
@@ -132,8 +132,8 @@ worker({
             added: snapshotState.added,
             updated: snapshotState.updated
           }
-          for (let i = snapshotState._counters.get(test.name); i > 0; i--) {
-            const key = utils.testNameToKey(test.name, i)
+          for (let i = snapshotState._counters.get(test.key); i > 0; i--) {
+            const key = utils.testNameToKey(test.key, i)
             testContext.result.snapshots[key] = snapshotState._snapshotData[key]
           }
         }
