@@ -1,4 +1,3 @@
-const { relative } = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const pTimeout = require('p-timeout')
@@ -8,8 +7,8 @@ const { threadId } = require('worker_threads')
 worker({
   async register (file, context) {
     const print = new Print({ level: context.logLevel })
-    const relativePath = relative(process.cwd(), file.path)
-    print.debug(`Registration worker ${threadId}`, chalk.gray(relativePath))
+    const relativePath = chalk.gray(file.relativePath)
+    print.debug(`Registration worker ${threadId}`, relativePath)
     const { toHookExec } = require('./lib')
 
     // Create the registration context with the list of tests that are intended
@@ -37,11 +36,8 @@ worker({
   },
   test (file, test, context) {
     const print = new Print({ level: context.logLevel })
-    print.debug(
-      `Test worker ${threadId}`,
-      chalk.cyan(test.name),
-      chalk.gray(relative(process.cwd(), file.path))
-    )
+    const relativePath = chalk.gray(file.relativePath)
+    print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
     return new Promise(async (resolve, reject) => {
       const expect = require('expect')
       const {

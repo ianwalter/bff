@@ -92,8 +92,9 @@ function run (config) {
       // worker so that the tests within it can be collected and given to a
       // execution pool worker to be run.
       context.files.forEach(async filePath => {
-        // Create the file context with the file path and snapshot file path.
-        const file = { path: filePath }
+        // Create the file context to contain information on the test file.
+        const relativePath = path.relative(process.cwd(), filePath)
+        const file = { path: filePath, relativePath }
 
         // Construct the path to the snapshot file.
         const snapshotsDir = path.join(path.dirname(filePath), 'snapshots')
@@ -189,8 +190,8 @@ function run (config) {
               // recorded.
               return
             } else if (err.name === 'TimeoutError') {
-              const relativePath = path.relative(process.cwd(), file.path)
-              print.error(`${test.name}: timeout`, chalk.gray(relativePath))
+              const relativePath = chalk.gray(file.relativePath)
+              print.error(`${test.name}: timeout`, relativePath)
             } else {
               print.error(`${test.name}:`, err)
             }
