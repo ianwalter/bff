@@ -4,7 +4,8 @@ const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toHookExec, getSnapshotState } = require('./lib')
+const { toHookExec } = require('./lib')
+const { SnapshotState } = require('jest-snapshot')
 
 /**
  * Collects tests names from tests files and assigns them to a worker in a
@@ -90,7 +91,15 @@ function run (config) {
       // For each test file found, pass the filename to a registration pool
       // worker so that the tests within it can be collected and given to a
       // execution pool worker to be run.
-      context.files.forEach(async file => {
+      context.files.forEach(async filePath => {
+        // Create the file context with the file path and snapshot file path.
+        const file = { path: filePath }
+
+        // Construct the path to the snapshot file.
+        const snapshotsDir = path.join(path.dirname(filePath), 'snapshots')
+        const snapshotFilename = path.basename(filePath).replace('.js', '.snap')
+        file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
+
         // Perform registration on the test file to collect the tests that need
         // to be executed.
         const tests = await registrationPool.exec('register', [file, context])
@@ -115,7 +124,10 @@ function run (config) {
         const hasOnly = Object.values(tests).some(test => test.only)
 
         // Get the snapshot state for the current test file.
-        const snapshotState = getSnapshotState(file, context.updateSnapshot)
+        const snapshotState = new SnapshotState(
+          file.snapshotPath,
+          context.updateSnapshot
+        )
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
@@ -177,10 +189,8 @@ function run (config) {
               // recorded.
               return
             } else if (err.name === 'TimeoutError') {
-              print.error(
-                `${test.name}: timeout`,
-                chalk.gray(path.relative(process.cwd(), file))
-              )
+              const relativePath = path.relative(process.cwd(), file.path)
+              print.error(`${test.name}: timeout`, chalk.gray(relativePath))
             } else {
               print.error(`${test.name}:`, err)
             }

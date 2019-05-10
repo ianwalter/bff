@@ -8,8 +8,8 @@ const { threadId } = require('worker_threads')
 worker({
   async register (file, context) {
     const print = new Print({ level: context.logLevel })
-    const filePath = relative(process.cwd(), file)
-    print.debug(`Registration worker ${threadId}`, chalk.gray(filePath))
+    const relativePath = relative(process.cwd(), file.path)
+    print.debug(`Registration worker ${threadId}`, chalk.gray(relativePath))
     const { toHookExec } = require('./lib')
 
     // Create the registration context with the list of tests that are intended
@@ -22,7 +22,7 @@ worker({
       }
       return acc
     }
-    const tests = Object.entries(require(file)).reduce(toTests, [])
+    const tests = Object.entries(require(file.path)).reduce(toTests, [])
     context.registrationContext = { file, tests }
 
     // Execute each function with the test names exported by the files
@@ -40,11 +40,12 @@ worker({
     print.debug(
       `Test worker ${threadId}`,
       chalk.cyan(test.name),
-      chalk.gray(relative(process.cwd(), file))
+      chalk.gray(relative(process.cwd(), file.path))
     )
     return new Promise(async (resolve, reject) => {
       const expect = require('expect')
       const {
+        SnapshotState,
         addSerializer,
         toMatchSnapshot,
         toMatchInlineSnapshot,
@@ -52,7 +53,7 @@ worker({
         toThrowErrorMatchingInlineSnapshot,
         utils
       } = require('jest-snapshot')
-      const { getSnapshotState, toHookExec } = require('./lib')
+      const { toHookExec } = require('./lib')
 
       // Extend the expect with jest-snapshot to allow snapshot testing.
       expect.extend({
@@ -65,8 +66,8 @@ worker({
 
       // Create the context object that provides data and utilities to tests.
       const testContext = {
+        ...file,
         ...test,
-        file,
         result: {},
         expect,
         fail (reason = 'manual failure') {
@@ -80,13 +81,16 @@ worker({
 
       try {
         // Load the test file and extract the test object.
-        const { testFn } = require(file)[test.key]
+        const { testFn } = require(file.path)[test.key]
 
         // Update expect's state with the snapshot state and the test name.
         expect.setState({
           assertionCalls: 0,
           suppressedErrors: [],
-          snapshotState: getSnapshotState(file, context.updateSnapshot),
+          snapshotState: new SnapshotState(
+            file.snapshotPath,
+            context.updateSnapshot
+          ),
           currentTestName: test.key
         })
 

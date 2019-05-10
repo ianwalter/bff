@@ -1,14 +1,4 @@
-const { join, dirname, basename, resolve } = require('path')
-const { SnapshotState } = require('jest-snapshot')
-
-function getSnapshotState (file, updateSnapshot) {
-  // Initialize the snapshot state with a path to the snapshot file and
-  // the updateSnapshot setting.
-  const snapshotsDir = join(dirname(file), 'snapshots')
-  const snapshotFilename = basename(file).replace('.js', '.snap')
-  const snapshotPath = join(snapshotsDir, snapshotFilename)
-  return new SnapshotState(snapshotPath, { updateSnapshot })
-}
+const path = require('path')
 
 function toHookExec (hookName, context) {
   return file => async () => {
@@ -18,7 +8,7 @@ function toHookExec (hookName, context) {
     } catch (err) {
       // Don't need to handle this error.
     }
-    plugin = plugin || require(resolve(file))
+    plugin = plugin || require(path.resolve(file))
     const hook = plugin[hookName]
     if (hook) {
       await hook(context)
@@ -26,4 +16,4 @@ function toHookExec (hookName, context) {
   }
 }
 
-module.exports = { getSnapshotState, toHookExec }
+module.exports = { toHookExec }
