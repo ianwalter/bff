@@ -4,6 +4,7 @@
   "version": "4.0.2",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
+  "browser": "browser.js",
   "scripts": {
     "lint": "eslint .",
     "bff": "./cli.js",
@@ -64,6 +65,15 @@
     "timeout": 5000,
     "plugins": [
       "tests/helpers/plugin.js"
-    ]
+    ],
+    "puppeteer": {
+      "webpack": {
+        "resolve": {
+          "alias": {
+            "@ianwalter/bff": "/Users/iwalter/ianwalter/bff/browser.js"
+          }
+        }
+      }
+    }
   }
 }

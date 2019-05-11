@@ -11,13 +11,12 @@ worker({
     print.debug(`Registration worker ${threadId}`, relativePath)
     const { toHookExec } = require('./lib')
 
-    let testMap
     if (file.puppeteer) {
       const webpack = require('webpack')
       const puppeteer = require('puppeteer')
-      print.debug('Compiling test file:', chalk.gray(file.puppeteer.path))
 
       // Compile the test file using Webpack.
+      print.debug('Compiling test file:', chalk.gray(file.puppeteer.path))
       const compiler = webpack(file.puppeteer.webpack)
       await new Promise((resolve, reject) => {
         compiler.run(err => {
@@ -30,19 +29,19 @@ worker({
       })
 
       // Launch a puppeteer browswer instance and new page.
-      const browser = await puppeteer.launch(context.puppeteer)
-      const page = await browser.newPage()
+      context.browser = await puppeteer.launch(context.puppeteer)
+      context.page = await context.browser.newPage()
 
       // Add the compiled file to the page.
-      page.addScriptTag({ path: file.puppeteer.path })
+      await context.page.addScriptTag({ path: file.puppeteer.path })
 
       // Return the test map that was stored on the window context when the
       // coimpiled script was added to the page.
-      testMap = await page.evaluate(() => window.testMap)
+      context.testMap = await context.page.evaluate(() => window.testMap)
     } else {
       // If the test file isn't meant for the browser we can simply require it
       // to ge the map of tests.
-      testMap = require(file.path)
+      context.testMap = require(file.path)
     }
 
     // Create the registration context with the list of tests that are intended
@@ -55,8 +54,7 @@ worker({
       }
       return acc
     }
-    const tests = Object.entries(testMap).reduce(toTests, [])
-    context.registrationContext = { file, tests }
+    file.tests = Object.entries(context.testMap).reduce(toTests, [])
 
     // Execute each function with the test names exported by the files
     // configured to be called during test registration.
@@ -66,7 +64,12 @@ worker({
       )
     }
 
-    return context.registrationContext.tests
+    // TODO:
+    if (context.browser) {
+      await context.browser.close()
+    }
+
+    return file.tests
   },
   test (file, test, context) {
     const print = new Print({ level: context.logLevel })
