@@ -6,17 +6,21 @@ const { threadId } = require('worker_threads')
 
 worker({
   async register (file, context) {
+    // Create the Print instance based on the log level set in the context
+    // received from the main thread.
     const print = new Print({ level: context.logLevel })
+
+    // Print a debug statement for this registration action with the relative
+    // path of the test file that's having it's tests registered.
     const relativePath = chalk.gray(file.relativePath)
     print.debug(`Registration worker ${threadId}`, relativePath)
-    const { toHookExec } = require('./lib')
 
     if (file.puppeteer) {
       const webpack = require('webpack')
       const puppeteer = require('puppeteer')
 
       // Compile the test file using Webpack.
-      print.debug('Compiling test file:', chalk.gray(file.puppeteer.path))
+      print.debug('Compiling Puppeteer file:', chalk.gray(file.puppeteer.path))
       const compiler = webpack(file.puppeteer.webpack)
       await new Promise((resolve, reject) => {
         compiler.run(err => {
@@ -28,11 +32,13 @@ worker({
         })
       })
 
-      // Launch a puppeteer browswer instance and new page.
+      // Launch a Puppeteer browser instance and new page.
       context.browser = await puppeteer.launch(context.puppeteer)
       context.page = await context.browser.newPage()
 
-      // TODO:
+      // Store any error thrown in the following try catch so that the browser
+      // can be closed before the error is thrown and execution of this worker
+      // actions terminates.
       let error
       try {
         // Add the compiled file to the page.
@@ -45,10 +51,11 @@ worker({
         error = err
       }
 
-      // TODO:
+      // Close the Puppeteer instance now that registration has completed.
       await context.browser.close()
 
-      // TODO:
+      // If there was an error during regisration, throw it now that the browser
+      // instance has been cleaned up.
       if (error) {
         throw error
       }
@@ -72,19 +79,28 @@ worker({
 
     // Execute each function with the test names exported by the files
     // configured to be called during test registration.
+    const { toHookExec } = require('./lib')
     if (context.plugins && context.plugins.length) {
       await pSeries(
         context.plugins.map(toHookExec('registration', file, context))
       )
     }
 
+    // Return the list of tests that need to be registered.
     return file.tests
   },
   test (file, test, context) {
+    // Create the Print instance based on the log level set in the context
+    // received from the main thread.
     const print = new Print({ level: context.logLevel })
+
+    // Print a debug statement for this test action with the test name and
+    // relative path of the test file it belongs to.
     const relativePath = chalk.gray(file.relativePath)
     print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
+
     return new Promise(async (resolve, reject) => {
+      // TODO: move to lib
       const expect = require('expect')
       const {
         SnapshotState,
@@ -107,7 +123,7 @@ worker({
       expect.addSnapshotSerializer = addSerializer
 
       // Create the context object that provides data and utilities to tests.
-      const testContext = {
+      const testContext = context.testContext = {
         ...file,
         ...test,
         result: {},
@@ -119,35 +135,41 @@ worker({
           testContext.result.passed = reason
         }
       }
-      context.testContext = testContext
+
+      // Update expect's state with the snapshot state and the test name.
+      expect.setState({
+        assertionCalls: 0,
+        suppressedErrors: [],
+        snapshotState: new SnapshotState(
+          file.snapshotPath,
+          context.updateSnapshot
+        ),
+        currentTestName: test.key
+      })
+
+      // Execute each function with the test context exported by the files
+      // configured to be called before each test.
+      if (context.plugins && context.plugins.length) {
+        await pSeries(
+          context.plugins.map(toHookExec('beforeEach', context))
+        )
+      }
+
+      let testFn
+      if (file.puppeteer) {
+        // TODO:
+      } else {
+        // Load the test file and extract the test object.
+        testFn = require(file.path)[test.key].testFn
+      }
 
       try {
-        // Load the test file and extract the test object.
-        const { testFn } = require(file.path)[test.key]
-
-        // Update expect's state with the snapshot state and the test name.
-        expect.setState({
-          assertionCalls: 0,
-          suppressedErrors: [],
-          snapshotState: new SnapshotState(
-            file.snapshotPath,
-            context.updateSnapshot
-          ),
-          currentTestName: test.key
-        })
-
-        // Execute each function with the test context exported by the files
-        // configured to be called before each test.
-        if (context.plugins && context.plugins.length) {
-          await pSeries(
-            context.plugins.map(toHookExec('beforeEach', context))
-          )
-        }
-
+        // TODO: simplify?
         // Perform the given test within the test file and make the expect
         // assertion library available to it.
         const promise = new Promise(async (resolve, reject) => {
           try {
+            // TODO: args depend on file.puppeteer?
             await testFn(testContext)
             resolve()
           } catch (err) {
@@ -156,6 +178,7 @@ worker({
         })
         await pTimeout(promise, context.timeout)
 
+        // TODO: move to handle result function
         // Extract expect's state after running the test.
         const { suppressedErrors, assertionCalls } = expect.getState()
 

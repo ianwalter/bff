@@ -1,4 +1,3 @@
-
 import { oneLine } from 'common-tags'
 
 window.testMap = {}
