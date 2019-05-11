@@ -6,6 +6,8 @@ const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { toHookExec } = require('./lib')
 const { SnapshotState } = require('jest-snapshot')
+const tempy = require('tempy')
+const merge = require('@ianwalter/merge')
 
 const defaultFiles = [
   'tests.js',
@@ -43,6 +45,10 @@ function run (config) {
     context.updateSnapshot = config.updateSnapshot ? 'all' : 'none'
     context.logLevel = config.logLevel || 'info'
     context.timeout = config.timeout || 60000
+
+    // TODO:
+    const webpack = { mode: 'development ' }
+    context.puppeteer = merge({ webpack }, config.puppeteer)
 
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
@@ -136,6 +142,23 @@ function run (config) {
           file.snapshotPath,
           context.updateSnapshot
         )
+
+        if (context.puppeteer.all || file.path.match(/pptr\.js$/)) {
+          // TODO:
+          file.puppeteer = { path: tempy.file({ extension: 'js' }) }
+
+          // TODO:
+          file.puppeteer.webpack = merge(
+            {
+              entry: file.path,
+              output: {
+                path: path.dirname(file.puppeteer.path),
+                filename: path.basename(file.puppeteer.path)
+              }
+            },
+            context.puppeteer.webpack
+          )
+        }
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {

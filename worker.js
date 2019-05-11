@@ -11,6 +11,39 @@ worker({
     print.debug(`Registration worker ${threadId}`, relativePath)
     const { toHookExec } = require('./lib')
 
+    let testMap
+    if (file.puppeteer) {
+      const webpack = require('webpack')
+      const puppeteer = require('puppeteer')
+
+      // Compile the test file using Webpack.
+      const compiler = webpack(file.puppeteer.webpack)
+      await new Promise((resolve, reject) => {
+        compiler.run(err => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve()
+          }
+        })
+      })
+
+      // Launch a puppeteer browswer instance and new page.
+      const browser = await puppeteer.launch(context.puppeteer)
+      const page = await browser.newPage()
+
+      // Add the compiled file to the page.
+      page.addScriptTag({ path: file.puppeteer.path })
+
+      // Return the test map that was stored on the window context when the
+      // coimpiled script was added to the page.
+      testMap = await page.evalutate(() => window.testMap)
+    } else {
+      // If the test file isn't meant for the browser we can simply require it
+      // to ge the map of tests.
+      testMap = require(file.path)
+    }
+
     // Create the registration context with the list of tests that are intended
     // to be executed.
     const needsTag = context.tags && context.tags.length
@@ -21,7 +54,7 @@ worker({
       }
       return acc
     }
-    const tests = Object.entries(require(file.path)).reduce(toTests, [])
+    const tests = Object.entries(testMap).reduce(toTests, [])
     context.registrationContext = { file, tests }
 
     // Execute each function with the test names exported by the files
