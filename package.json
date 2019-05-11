@@ -43,7 +43,9 @@
     "jest-snapshot": "^24.7.1",
     "p-series": "^2.1.0",
     "p-timeout": "^3.1.0",
+    "puppeteer": "^1.15.0",
     "tempy": "^0.3.0",
+    "webpack": "^4.31.0",
     "workerpool": "^3.1.2"
   },
   "devDependencies": {
@@ -58,6 +60,7 @@
     ]
   },
   "bff": {
+    "logLevel": "debug",
     "timeout": 5000,
     "plugins": [
       "tests/helpers/plugin.js"

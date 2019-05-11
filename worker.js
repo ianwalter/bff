@@ -15,6 +15,7 @@ worker({
     if (file.puppeteer) {
       const webpack = require('webpack')
       const puppeteer = require('puppeteer')
+      print.debug('Compiling test file:', chalk.gray(file.puppeteer.path))
 
       // Compile the test file using Webpack.
       const compiler = webpack(file.puppeteer.webpack)
@@ -37,7 +38,7 @@ worker({
 
       // Return the test map that was stored on the window context when the
       // coimpiled script was added to the page.
-      testMap = await page.evalutate(() => window.testMap)
+      testMap = await page.evaluate(() => window.testMap)
     } else {
       // If the test file isn't meant for the browser we can simply require it
       // to ge the map of tests.

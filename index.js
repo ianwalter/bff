@@ -47,7 +47,7 @@ function run (config) {
     context.timeout = config.timeout || 60000
 
     // TODO:
-    const webpack = { mode: 'development ' }
+    const webpack = { mode: 'development' }
     context.puppeteer = merge({ webpack }, config.puppeteer)
 
     // Create the print instance with the given log level.
@@ -114,6 +114,23 @@ function run (config) {
         const snapshotFilename = path.basename(filePath).replace('.js', '.snap')
         file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
 
+        if (context.puppeteer.all || file.path.match(/pptr\.js$/)) {
+          // TODO:
+          file.puppeteer = { path: tempy.file({ extension: 'js' }) }
+
+          // TODO:
+          file.puppeteer.webpack = merge(
+            {
+              entry: file.path,
+              output: {
+                path: path.dirname(file.puppeteer.path),
+                filename: path.basename(file.puppeteer.path)
+              }
+            },
+            context.puppeteer.webpack
+          )
+        }
+
         // Perform registration on the test file to collect the tests that need
         // to be executed.
         const tests = await registrationPool.exec('register', [file, context])
@@ -142,23 +159,6 @@ function run (config) {
           file.snapshotPath,
           context.updateSnapshot
         )
-
-        if (context.puppeteer.all || file.path.match(/pptr\.js$/)) {
-          // TODO:
-          file.puppeteer = { path: tempy.file({ extension: 'js' }) }
-
-          // TODO:
-          file.puppeteer.webpack = merge(
-            {
-              entry: file.path,
-              output: {
-                path: path.dirname(file.puppeteer.path),
-                filename: path.basename(file.puppeteer.path)
-              }
-            },
-            context.puppeteer.webpack
-          )
-        }
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
