@@ -32,12 +32,26 @@ worker({
       context.browser = await puppeteer.launch(context.puppeteer)
       context.page = await context.browser.newPage()
 
-      // Add the compiled file to the page.
-      await context.page.addScriptTag({ path: file.puppeteer.path })
+      // TODO:
+      let error
+      try {
+        // Add the compiled file to the page.
+        await context.page.addScriptTag({ path: file.puppeteer.path })
 
-      // Return the test map that was stored on the window context when the
-      // coimpiled script was added to the page.
-      context.testMap = await context.page.evaluate(() => window.testMap)
+        // Return the test map that was stored on the window context when the
+        // coimpiled script was added to the page.
+        context.testMap = await context.page.evaluate(() => window.testMap)
+      } catch (err) {
+        error = err
+      }
+
+      // TODO:
+      await context.browser.close()
+
+      // TODO:
+      if (error) {
+        throw error
+      }
     } else {
       // If the test file isn't meant for the browser we can simply require it
       // to ge the map of tests.
@@ -60,13 +74,8 @@ worker({
     // configured to be called during test registration.
     if (context.plugins && context.plugins.length) {
       await pSeries(
-        context.plugins.map(toHookExec('registration', context))
+        context.plugins.map(toHookExec('registration', file, context))
       )
-    }
-
-    // TODO:
-    if (context.browser) {
-      await context.browser.close()
     }
 
     return file.tests

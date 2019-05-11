@@ -1,6 +1,6 @@
 const path = require('path')
 
-function toHookExec (hookName, context) {
+function toHookExec (hookName, ...args) {
   return file => async () => {
     let plugin
     try {
@@ -11,7 +11,7 @@ function toHookExec (hookName, context) {
     plugin = plugin || require(path.resolve(file))
     const hook = plugin[hookName]
     if (hook) {
-      await hook(context)
+      await hook(...args)
     }
   }
 }
