@@ -4,7 +4,6 @@ const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
-const { toHookExec } = require('./lib')
 const { SnapshotState } = require('jest-snapshot')
 const tempy = require('tempy')
 const merge = require('@ianwalter/merge')
@@ -17,8 +16,8 @@ const defaultFiles = [
 ]
 
 /**
- * Collects tests names from tests files and assigns them to a worker in a
- * worker pool to be executed.
+ * Collects test names from test files and assigns them to a worker in a
+ * worker pool that runs the associated test.
  */
 function run (config) {
   return new Promise(async (resolve, reject) => {
@@ -37,9 +36,9 @@ function run (config) {
       failed: 0,
       skipped: 0,
       // Initialize a count for the total number of tests that have been
-      // executed so that the run can figure out when all tests have completed
-      // and the worker pool can be terminated.
-      executed: 0
+      // run so that the run can figure out when all tests have completed and
+      // the worker pool can be terminated.
+      testsRun: 0
     }
     context.tests = config.tests || defaultFiles
     context.updateSnapshot = config.updateSnapshot ? 'all' : 'none'
@@ -66,10 +65,10 @@ function run (config) {
     // For registering individual tests exported from test files:
     const registrationPool = workerpool.pool(workerPath, poolOptions)
 
-    // For actually executing the tests:
-    const executionPool = workerpool.pool(workerPath, poolOptions)
+    // For actually running the tests:
+    const runPool = workerpool.pool(workerPath, poolOptions)
 
-    // Collect the execution promises in an array so that they can be
+    // Collect the in-progress test run promises in an array so that they can be
     // cancelled if need be (e.g. on failFast before pool termination).
     const inProgress = []
 
@@ -95,15 +94,16 @@ function run (config) {
       // Add the absolute paths of the test files to the run context.
       context.files = (await globby(context.tests)).map(f => path.resolve(f))
 
-      // Execute each function with the run context exported by the files
+      // Call each function with the run context exported by the files
       // configured to be called before a run.
+      const toHookRun = require('./lib/toHookRun')
       if (context.plugins && context.plugins.length) {
-        await pSeries(context.plugins.map(toHookExec('before', context)))
+        await pSeries(context.plugins.map(toHookRun('before', context)))
       }
 
       // For each test file found, pass the filename to a registration pool
       // worker so that the tests within it can be collected and given to a
-      // execution pool worker to be run.
+      // run pool worker to be run.
       context.files.forEach(async filePath => {
         // Create the file context to contain information on the test file.
         const relativePath = path.relative(process.cwd(), filePath)
@@ -132,7 +132,7 @@ function run (config) {
         }
 
         // Perform registration on the test file to collect the tests that need
-        // to be executed.
+        // to be run.
         const tests = await registrationPool.exec('register', [file, context])
 
         // Increment the registration count now that registration has completed
@@ -147,11 +147,11 @@ function run (config) {
         }
 
         // Add the number of tests returned by test registration to the running
-        // total of all tests that need to be executed.
+        // total of all tests that need to be run.
         context.testsRegistered += tests.length
 
         // Determine if any of the tests in the test file have the .only
-        // modifier so that tests can be excluded from being executed.
+        // modifier so that tests can be excluded from being run.
         const hasOnly = Object.values(tests).some(test => test.only)
 
         // Get the snapshot state for the current test file.
@@ -162,10 +162,10 @@ function run (config) {
 
         // Iterate through all tests in the test file.
         const runAllTestsInFile = Promise.all(tests.map(async test => {
-          // Define the execution promise outside of try-catch-finally so that
-          // it can be referenced when it needs to be removed from the
-          // inProgress collection.
-          let execution
+          // Define the test run promise outside of try-catch-finally so that it
+          // can be referenced when it needs to be removed from the inProgress
+          // collection.
+          let testRun
 
           try {
             // Mark all tests as having been checked for snapshot changes so
@@ -175,12 +175,12 @@ function run (config) {
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
             if (context.hasFastFailure) {
-              // Don't execute the test if the failFast option is set and there
-              // has been a test failure.
+              // Don't run the test if the failFast option is set and there has
+              // been a test failure.
               print.debug('Skipping test because of failFast flag:', test.name)
             } else if (hasOnly && !test.only) {
-              // Don't execute the test if there is a test in the current test
-              // file marked with the only modifier and it's not this test.
+              // Don't run the test if there is a test in the current test file
+              // marked with the only modifier and it's not this test.
               print.debug('Skipping test because of only modifier:', test.name)
             } else if (test.skip) {
               // Output the test name and increment the skip count to remind
@@ -188,16 +188,16 @@ function run (config) {
               print.log('🛌', test.name)
               context.skipped++
             } else {
-              // Send the test to a worker in the execution pool to be executed.
-              execution = executionPool.exec('test', [file, test, context])
+              // Send the test to a worker in the run pool to be run.
+              testRun = runPool.exec('test', [file, test, context])
 
-              // Push the execution promise to the inProgress collection so
-              // that, if need be, it can be cancelled later (e.g. on failFast).
-              inProgress.push(execution)
+              // Push the test run promise to the inProgress collection so that,
+              // if need be, it can be cancelled later (e.g. on failFast).
+              inProgress.push(testRun)
 
-              // Wait for the execution promise to complete so that the test
+              // Wait for the test run promise to complete so that the test
               // results can be handled.
-              const result = await execution
+              const result = await testRun
 
               // Update the snapshot state with the snapshot data received from
               // the worker.
@@ -231,22 +231,22 @@ function run (config) {
             context.failed++
 
             // If the failFast option is set, record that there's been a "fast
-            // failure" and try to cancel any in-progress executions.
+            // failure" and try to cancel any in-progress test runs.
             if (context.failFast) {
               context.hasFastFailure = true
               inProgress.forEach(exec => exec.cancel())
             }
           } finally {
-            // Increment the execution count now that the test has completed.
-            context.executed++
+            // Increment the test run count now that the test has completed.
+            context.testsRun++
 
-            // Remove the current execution promise from the inProgress
+            // Remove the current test run promise from the inProgress
             // collection.
-            inProgress.splice(inProgress.indexOf(execution), 1)
+            inProgress.splice(inProgress.indexOf(testRun), 1)
           }
         }))
 
-        // After all the tests in the test file have been executed...
+        // After all the tests in the test file have been run...
         runAllTestsInFile.then(async () => {
           try {
             // The snapshot tests that weren't checked are obsolete and can be
@@ -261,17 +261,17 @@ function run (config) {
             if (
               context.hasFastFailure ||
               (context.filesRegistered === context.files.length &&
-              context.executed === context.testsRegistered)
+              context.testsRun === context.testsRegistered)
             ) {
-              // Execute each function with the run context exported by the
-              // files configured to be called after a run.
+              // Call each function with the run context exported by the files
+              // configured to be called after a run.
               if (context.plugins && context.plugins.length) {
-                await pSeries(context.plugins.map(toHookExec('after', context)))
+                await pSeries(context.plugins.map(toHookRun('after', context)))
               }
 
-              // Terminate the execution pool if all tests have been run.
-              executionPool.terminate(context.hasFastFailure)
-                .then(() => print.debug('Execution pool terminated'))
+              // Terminate the run pool if all tests have been run.
+              runPool.terminate(context.hasFastFailure)
+                .then(() => print.debug('Run pool terminated'))
 
               // Resolve the run Promise with the run context which contains
               // the tests' passed/failed/skipped counts.

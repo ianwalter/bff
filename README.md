@@ -46,8 +46,8 @@ test.skip('something', ({ expect }) => {
 })
 ```
 
-You can also have only designated tests in a test file executed with the
-`.only` modifier:
+You can also have only designated tests in a test file run with the `.only`
+modifier:
 
 ```js
 test.only('focus', ({ expect }) => {
