@@ -145,7 +145,9 @@ worker({
       }
     } finally {
       // Close the Puppeteer instance now that the test has completed.
-      await context.browser.close()
+      if (context.browser) {
+        await context.browser.close()
+      }
     }
 
     // Return the test result to the main thread.
