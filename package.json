@@ -61,7 +61,6 @@
     ]
   },
   "bff": {
-    "logLevel": "debug",
     "timeout": 5000,
     "plugins": [
       "tests/helpers/plugin.js"

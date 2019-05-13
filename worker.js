@@ -169,6 +169,9 @@ worker({
     }
 
     // Return the test result to the main thread.
+    if (context.testContext.result.failed) {
+      throw context.testContext.result.failed
+    }
     return context.testContext.result
   }
 })
