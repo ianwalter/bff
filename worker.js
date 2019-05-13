@@ -106,6 +106,10 @@ worker({
     }
 
     try {
+      //
+      const createTestContext = require('./lib/createTestContext')
+      const testContext = createTestContext(file, test, context)
+
       // Call each function with the test context exported by the files
       // configured to be called before each test.
       const toHookRun = require('./lib/toHookRun')
@@ -119,21 +123,18 @@ worker({
 
         // Run the test in the browser and create the testContext using the
         // result.
-        context.testContext = {
-          result: await context.page.evaluate(
-            ({ file, test, context }) => window.runTest(file, test, context),
-            { file, test, context }
-          )
-        }
+        testContext.result = await context.page.evaluate(
+          ({ file, test, context }) => window.runTest(file, test, context),
+          { file, test, context }
+        )
       } else {
-        const runTest = require('./lib/runTest')
-
         // Load the test file and add the matching test function to the test
         // object.
-        test.testFn = require(file.path)[test.key].testFn
+        const { testFn } = require(file.path)[test.key]
 
         // Run the test!
-        await runTest(file, test, context)
+        const runTest = require('./lib/runTest')
+        await runTest(testContext, testFn, context.timeout)
       }
 
       // Call each function with the test context exported by the files

@@ -1,4 +1,5 @@
 import { oneLine } from 'common-tags'
+import createTestContext from './lib/createTestContext'
 import runTest from './lib/runTest'
 
 window.testMap = {}
@@ -30,11 +31,13 @@ test.only = function only (name, ...tags) {
 }
 
 window.runTests = async function (file, test, context) {
-  // TODO:
-  test.testFn = window.tests[test].testFn
+  const testContext = createTestContext(file, test, context)
 
   // TODO:
-  await runTest(file, test, context)
+  const { testFn } = window.tests[test]
+
+  // TODO:
+  await runTest(testContext, testFn, context.timeout)
 
   // TODO:
   return context.testContext.result
