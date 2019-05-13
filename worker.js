@@ -1,3 +1,4 @@
+const path = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
@@ -17,6 +18,22 @@ worker({
     if (file.puppeteer) {
       const webpack = require('webpack')
       const puppeteer = require('puppeteer')
+      const merge = require('@ianwalter/merge')
+
+      // TODO:
+      file.puppeteer.webpack = merge(
+        {
+          entry: file.path,
+          output: {
+            path: path.dirname(file.puppeteer.path),
+            filename: path.basename(file.puppeteer.path)
+          },
+          node: {
+            fs: 'empty'
+          }
+        },
+        context.puppeteer.webpack
+      )
 
       // Compile the test file using Webpack.
       print.debug('Compiling Puppeteer file:', chalk.gray(file.puppeteer.path))
@@ -105,11 +122,11 @@ worker({
       context.page = await context.browser.newPage()
     }
 
-    try {
-      //
-      const createTestContext = require('./lib/createTestContext')
-      const testContext = createTestContext(file, test, context)
+    // TODO:
+    const createTestContext = require('./lib/createTestContext')
+    context.testContext = createTestContext(file, test, context.updateSnapshot)
 
+    try {
       // Call each function with the test context exported by the files
       // configured to be called before each test.
       const toHookRun = require('./lib/toHookRun')
@@ -123,9 +140,9 @@ worker({
 
         // Run the test in the browser and create the testContext using the
         // result.
-        testContext.result = await context.page.evaluate(
-          ({ file, test, context }) => window.runTest(file, test, context),
-          { file, test, context }
+        context.testContext.result = await context.page.evaluate(
+          ({ file, test, update }) => window.runTest(file, test, update),
+          { file, test, update: context.updateSnapshot }
         )
       } else {
         // Load the test file and add the matching test function to the test
@@ -134,7 +151,7 @@ worker({
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(testContext, testFn, context.timeout)
+        await runTest(context.testContext, testFn, context.timeout)
       }
 
       // Call each function with the test context exported by the files

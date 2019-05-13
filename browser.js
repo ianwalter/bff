@@ -30,7 +30,7 @@ test.only = function only (name, ...tags) {
   handleTestArgs(name, tags, { only: true })
 }
 
-window.runTests = async function (file, test, context) {
+window.runTest = async function (file, test, context) {
   const testContext = createTestContext(file, test, context)
 
   // TODO:
@@ -40,7 +40,7 @@ window.runTests = async function (file, test, context) {
   await runTest(testContext, testFn, context.timeout)
 
   // TODO:
-  return context.testContext.result
+  return testContext.result
 }
 
 export { test }

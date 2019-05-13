@@ -117,18 +117,6 @@ function run (config) {
         if (context.puppeteer.all || file.path.match(/pptr\.js$/)) {
           // TODO:
           file.puppeteer = { path: tempy.file({ extension: 'js' }) }
-
-          // TODO:
-          file.puppeteer.webpack = merge(
-            {
-              entry: file.path,
-              output: {
-                path: path.dirname(file.puppeteer.path),
-                filename: path.basename(file.puppeteer.path)
-              }
-            },
-            context.puppeteer.webpack
-          )
         }
 
         // Perform registration on the test file to collect the tests that need
