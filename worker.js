@@ -140,10 +140,16 @@ worker({
 
         // Run the test in the browser and create the testContext using the
         // result.
-        context.testContext.result = await context.page.evaluate(
-          ({ file, test, update }) => window.runTest(file, test, update),
-          { file, test, update: context.updateSnapshot }
+        const { updateSnapshot, timeout } = context
+        const result = await context.page.evaluate(
+          ({ file, test, context }) => window.runTest(file, test, context),
+          { file, test, context: { updateSnapshot, timeout } }
         )
+
+        if (result) {
+          context.testContext.result.failed = new Error(result.message)
+          context.testContext.result.failed.stack = result.stack
+        }
       } else {
         // Load the test file and add the matching test function to the test
         // object.

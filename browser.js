@@ -31,16 +31,19 @@ test.only = function only (name, ...tags) {
 }
 
 window.runTest = async function (file, test, context) {
-  const testContext = createTestContext(file, test, context)
+  const testContext = createTestContext(file, test, context.updateSnapshot)
 
   // TODO:
-  const { testFn } = window.tests[test]
+  const { testFn } = window.testMap[test.key]
 
   // TODO:
   await runTest(testContext, testFn, context.timeout)
 
   // TODO:
-  return testContext.result
+  if (testContext.result.failed) {
+    const { message, stack } = testContext.result.failed
+    return { message, stack }
+  }
 }
 
 export { test }
