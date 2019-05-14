@@ -51,6 +51,7 @@ function run (config) {
 
     // TODO:
     const puppeteer = {
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
       webpack: {
         mode: 'development',
         resolve: {
