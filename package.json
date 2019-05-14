@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "bff": "./cli.js",
-    "test": "./cli.js tests/pass.tests.js tests/skip.tests.js tests/only.tests.js"
+    "test": "./cli.js tests/bff.js"
   },
   "bin": {
     "bff": "cli.js"
@@ -52,19 +52,12 @@
   },
   "devDependencies": {
     "@ianwalter/eslint-config": "^1.1.2",
-    "execa": "^1.0.0",
-    "np": "^5.0.0",
-    "strip-ansi": "^5.2.0"
+    "np": "^5.0.0"
   },
   "eslintConfig": {
     "root": true,
     "extends": [
       "@ianwalter"
-    ]
-  },
-  "bff": {
-    "plugins": [
-      "tests/helpers/plugin.js"
     ]
   }
 }
