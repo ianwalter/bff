@@ -14,6 +14,7 @@ const defaultFiles = [
   'tests/**/*tests.js',
   'tests/**/*pptr.js'
 ]
+const pptrRe = /pptr\.js$/
 
 /**
  * Collects test names from test files and assigns them to a worker in a
@@ -45,6 +46,9 @@ function run (config) {
     context.logLevel = config.logLevel || 'info'
     context.timeout = config.timeout || 60000
 
+    // Add the absolute paths of the test files to the run context.
+    context.files = (await globby(context.tests)).map(f => path.resolve(f))
+
     // TODO:
     const webpack = {
       mode: 'development',
@@ -58,9 +62,12 @@ function run (config) {
     context.puppeteer = merge({ webpack }, config.puppeteer)
 
     // TODO:
-    const createServer = require('fs-remote/createServer')
-    const server = createServer()
-    server.listen(24513)
+    let fileServer
+    if (context.puppeteer.all || context.files.some(f => f.match(pptrRe))) {
+      const createServer = require('fs-remote/createServer')
+      fileServer = createServer()
+      fileServer.listen(24513)
+    }
 
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
@@ -99,15 +106,18 @@ function run (config) {
           'Hit CTRL+C again to have the process exit immediately'
         )
         context.hasFastFailure = true
+
+        // TODO:
         inProgress.forEach(exec => exec.cancel())
-        server.close()
+
+        // TODO:
+        if (fileServer) {
+          fileServer.close()
+        }
       }
     })
 
     try {
-      // Add the absolute paths of the test files to the run context.
-      context.files = (await globby(context.tests)).map(f => path.resolve(f))
-
       // Call each function with the run context exported by the files
       // configured to be called before a run.
       const toHookRun = require('./lib/toHookRun')
@@ -128,7 +138,7 @@ function run (config) {
         const snapshotFilename = path.basename(filePath).replace('.js', '.snap')
         file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
 
-        if (context.puppeteer.all || file.path.match(/pptr\.js$/)) {
+        if (context.puppeteer.all || file.path.match(pptrRe)) {
           // TODO:
           file.puppeteer = { path: tempy.file({ extension: 'js' }) }
         }
