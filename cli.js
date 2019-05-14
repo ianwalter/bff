@@ -2,7 +2,7 @@
 
 const cli = require('@ianwalter/cli')
 const { print } = require('@ianwalter/print')
-const { run: bff } = require('.')
+const bff = require('.')
 
 async function run () {
   const config = cli({
@@ -28,7 +28,7 @@ async function run () {
 
   // Run the tests and wait for a response with the passed/failed/skipped
   // counts.
-  const { passed, failed, skipped } = await bff(config)
+  const { passed, failed, skipped } = await bff.run(config)
 
   // Log the results of running the tests.
   process.stdout.write('\n')

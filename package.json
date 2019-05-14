@@ -37,7 +37,7 @@
   "homepage": "https://github.com/ianwalter/bff#readme",
   "dependencies": {
     "@ianwalter/cli": "^1.1.1",
-    "@ianwalter/print": "^2.3.0",
+    "@ianwalter/print": "^2.3.1",
     "common-tags": "^1.8.0",
     "expect": "^24.7.1",
     "fs-remote": "^0.1.9",
@@ -53,7 +53,8 @@
   "devDependencies": {
     "@ianwalter/eslint-config": "^1.1.2",
     "execa": "^1.0.0",
-    "np": "^5.0.0"
+    "np": "^5.0.0",
+    "strip-ansi": "^5.2.0"
   },
   "eslintConfig": {
     "root": true,
@@ -62,10 +63,8 @@
     ]
   },
   "bff": {
-    "timeout": 5000,
     "plugins": [
       "tests/helpers/plugin.js"
-    ],
-    "puppeteer": {}
+    ]
   }
 }

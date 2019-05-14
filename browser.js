@@ -42,8 +42,10 @@ window.runTest = async function (file, test, context) {
   // TODO:
   if (testContext.result.failed) {
     const { message, stack } = testContext.result.failed
-    return { message, stack }
+    testContext.result.failed = { message, stack }
   }
+
+  return testContext.result
 }
 
 export { test }

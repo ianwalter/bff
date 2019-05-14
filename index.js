@@ -63,7 +63,7 @@ function run (config) {
 
     // TODO:
     let fileServer
-    if (context.puppeteer.all || context.files.some(f => f.match(pptrRe))) {
+    if (context.puppeteer.all || context.files.some(f => pptrRe.test(f))) {
       const createServer = require('fs-remote/createServer')
       fileServer = createServer()
       fileServer.listen(24513)
@@ -138,7 +138,7 @@ function run (config) {
         const snapshotFilename = path.basename(filePath).replace('.js', '.snap')
         file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
 
-        if (context.puppeteer.all || file.path.match(pptrRe)) {
+        if (context.puppeteer.all || pptrRe.test(file.path)) {
           // TODO:
           file.puppeteer = { path: tempy.file({ extension: 'js' }) }
         }

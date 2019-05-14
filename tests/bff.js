@@ -1,8 +1,8 @@
-const { test } = require('..')
-const execa = require('execa')
+const { test, run } = require('..')
 
-test('bff', async ({ fail }) => {
-  const { stdout, stderr } = await execa('./cli.js', { reject: false })
-  console.log(stdout, stderr)
-  fail('TODO: figure out how to assert test results.')
+test('bff', async ({ expect }) => {
+  const result = await run({ timeout: 5000 })
+  expect(result.passed).toBe(15)
+  expect(result.failed).toBe(8)
+  expect(result.skipped).toBe(2)
 })
