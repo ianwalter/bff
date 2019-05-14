@@ -27,9 +27,6 @@ worker({
           output: {
             path: path.dirname(file.puppeteer.path),
             filename: path.basename(file.puppeteer.path)
-          },
-          node: {
-            fs: 'empty'
           }
         },
         context.puppeteer.webpack

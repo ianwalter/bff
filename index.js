@@ -46,8 +46,21 @@ function run (config) {
     context.timeout = config.timeout || 60000
 
     // TODO:
-    const webpack = { mode: 'development' }
+    const webpack = {
+      mode: 'development',
+      resolve: {
+        alias: {
+          'fs': path.join(__dirname, 'lib', 'fs.js'),
+          '@ianwalter/bff': path.join(__dirname, 'browser.js')
+        }
+      }
+    }
     context.puppeteer = merge({ webpack }, config.puppeteer)
+
+    // TODO:
+    const createServer = require('fs-remote/createServer')
+    const server = createServer()
+    server.listen(24513)
 
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
@@ -87,6 +100,7 @@ function run (config) {
         )
         context.hasFastFailure = true
         inProgress.forEach(exec => exec.cancel())
+        server.close()
       }
     })
 
