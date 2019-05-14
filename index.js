@@ -50,16 +50,26 @@ function run (config) {
     context.files = (await globby(context.tests)).map(f => path.resolve(f))
 
     // TODO:
-    const webpack = {
-      mode: 'development',
-      resolve: {
-        alias: {
-          'fs': path.join(__dirname, 'lib', 'fs.js'),
-          '@ianwalter/bff': path.join(__dirname, 'browser.js')
+    const puppeteer = {
+      webpack: {
+        mode: 'development',
+        resolve: {
+          alias: {
+            'fs': path.join(__dirname, 'lib', 'fs.js'),
+            '@ianwalter/bff': path.join(__dirname, 'browser.js')
+          }
         }
       }
     }
-    context.puppeteer = merge({ webpack }, config.puppeteer)
+
+    // If running in the Puppeteer Docker container, configure Puppeteer to use
+    // the instance of Google Chrome that is already installed.
+    if (process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD) {
+      puppeteer.executablePath = 'google-chrome-unstable'
+    }
+
+    // TODO:
+    context.puppeteer = merge(puppeteer, config.puppeteer)
 
     // TODO:
     let fileServer
