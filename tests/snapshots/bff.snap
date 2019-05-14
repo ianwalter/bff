@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bff 1`] = `
+Array [
+  "A test with a multiline name",
+  "arithmetic",
+  "beforeEach",
+  "dom snapshot",
+  "manual pass",
+  "manual pass",
+  "only",
+  "only with test specified after name",
+  "parseInt after a 1 second timeout",
+  "registration [ONE]",
+  "registration [TWO]",
+  "second snapshot pass",
+  "snapshot pass",
+  "strict equality",
+  "tags second call",
+]
+`;
+
+exports[`bff 2`] = `
+Array [
+  "afterEach",
+  "manual fail",
+  "manual fail with reason",
+  "no assertions",
+  "parseInt with the wrong base",
+  "snapshot fail",
+  "tags",
+  "timeout",
+]
+`;
+
+exports[`bff 3`] = `
+Array [
+  "skip no assertions",
+  "skip with test specified after name",
+]
+`;

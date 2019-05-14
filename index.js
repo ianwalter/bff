@@ -32,10 +32,10 @@ function run (config) {
       // Initialize a count for the total number of tests registered from all of
       // the test files.
       testsRegistered: 0,
-      // Initialize counts for how many tests passed, failed, or were skipped.
-      passed: 0,
-      failed: 0,
-      skipped: 0,
+      // Initialize collections for tests that passed, failed, or were skipped.
+      passed: [],
+      failed: [],
+      skipped: [],
       // Initialize a count for the total number of tests that have been
       // run so that the run can figure out when all tests have completed and
       // the worker pool can be terminated.
@@ -198,7 +198,7 @@ function run (config) {
               // Output the test name and increment the skip count to remind
               // the user that some tests are being explicitly skipped.
               print.log('🛌', test.name)
-              context.skipped++
+              context.skipped.push(test.name)
             } else {
               // Send the test to a worker in the run pool to be run.
               testRun = runPool.exec('test', [file, test, context])
@@ -224,7 +224,7 @@ function run (config) {
               // Output the test name and increment the pass count since the
               // test didn't throw and error indicating a failure.
               print.success(test.name)
-              context.passed++
+              context.passed.push(test.name)
             }
           } catch (err) {
             if (context.hasFastFailure) {
@@ -240,7 +240,7 @@ function run (config) {
 
             // Increment the failure count since the test threw an error
             // indicating a test failure.
-            context.failed++
+            context.failed.push(test.name)
 
             // If the failFast option is set, record that there's been a "fast
             // failure" and try to cancel any in-progress test runs.

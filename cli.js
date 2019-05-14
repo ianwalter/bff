@@ -32,10 +32,14 @@ async function run () {
 
   // Log the results of running the tests.
   process.stdout.write('\n')
-  print.info(`${passed} passed. ${failed} failed. ${skipped} skipped.`)
+  print.info(
+    `${passed.length} passed.`,
+    `${failed.length} failed.`,
+    `${skipped.length} skipped.`
+  )
 
   // If any tests failed, exit with a non-zero exit code.
-  process.exit(failed ? 1 : 0)
+  process.exit(failed.length ? 1 : 0)
 }
 
 try {
