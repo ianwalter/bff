@@ -54,6 +54,9 @@
     "@ianwalter/eslint-config": "^1.1.2",
     "np": "^5.0.0"
   },
+  "bff": {
+    "timeout": 120000
+  },
   "eslintConfig": {
     "root": true,
     "extends": [
