@@ -162,10 +162,10 @@
   dependencies:
     "@babel/runtime" "^7.3.1"
 
-"@ianwalter/print@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-2.3.0.tgz#12e2a11ca3e622e98069f1ca824c6edb3f4c47cb"
-  integrity sha512-JBysj0+79suEX/GT14xtuc+3MaaShPvo6U4LFuxsldGRvClYJYfG+c4VqZMJ18TwDYrd3ImVKQ4apKSyAOmVHQ==
+"@ianwalter/print@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-2.3.1.tgz#36e3ed258a9333f39d45e18e2297f987685b8c3d"
+  integrity sha512-cJSwa3eXMfqU3T/A82e48vnbHy0AJiELIQUD2saaDIxkEZZN01eX5euboLUPCf1Pt72Es5VWDnwScXf6fceFBw==
   dependencies:
     "@ianwalter/log" "^3.0.0"
     chalk "^2.4.2"
