@@ -8,8 +8,8 @@ test(`
   a
   multiline
   name
-`)(ctx => {
-  ctx.expect('ok').toBeTruthy()
+`)(({ expect }) => {
+  expect('ok').toBeTruthy()
 })
 
 test('strict equality', ({ expect }) => {

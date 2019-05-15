@@ -23,6 +23,14 @@ Array [
 exports[`bff 2`] = `
 Array [
   "afterEach: manual failure",
+  "deep equal failure: expect(received).toBe(expected) // Object.is equality
+
+Expected: {\\"name\\": \\"Joe\\"}
+Received: {\\"name\\": \\"Joe\\"}
+
+Difference:
+
+Compared values have no visual difference. Note that you are testing for equality with the stricter \`toBe\` matcher using \`Object.is\`. For deep equality only, use \`toEqual\` instead.",
   "manual fail with reason: because reasons",
   "manual fail: manual failure",
   "no assertions: no assertions made",
@@ -30,6 +38,7 @@ Array [
 
 Expected: [32m2[39m
 Received: [31mNaN[39m",
+  "property of undefined failure: Cannot read property 'that' of undefined",
   "snapshot fail: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchSnapshot[2m()[22m
 
 Snapshot name: \`snapshot fail 1\`

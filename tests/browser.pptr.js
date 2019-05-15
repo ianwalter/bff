@@ -10,3 +10,11 @@ test('dom snapshot', ({ expect }) => {
   anchor.innerHTML = `Ian's Website`
   expect(anchor).toMatchSnapshot()
 })
+
+test('deep equal failure', ({ expect }) => {
+  expect({ name: 'Joe' }).toBe({ name: 'Joe' })
+})
+
+test('property of undefined failure', ({ expect }) => {
+  expect(window.thing.that.does.not.exist).tobeDefined()
+})
