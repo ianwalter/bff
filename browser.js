@@ -31,16 +31,17 @@ test.only = function only (name, ...tags) {
 }
 
 window.runTest = async function (file, test, context) {
-  // TODO:
+  // Create the context that will be passed to the test function.
   const testContext = createTestContext(file, test, context.updateSnapshot)
 
-  // TODO:
+  // Extract the relevant test function from the map of tests.
   const { testFn } = window.testMap[test.key]
 
-  // TODO:
+  // Run the test!
   await runTest(testContext, testFn, context.timeout)
 
-  // TODO:
+  // If the test failed, extract the data from the Error instance into a POJO so
+  // that it can be returned to the node process via JSON.
   if (testContext.result.failed) {
     const { message, stack } = testContext.result.failed
     testContext.result.failed = { message, stack }

@@ -49,7 +49,7 @@ function run (config) {
     // Add the absolute paths of the test files to the run context.
     context.files = (await globby(context.tests)).map(f => path.resolve(f))
 
-    // TODO:
+    // Construct the default Puppeteer / Webpack configuration.
     const puppeteer = {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       webpack: {
@@ -70,13 +70,15 @@ function run (config) {
       puppeteer.executablePath = 'google-chrome-unstable'
     }
 
-    // TODO:
+    // Merge the default Puppeteer configuration with the user supplied
+    // configuration.
     context.puppeteer = merge(puppeteer, config.puppeteer)
 
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
 
-    // TODO:
+    // Create the fs-remote file server so that jest-snapshot can work in the
+    // browser.
     let fileServer
     if (context.puppeteer.all || context.files.some(f => pptrRe.test(f))) {
       const createServer = require('fs-remote/createServer')
@@ -121,10 +123,10 @@ function run (config) {
         )
         context.hasFastFailure = true
 
-        // TODO:
+        // Try to cancel each test that it currently running.
         inProgress.forEach(exec => exec.cancel())
 
-        // TODO:
+        // If a file server is running, try to close it.
         if (fileServer) {
           fileServer.close()
         }
@@ -153,7 +155,7 @@ function run (config) {
         file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
 
         if (context.puppeteer.all || pptrRe.test(file.path)) {
-          // TODO:
+          // Create a temporary path for the compiled test file.
           file.puppeteer = { path: tempy.file({ extension: 'js' }) }
         }
 

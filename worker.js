@@ -20,7 +20,8 @@ worker({
       const puppeteer = require('puppeteer')
       const merge = require('@ianwalter/merge')
 
-      // TODO:
+      // Create a Webpack configuration specific to the test file being
+      // registered.
       file.puppeteer.webpack = merge(
         {
           entry: file.path,
@@ -32,7 +33,8 @@ worker({
         context.puppeteer.webpack
       )
 
-      // TODO:
+      // Define the constant FILE_SERVER_PORT so that the fs-remote client can
+      // be compiled with the correct server address.
       file.puppeteer.webpack.plugins.push(
         new webpack.DefinePlugin({ FILE_SERVER_PORT: context.fileServerPort })
       )
@@ -124,7 +126,7 @@ worker({
       context.page = await context.browser.newPage()
     }
 
-    // TODO:
+    // Create the context that will be passed to the test function.
     const createTestContext = require('./lib/createTestContext')
     context.testContext = createTestContext(file, test, context.updateSnapshot)
 
@@ -148,15 +150,15 @@ worker({
           { file, test, context: { updateSnapshot, timeout, fileServerPort } }
         )
 
-        // TODO:
+        // If the test failed, re-hydrate the JSON failure data into an Error
+        // instance.
         if (context.testContext.result.failed) {
           const { message, stack } = context.testContext.result.failed
           context.testContext.result.failed = new Error(message)
           context.testContext.result.failed.stack = stack
         }
       } else {
-        // Load the test file and add the matching test function to the test
-        // object.
+        // Load the test file and extract the relevant test function.
         const { testFn } = require(file.path)[test.key]
 
         // Run the test!
