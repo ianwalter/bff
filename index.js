@@ -28,8 +28,10 @@ function run (config) {
       logLevel: 'info',
       timeout: 60000,
       tests: defaultFiles,
-      updateSnapshot: config.updateSnapshot ? 'all' : 'none',
-      testContext: {},
+      testContext: {
+        result: {},
+        updateSnapshot: config.updateSnapshot ? 'all' : 'none'
+      },
       // Add any passed configuration data to the context.
       ...config,
       // Initialize a count for each time a test file has been registered so
@@ -188,7 +190,7 @@ function run (config) {
         // Get the snapshot state for the current test file.
         const snapshotState = new SnapshotState(
           file.snapshotPath,
-          context.updateSnapshot
+          context.testContext.updateSnapshot
         )
 
         // Iterate through all tests in the test file.
@@ -197,6 +199,9 @@ function run (config) {
           // can be referenced when it needs to be removed from the inProgress
           // collection.
           let testRun
+
+          // TODO:
+          merge(context.testContext, file, test)
 
           try {
             // Mark all tests as having been checked for snapshot changes so

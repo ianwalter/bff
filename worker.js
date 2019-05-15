@@ -126,10 +126,6 @@ worker({
       context.page = await context.browser.newPage()
     }
 
-    // Create the context that will be passed to the test function.
-    const createTestContext = require('./lib/createTestContext')
-    context.testContext = createTestContext(file, test, context.updateSnapshot)
-
     try {
       // Call each function with the test context exported by the files
       // configured to be called before each test.
@@ -144,10 +140,9 @@ worker({
 
         // Run the test in the browser and add the result to the local
         // testContext.
-        const { browser, page, ...simpleContext } = context
-        context.testContext.result = await page.evaluate(
-          ({ file, test, context }) => window.runTest(file, test, context),
-          { file, test, context: simpleContext }
+        context.testContext.result = await context.page.evaluate(
+          ({ test, context }) => window.runTest(test, context),
+          { test, context: context.testContext }
         )
 
         // If the test failed, re-hydrate the JSON failure data into an Error
@@ -158,6 +153,10 @@ worker({
           context.testContext.result.failed.stack = stack
         }
       } else {
+        // TODO:
+        const enhanceTestContext = require('./lib/enhanceTestContext')
+        enhanceTestContext(test, context.testContext)
+
         // Load the test file and extract the relevant test function.
         const { testFn } = require(file.path)[test.key]
 
