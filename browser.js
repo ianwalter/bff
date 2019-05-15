@@ -30,24 +30,24 @@ test.only = function only (name, ...tags) {
   handleTestArgs(name, tags, { only: true })
 }
 
-window.runTest = async function (test, context) {
-  // Create the context that will be passed to the test function.
-  enhanceTestContext(context.testContext)
+window.runTest = async function (testContext) {
+  // Enhance the context passed to the test function with testing utilities.
+  enhanceTestContext(testContext)
 
   // Extract the relevant test function from the map of tests.
-  const { testFn } = window.testMap[test.key]
+  const { testFn } = window.testMap[testContext.key]
 
   // Run the test!
-  await runTest(context.testContext, testFn, context.timeout)
+  await runTest(testContext, testFn)
 
   // If the test failed, extract the data from the Error instance into a POJO so
   // that it can be returned to the node process via JSON.
-  if (context.testContext.result.failed) {
-    const { message, stack } = context.testContext.result.failed
-    context.testContext.result.failed = { message, stack }
+  if (testContext.result.failed) {
+    const { message, stack } = testContext.result.failed
+    testContext.result.failed = { message, stack }
   }
 
-  return context.testContext.result
+  return testContext.result
 }
 
 export { test }

@@ -24,24 +24,18 @@ function run (config) {
   return new Promise(async (resolve, reject) => {
     // Create the run context using the passed configuration and defaults.
     const context = {
-      // Add default configuration to the context.
       logLevel: 'info',
-      timeout: 60000,
       tests: defaultFiles,
-      testContext: {
-        result: {},
-        updateSnapshot: config.updateSnapshot ? 'all' : 'none'
-      },
-      // Add any passed configuration data to the context.
-      ...config,
+      testContext: { result: {} },
       // Initialize a count for each time a test file has been registered so
-      // that the main thread can figure out when registration has completed and
-      // the worker pool can be terminated.
+      // that the main thread can figure out when registration has completed
+      // and the worker pool can be terminated.
       filesRegistered: 0,
-      // Initialize a count for the total number of tests registered from all of
-      // the test files.
+      // Initialize a count for the total number of tests registered from all
+      // of the test files.
       testsRegistered: 0,
-      // Initialize collections for tests that passed, failed, or were skipped.
+      // Initialize collections for tests that passed, failed, or were
+      // skipped.
       passed: [],
       failed: [],
       skipped: [],
@@ -50,6 +44,12 @@ function run (config) {
       // the worker pool can be terminated.
       testsRun: 0
     }
+
+    // Destructure passed configuration and add it to testContext and context.
+    const { timeout, updateSnapshot, ...restOfConfig } = config
+    context.testContext.timeout = timeout || 60000
+    context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
+    merge(context, restOfConfig)
 
     // Add the absolute paths of the test files to the run context.
     context.files = (await globby(context.tests)).map(f => path.resolve(f))

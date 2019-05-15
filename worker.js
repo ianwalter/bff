@@ -141,8 +141,8 @@ worker({
         // Run the test in the browser and add the result to the local
         // testContext.
         context.testContext.result = await context.page.evaluate(
-          ({ test, context }) => window.runTest(test, context),
-          { test, context: context.testContext }
+          testContext => window.runTest(testContext),
+          context.testContext
         )
 
         // If the test failed, re-hydrate the JSON failure data into an Error
@@ -153,16 +153,17 @@ worker({
           context.testContext.result.failed.stack = stack
         }
       } else {
-        // TODO:
+        // Enhance the context passed to the test function with testing
+        // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
-        enhanceTestContext(test, context.testContext)
+        enhanceTestContext(context.testContext)
 
         // Load the test file and extract the relevant test function.
         const { testFn } = require(file.path)[test.key]
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, testFn, context.timeout)
+        await runTest(context.testContext, testFn)
       }
 
       // Call each function with the test context exported by the files
