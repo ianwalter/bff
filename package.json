@@ -59,7 +59,10 @@
     "root": true,
     "extends": [
       "@ianwalter"
-    ]
+    ],
+    "globals": {
+      "FILE_SERVER_PORT": true
+    }
   },
   "renovate": {
     "extends": [
