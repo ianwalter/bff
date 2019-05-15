@@ -7,7 +7,7 @@
   "browser": "browser.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "./cli.js"
+    "test": "./cli.js tests/bff.js"
   },
   "bin": {
     "bff": "cli.js"

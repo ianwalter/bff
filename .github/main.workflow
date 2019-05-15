@@ -19,5 +19,5 @@ action "Test" {
   uses = "ianwalter/puppeteer@v1.0.0"
   needs = ["Install"]
   runs = "yarn"
-  args = "test tests/bff.js"
+  args = "test"
 }
