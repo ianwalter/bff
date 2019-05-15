@@ -13,10 +13,11 @@
     "bff": "cli.js"
   },
   "files": [
+    "lib",
+    "browser.js",
     "cli.js",
     "index.js",
-    "worker.js",
-    "lib.js"
+    "worker.js"
   ],
   "repository": {
     "type": "git",
