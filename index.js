@@ -28,20 +28,19 @@ function run (config) {
       tests: defaultFiles,
       testContext: { result: {} },
       // Initialize a count for each time a test file has been registered so
-      // that the main thread can figure out when registration has completed
-      // and the worker pool can be terminated.
+      // that the main thread can figure out when registration has completed and
+      // the worker pool can be terminated.
       filesRegistered: 0,
-      // Initialize a count for the total number of tests registered from all
-      // of the test files.
+      // Initialize a count for the total number of tests registered from all of
+      // the test files.
       testsRegistered: 0,
-      // Initialize collections for tests that passed, failed, or were
-      // skipped.
+      // Initialize collections for tests that passed, failed, or were skipped.
       passed: [],
       failed: [],
       skipped: [],
-      // Initialize a count for the total number of tests that have been
-      // run so that the run can figure out when all tests have completed and
-      // the worker pool can be terminated.
+      // Initialize a count for the total number of tests that have been run so
+      // that the run can figure out when all tests have completed and the
+      // worker pool can be terminated.
       testsRun: 0
     }
 
