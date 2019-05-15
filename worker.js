@@ -142,12 +142,12 @@ worker({
         // Add the compiled file to the page.
         await context.page.addScriptTag({ path: file.puppeteer.path })
 
-        // Run the test in the browser and create the testContext using the
-        // result.
-        const { updateSnapshot, timeout, fileServerPort } = context
-        context.testContext.result = await context.page.evaluate(
+        // Run the test in the browser and add the result to the local
+        // testContext.
+        const { browser, page, ...simpleContext } = context
+        context.testContext.result = await page.evaluate(
           ({ file, test, context }) => window.runTest(file, test, context),
-          { file, test, context: { updateSnapshot, timeout, fileServerPort } }
+          { file, test, context: simpleContext }
         )
 
         // If the test failed, re-hydrate the JSON failure data into an Error

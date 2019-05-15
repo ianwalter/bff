@@ -1,4 +1,5 @@
 import { oneLine } from 'common-tags'
+import merge from '@ianwalter/merge'
 import createTestContext from './lib/createTestContext'
 import runTest from './lib/runTest'
 
@@ -33,6 +34,7 @@ test.only = function only (name, ...tags) {
 window.runTest = async function (file, test, context) {
   // Create the context that will be passed to the test function.
   const testContext = createTestContext(file, test, context.updateSnapshot)
+  merge(testContext, context.testContext)
 
   // Extract the relevant test function from the map of tests.
   const { testFn } = window.testMap[test.key]
