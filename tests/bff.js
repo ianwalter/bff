@@ -1,8 +1,24 @@
-const { test } = require('..')
-const execa = require('execa')
+const { test, run } = require('..')
 
-test('bff', async ({ expect, fail }) => {
-  const { stdout, stderr } = await execa('./cli.js', { reject: false })
-  console.log(stdout, stderr)
-  fail('TODO: figure out how to assert test results.')
+const config = { timeout: 5000, plugins: ['tests/helpers/plugin.js'] }
+const toName = ({ name, err }) => name + (err ? `: ${err}` : '')
+
+test('bff', async ({ expect }) => {
+  const result = await run(config)
+  expect(result.filesRegistered).toBe(5)
+  expect(result.testsRegistered).toBe(28)
+  expect(result.testsRun).toBe(28)
+  expect(result.passed.length).toBe(15)
+  expect(result.passed.map(toName).sort()).toMatchSnapshot()
+  expect(result.failed.length).toBe(10)
+  expect(result.failed.map(toName).sort()).toMatchSnapshot()
+  expect(result.skipped.length).toBe(2)
+  expect(result.skipped.map(toName).sort()).toMatchSnapshot()
+})
+
+test('bff --failFast', async ({ expect }) => {
+  const result = await run({ ...config, failFast: true })
+  expect(result.testsRegistered).toBeGreaterThan(0)
+  expect(result.testsRun).toBeGreaterThan(0)
+  expect(result.failed.length).toBe(1)
 })

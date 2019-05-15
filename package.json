@@ -4,10 +4,10 @@
   "version": "4.0.2",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
+  "browser": "browser.js",
   "scripts": {
     "lint": "eslint .",
-    "bff": "./cli.js",
-    "test": "./cli.js tests/pass.tests.js tests/skip.tests.js tests/only.tests.js"
+    "test": "./cli.js"
   },
   "bin": {
     "bff": "cli.js"
@@ -39,29 +39,29 @@
     "@ianwalter/print": "^2.3.1",
     "common-tags": "^1.8.0",
     "expect": "^24.8.0",
+    "fs-remote": "^0.1.9",
     "globby": "^9.2.0",
     "jest-snapshot": "^24.8.0",
     "p-series": "^2.1.0",
     "p-timeout": "^3.1.0",
+    "puppeteer": "^1.15.0",
+    "tempy": "^0.3.0",
+    "webpack": "^4.31.0",
     "workerpool": "^3.1.2"
   },
   "devDependencies": {
     "@ianwalter/eslint-config": "^1.1.2",
     "@ianwalter/renovate-config": "^1.1.0",
-    "execa": "^1.0.0",
     "np": "^5.0.1"
   },
   "eslintConfig": {
     "root": true,
     "extends": [
       "@ianwalter"
-    ]
-  },
-  "bff": {
-    "timeout": 5000,
-    "plugins": [
-      "tests/helpers/plugin.js"
-    ]
+    ],
+    "globals": {
+      "FILE_SERVER_PORT": true
+    }
   },
   "renovate": {
     "extends": [
