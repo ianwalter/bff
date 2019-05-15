@@ -3,6 +3,7 @@ const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
+const merge = require('@ianwalter/merge')
 
 worker({
   async register (file, context) {
@@ -118,6 +119,9 @@ worker({
     // relative path of the test file it belongs to.
     const relativePath = chalk.gray(file.relativePath)
     print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
+
+    // Add the file and test data to the testContext.
+    merge(context.testContext, file, test)
 
     if (file.puppeteer) {
       // Launch a Puppeteer browser instance and create a new page.

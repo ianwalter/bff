@@ -199,9 +199,6 @@ function run (config) {
           // collection.
           let testRun
 
-          // TODO:
-          merge(context.testContext, file, test)
-
           try {
             // Mark all tests as having been checked for snapshot changes so
             // that tests that have been removed can have their associated
