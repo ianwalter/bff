@@ -32,6 +32,11 @@ worker({
         context.puppeteer.webpack
       )
 
+      // TODO:
+      file.puppeteer.webpack.plugins.push(
+        new webpack.DefinePlugin({ FILE_SERVER_PORT: context.fileServerPort })
+      )
+
       // Compile the test file using Webpack.
       print.debug('Compiling Puppeteer file:', chalk.gray(file.puppeteer.path))
       const compiler = webpack(file.puppeteer.webpack)
@@ -137,10 +142,10 @@ worker({
 
         // Run the test in the browser and create the testContext using the
         // result.
-        const { updateSnapshot, timeout } = context
+        const { updateSnapshot, timeout, fileServerPort } = context
         context.testContext.result = await context.page.evaluate(
           ({ file, test, context }) => window.runTest(file, test, context),
-          { file, test, context: { updateSnapshot, timeout } }
+          { file, test, context: { updateSnapshot, timeout, fileServerPort } }
         )
 
         // TODO:

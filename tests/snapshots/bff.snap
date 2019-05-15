@@ -22,14 +22,36 @@ Array [
 
 exports[`bff 2`] = `
 Array [
-  "afterEach",
-  "manual fail",
-  "manual fail with reason",
-  "no assertions",
-  "parseInt with the wrong base",
-  "snapshot fail",
-  "tags",
-  "timeout",
+  "afterEach: manual failure",
+  "manual fail with reason: because reasons",
+  "manual fail: manual failure",
+  "no assertions: no assertions made",
+  "parseInt with the wrong base: [2mexpect([22m[31mreceived[39m[2m).toBe([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m2[39m
+Received: [31mNaN[39m",
+  "snapshot fail: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchSnapshot[2m()[22m
+
+Snapshot name: \`snapshot fail 1\`
+
+[32m- Snapshot[39m
+[31m+ Received[39m
+
+[33m@@ -1,8 +1,8 @@[39m
+[2m  \\"<html>[22m
+[2m    <head>[22m
+[32m-     <title>Demo</title>[39m
+[31m+     <title>Dema</title>[39m
+[2m    </head>[22m
+[2m    <body>[22m
+[2m      <main>[22m
+[2m        <h1>Demo</h1>[22m
+[2m      </main>[22m",
+  "tags: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected value: [32m3[39m
+Received array: [31m[1, 2][39m",
+  "timeout: Promise timed out after 5000 milliseconds",
 ]
 `;
 

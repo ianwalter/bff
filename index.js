@@ -59,7 +59,8 @@ function run (config) {
             'fs': path.join(__dirname, 'lib', 'fs.js'),
             '@ianwalter/bff': path.join(__dirname, 'browser.js')
           }
-        }
+        },
+        plugins: []
       }
     }
 
@@ -72,16 +73,18 @@ function run (config) {
     // TODO:
     context.puppeteer = merge(puppeteer, config.puppeteer)
 
+    // Create the print instance with the given log level.
+    const print = new Print({ level: context.logLevel })
+
     // TODO:
     let fileServer
     if (context.puppeteer.all || context.files.some(f => pptrRe.test(f))) {
       const createServer = require('fs-remote/createServer')
       fileServer = createServer()
-      fileServer.listen(24513)
+      fileServer.listen()
+      context.fileServerPort = `${fileServer.address().port}`
+      print.debug('Setting fileServerPort to', context.fileServerPort)
     }
-
-    // Create the print instance with the given log level.
-    const print = new Print({ level: context.logLevel })
 
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
@@ -209,7 +212,7 @@ function run (config) {
               // Output the test name and increment the skip count to remind
               // the user that some tests are being explicitly skipped.
               print.log('🛌', test.name)
-              context.skipped.push(test.name)
+              context.skipped.push({ name: test.name })
             } else {
               // Send the test to a worker in the run pool to be run.
               testRun = runPool.exec('test', [file, test, context])
@@ -235,7 +238,7 @@ function run (config) {
               // Output the test name and increment the pass count since the
               // test didn't throw and error indicating a failure.
               print.success(test.name)
-              context.passed.push(test.name)
+              context.passed.push({ name: test.name })
             }
           } catch (err) {
             if (context.hasFastFailure) {
@@ -251,7 +254,7 @@ function run (config) {
 
             // Increment the failure count since the test threw an error
             // indicating a test failure.
-            context.failed.push(test.name)
+            context.failed.push({ name: test.name, err: err.message })
 
             // If the failFast option is set, record that there's been a "fast
             // failure" and try to cancel any in-progress test runs.
