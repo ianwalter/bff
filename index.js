@@ -10,7 +10,7 @@ const merge = require('@ianwalter/merge')
 
 const defaultFiles = [
   'tests.js',
-  'pptr.js',
+  'tests.pptr.js',
   'tests/**/*tests.js',
   'tests/**/*pptr.js'
 ]
