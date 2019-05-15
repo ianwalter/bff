@@ -24,7 +24,9 @@ function run (config) {
   return new Promise(async (resolve, reject) => {
     // Create the run context using the passed configuration and defaults.
     const context = {
-      ...config,
+      logLevel: 'info',
+      tests: defaultFiles,
+      testContext: { result: {} },
       // Initialize a count for each time a test file has been registered so
       // that the main thread can figure out when registration has completed and
       // the worker pool can be terminated.
@@ -36,15 +38,17 @@ function run (config) {
       passed: [],
       failed: [],
       skipped: [],
-      // Initialize a count for the total number of tests that have been
-      // run so that the run can figure out when all tests have completed and
-      // the worker pool can be terminated.
+      // Initialize a count for the total number of tests that have been run so
+      // that the run can figure out when all tests have completed and the
+      // worker pool can be terminated.
       testsRun: 0
     }
-    context.tests = config.tests || defaultFiles
-    context.updateSnapshot = config.updateSnapshot ? 'all' : 'none'
-    context.logLevel = config.logLevel || 'info'
-    context.timeout = config.timeout || 60000
+
+    // Destructure passed configuration and add it to testContext and context.
+    const { timeout, updateSnapshot, ...restOfConfig } = config
+    context.testContext.timeout = timeout || 60000
+    context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
+    merge(context, restOfConfig)
 
     // Add the absolute paths of the test files to the run context.
     context.files = (await globby(context.tests)).map(f => path.resolve(f))
@@ -185,7 +189,7 @@ function run (config) {
         // Get the snapshot state for the current test file.
         const snapshotState = new SnapshotState(
           file.snapshotPath,
-          context.updateSnapshot
+          context.testContext.updateSnapshot
         )
 
         // Iterate through all tests in the test file.

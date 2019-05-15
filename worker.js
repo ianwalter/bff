@@ -3,6 +3,7 @@ const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
+const merge = require('@ianwalter/merge')
 
 worker({
   async register (file, context) {
@@ -119,16 +120,15 @@ worker({
     const relativePath = chalk.gray(file.relativePath)
     print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
 
+    // Add the file and test data to the testContext.
+    merge(context.testContext, file, test)
+
     if (file.puppeteer) {
       // Launch a Puppeteer browser instance and create a new page.
       const puppeteer = require('puppeteer')
       context.browser = await puppeteer.launch(context.puppeteer)
       context.page = await context.browser.newPage()
     }
-
-    // Create the context that will be passed to the test function.
-    const createTestContext = require('./lib/createTestContext')
-    context.testContext = createTestContext(file, test, context.updateSnapshot)
 
     try {
       // Call each function with the test context exported by the files
@@ -144,10 +144,9 @@ worker({
 
         // Run the test in the browser and add the result to the local
         // testContext.
-        const { browser, page, ...simpleContext } = context
-        context.testContext.result = await page.evaluate(
-          ({ file, test, context }) => window.runTest(file, test, context),
-          { file, test, context: simpleContext }
+        context.testContext.result = await context.page.evaluate(
+          testContext => window.runTest(testContext),
+          context.testContext
         )
 
         // If the test failed, re-hydrate the JSON failure data into an Error
@@ -158,12 +157,17 @@ worker({
           context.testContext.result.failed.stack = stack
         }
       } else {
+        // Enhance the context passed to the test function with testing
+        // utilities.
+        const enhanceTestContext = require('./lib/enhanceTestContext')
+        enhanceTestContext(context.testContext)
+
         // Load the test file and extract the relevant test function.
         const { testFn } = require(file.path)[test.key]
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, testFn, context.timeout)
+        await runTest(context.testContext, testFn)
       }
 
       // Call each function with the test context exported by the files

@@ -1,6 +1,5 @@
 import { oneLine } from 'common-tags'
-import merge from '@ianwalter/merge'
-import createTestContext from './lib/createTestContext'
+import enhanceTestContext from './lib/enhanceTestContext'
 import runTest from './lib/runTest'
 
 window.testMap = {}
@@ -31,16 +30,15 @@ test.only = function only (name, ...tags) {
   handleTestArgs(name, tags, { only: true })
 }
 
-window.runTest = async function (file, test, context) {
-  // Create the context that will be passed to the test function.
-  const testContext = createTestContext(file, test, context.updateSnapshot)
-  merge(testContext, context.testContext)
+window.runTest = async function (testContext) {
+  // Enhance the context passed to the test function with testing utilities.
+  enhanceTestContext(testContext)
 
   // Extract the relevant test function from the map of tests.
-  const { testFn } = window.testMap[test.key]
+  const { testFn } = window.testMap[testContext.key]
 
   // Run the test!
-  await runTest(testContext, testFn, context.timeout)
+  await runTest(testContext, testFn)
 
   // If the test failed, extract the data from the Error instance into a POJO so
   // that it can be returned to the node process via JSON.
