@@ -10,6 +10,8 @@ test('parseInt with the wrong base', ({ expect }) => {
 
 test('manual fail', ({ fail }) => fail())
 
+test('manual fail with reason', ({ fail }) => fail('because reasons'))
+
 test('afterEach', ({ fail }) => fail())
 
 test('snapshot fail', ({ expect }) => {
