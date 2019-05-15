@@ -52,10 +52,16 @@
   },
   "devDependencies": {
     "@ianwalter/eslint-config": "^1.1.2",
-    "np": "^5.0.0"
+    "@ianwalter/renovate-config": "^1.1.0",
+    "np": "^5.0.1"
   },
   "eslintConfig": {
     "root": true,
+    "extends": [
+      "@ianwalter"
+    ]
+  },
+  "renovate": {
     "extends": [
       "@ianwalter"
     ]
