@@ -52,7 +52,7 @@ worker({
         })
       })
 
-      // Launch a Puppeteer browser instance and new page.
+      // Launch a Puppeteer browser instance and create a new page.
       context.browser = await puppeteer.launch(context.puppeteer)
       context.page = await context.browser.newPage()
 
@@ -61,11 +61,11 @@ worker({
       // action terminates.
       let error
       try {
-        // Add the compiled file to the page.
+        // Add the compiled test file to the page.
         await context.page.addScriptTag({ path: file.puppeteer.path })
 
         // Return the test map that was stored on the window context when the
-        // coimpiled script was added to the page.
+        // compiled script was added to the page.
         context.testMap = await context.page.evaluate(() => window.testMap)
       } catch (err) {
         error = err
@@ -120,7 +120,7 @@ worker({
     print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
 
     if (file.puppeteer) {
-      // Launch a Puppeteer browser instance and new page.
+      // Launch a Puppeteer browser instance and create a new page.
       const puppeteer = require('puppeteer')
       context.browser = await puppeteer.launch(context.puppeteer)
       context.page = await context.browser.newPage()

@@ -26,8 +26,8 @@ function run (config) {
     const context = {
       ...config,
       // Initialize a count for each time a test file has been registered so
-      // that the run can figure out when registration has completed and the
-      // worker pool can be terminated.
+      // that the main thread can figure out when registration has completed and
+      // the worker pool can be terminated.
       filesRegistered: 0,
       // Initialize a count for the total number of tests registered from all of
       // the test files.
@@ -85,7 +85,7 @@ function run (config) {
       fileServer = createServer()
       fileServer.listen()
       context.fileServerPort = `${fileServer.address().port}`
-      print.debug('Setting fileServerPort to', context.fileServerPort)
+      print.debug('Set fileServerPort to', context.fileServerPort)
     }
 
     // Set the worker pool options. For now, it only sets the maximum amount of
