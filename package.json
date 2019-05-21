@@ -47,7 +47,7 @@
     "p-timeout": "^3.1.0",
     "puppeteer": "^1.16.0",
     "tempy": "^0.3.0",
-    "webpack": "^4.31.0",
+    "webpack": "^4.32.0",
     "workerpool": "^3.1.2"
   },
   "devDependencies": {
