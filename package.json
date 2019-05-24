@@ -51,7 +51,7 @@
     "workerpool": "^3.1.2"
   },
   "devDependencies": {
-    "@ianwalter/eslint-config": "^1.1.3",
+    "@ianwalter/eslint-config": "^2.0.1",
     "@ianwalter/renovate-config": "^1.1.0",
     "np": "^5.0.2"
   },
