@@ -2,6 +2,7 @@
 
 const cli = require('@ianwalter/cli')
 const { print } = require('@ianwalter/print')
+const junitBuilder = require('junit-report-builder')
 const bff = require('.')
 
 async function run () {
@@ -15,7 +16,8 @@ async function run () {
         tags: 't',
         timeout: 'T',
         failFast: 'f',
-        puppeteer: 'p'
+        puppeteer: 'p',
+        junit: 'j'
       }
     }
   })
@@ -37,6 +39,20 @@ async function run () {
     `${failed.length} failed.`,
     `${skipped.length} skipped.`
   )
+
+  // If configured, generate a junit XML report file based on the test results.
+  if (config.junit) {
+    const defaults = {
+      name: 'Test Suite',
+      path: typeof config.junit === 'string' ? config.junit : 'junit.xml'
+    }
+    const junit = Object.assign(defaults, config.junit)
+    const suite = junitBuilder.testSuite().name(junit.name)
+    passed.forEach(t => suite.testCase().name(t.name))
+    failed.forEach(t => suite.testCase().name(t.name).failure(t.err))
+    skipped.forEach(t => suite.testCase().name(t.name).skipped())
+    junitBuilder.writeTo(junit.path)
+  }
 
   // If any tests failed, exit with a non-zero exit code.
   process.exit(failed.length ? 1 : 0)
