@@ -53,6 +53,11 @@ function run (config) {
     // Add the absolute paths of the test files to the run context.
     context.files = (await globby(context.tests)).map(f => path.resolve(f))
 
+    // Reject the returned promise if there are no tests files found.
+    if (context.files.length === 0) {
+      reject(new Error('No test files found.'))
+    }
+
     // Construct the default Puppeteer / Webpack configuration.
     const puppeteer = {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],

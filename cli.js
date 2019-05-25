@@ -42,9 +42,8 @@ async function run () {
   process.exit(failed.length ? 1 : 0)
 }
 
-try {
-  run()
-} catch (err) {
+run().catch(err => {
+  process.stdout.write('\n')
   print.error(err)
   process.exit(1)
-}
+})
