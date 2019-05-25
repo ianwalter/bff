@@ -2,6 +2,7 @@
 
 const cli = require('@ianwalter/cli')
 const { print } = require('@ianwalter/print')
+const { oneLine } = require('common-tags')
 const bff = require('.')
 
 async function run () {
@@ -33,11 +34,11 @@ async function run () {
 
   // Log the results of running the tests.
   process.stdout.write('\n')
-  print.info(
-    `${passed.length} passed.`,
-    `${failed.length} failed.`,
-    `${skipped.length} skipped.`
-  )
+  print.info(oneLine`
+    ${passed.length} passed.
+    ${failed.length} failed.
+    ${skipped.length} skipped.
+  `)
 
   // If configured, generate a junit XML report file based on the test results.
   if (config.junit) {
