@@ -2,7 +2,6 @@
 
 const cli = require('@ianwalter/cli')
 const { print } = require('@ianwalter/print')
-const junitBuilder = require('junit-report-builder')
 const bff = require('.')
 
 async function run () {
@@ -42,6 +41,7 @@ async function run () {
 
   // If configured, generate a junit XML report file based on the test results.
   if (config.junit) {
+    const junitBuilder = require('junit-report-builder')
     const defaults = {
       name: 'Test Suite',
       path: typeof config.junit === 'string' ? config.junit : 'junit.xml'
