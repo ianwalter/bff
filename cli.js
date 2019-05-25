@@ -43,11 +43,13 @@ async function run () {
   if (config.junit) {
     const junitBuilder = require('junit-report-builder')
     const defaults = {
-      name: 'Test Suite',
       path: typeof config.junit === 'string' ? config.junit : 'junit.xml'
     }
     const junit = Object.assign(defaults, config.junit)
-    const suite = junitBuilder.testSuite().name(junit.name)
+    const suite = junitBuilder.testSuite()
+    if (junit.name) {
+      suite.name(junit.name)
+    }
     passed.forEach(t => suite.testCase().name(t.name))
     failed.forEach(t => suite.testCase().name(t.name).failure(t.err))
     skipped.forEach(t => suite.testCase().name(t.name).skipped())
