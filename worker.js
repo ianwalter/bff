@@ -91,7 +91,8 @@ worker({
     const needsTag = context.tags && context.tags.length
     const toTests = (acc, [name, { skip, only, tags }]) => {
       const test = { key: name, name, skip, only, tags }
-      if (!needsTag || (needsTag && tags.some(t => context.tags.includes(t)))) {
+      const matchesTags = match => context.tags[match](t => tags.includes(t))
+      if (!needsTag || (needsTag && matchesTags(context.match))) {
         acc.push(test)
       }
       return acc

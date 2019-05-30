@@ -17,7 +17,8 @@ async function run () {
         timeout: 'T',
         failFast: 'f',
         puppeteer: 'p',
-        junit: 'j'
+        junit: 'j',
+        match: 'm'
       }
     }
   })
