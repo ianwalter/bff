@@ -3,6 +3,8 @@
 
 [![npm page][npmImage]][npmUrl]
 
+<img src="./screenshot.png">
+
 ## Installation
 
 ```console
