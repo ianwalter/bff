@@ -223,7 +223,7 @@ function run (config) {
               // Output the test name and increment the skip count to remind
               // the user that some tests are being explicitly skipped.
               print.log('🛌', test.name)
-              context.skipped.push({ name: test.name })
+              context.skipped.push({ ...test, file: relativePath })
             } else {
               // Send the test to a worker in the run pool to be run.
               testRun = runPool.exec('test', [file, test, context])
@@ -249,7 +249,7 @@ function run (config) {
               // Output the test name and increment the pass count since the
               // test didn't throw and error indicating a failure.
               print.success(test.name)
-              context.passed.push({ name: test.name })
+              context.passed.push({ ...test, file: relativePath })
             }
           } catch (err) {
             if (context.hasFastFailure) {
@@ -265,7 +265,11 @@ function run (config) {
 
             // Increment the failure count since the test threw an error
             // indicating a test failure.
-            context.failed.push({ name: test.name, err: err.message })
+            context.failed.push({
+              ...test,
+              err: err.message,
+              file: relativePath
+            })
 
             // If the failFast option is set, record that there's been a "fast
             // failure" and try to cancel any in-progress test runs.

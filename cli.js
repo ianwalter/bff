@@ -43,18 +43,37 @@ async function run () {
   // If configured, generate a junit XML report file based on the test results.
   if (config.junit) {
     const junitBuilder = require('junit-report-builder')
-    const defaults = {
-      path: typeof config.junit === 'string' ? config.junit : 'junit.xml'
-    }
-    const junit = Object.assign(defaults, config.junit)
-    const suite = junitBuilder.testSuite()
-    if (junit.name) {
-      suite.name(junit.name)
-    }
-    passed.forEach(t => suite.testCase().name(t.name))
-    failed.forEach(t => suite.testCase().name(t.name).failure(t.err))
-    skipped.forEach(t => suite.testCase().name(t.name).skipped())
-    junitBuilder.writeTo(junit.path)
+
+    // Determine the junit report file path.
+    const junit = typeof config.junit === 'string' ? config.junit : 'junit.xml'
+
+    // Group tests by test file so that the test file relative path can be used
+    // as the suite name.
+    const files = [...passed, ...failed, ...skipped].reduce((acc, test) => {
+      if (acc[test.file]) {
+        acc[test.file].push(test)
+      } else {
+        acc[test.file] = [test]
+      }
+      return acc
+    }, {})
+
+    // Create a test for each test file and add the containing tests to the
+    // suite as test cases.
+    Object.entries(files).forEach(([file, tests]) => {
+      const suite = junitBuilder.testSuite().name(file)
+      tests.forEach(test => {
+        const testCase = suite.testCase().name(test.name)
+        if (test.err) {
+          testCase.failure(test.err)
+        } else if (test.skip) {
+          testCase.skipped()
+        }
+      })
+    })
+
+    // Write the junit report file to the filesystem.
+    junitBuilder.writeTo(junit)
   }
 
   // If any tests failed, exit with a non-zero exit code.
