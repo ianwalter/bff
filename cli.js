@@ -16,7 +16,6 @@ async function run () {
         tags: 't',
         timeout: 'T',
         failFast: 'f',
-        puppeteer: 'p',
         junit: 'j',
         match: 'm'
       }

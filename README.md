@@ -11,7 +11,91 @@ yarn add @ianwalter/bff --dev
 
 ## CLI Usage
 
+You can pass **all** configuration described in the next section through the CLI
+using a dot syntax for nested configuration properties, e.g.
+`bff --puppeteer.dumpio true`. Test files can be specified as input without a
+flag, e.g. `bff tests/example.tests.js`
+
+The following top-level options are also aliased to shorter flags for
+convenience:
+
+* `--logLevel, -l` Specifies bff's logging level.
+* `--failFast, -f` Specifies whether to exit when a test fails instead of
+  continuing to run tests.
+* `--updateSnapshot, -u` Specifies whether snapshots should be created or
+  updated.
+* `--concurrency, -c` Specifies how many tests/workers to run in parallel.
+* `--tags, -t` Specifies which test tags should be used to match tests. How it
+  matches the tags depends on the `match` option below.
+* `--match, -m` Specifies whether tests have to contain every or at least one
+  specified tag in order to be matched and run.
+* `--timeout, -T` Specifies how long a test should take before it is marked as
+  failed for timing out.
+* `--junit, -j` Specifies whether or not to write the results to a junit report
+  file.
+
 ## Configuration
+
+Configuration can be specified under the `bff` property in your package.json.
+The following is a snapshot of the available options with their **default**
+values:
+
+```js
+{
+  bff: {
+    // Specifies what files to consider test files.
+    // Value should be an array of file paths/globs.
+    tests: [
+      'tests.js',
+      'tests.pptr.js',
+      'tests/**/*tests.js',
+      'tests/**/*pptr.js'
+    ],
+    // Specifies bff's logging level.
+    // Possible values include: 'debug', 'info', 'warn', 'error', 'fatal'
+    logLevel: 'info',
+    // Specifies whether to exit when a test fails instead of continuing to run
+    // tests.
+    // Value should be a boolean.
+    failFast: undefined,
+    // Specifies whether snapshots should be created or updated.
+    // Value should be a boolean (although in practice it only makes sense to
+    // use this option with the CLI).
+    updateSnapshot: undefined,
+    // Specifies how many tests/workers to run in parallel.
+    // Value should be a integer.
+    concurrency: 4, // This defaults to the number of the host system's CPU
+                    // cores minus one.
+    // Specifies which test tags should be used to match tests. How it matches
+    // the tags depends on the `match` option below.
+    // Value should be an array of strings, e.g. ['dev', 'qa'].
+    tags: undefined
+    // Specifies whether tests have to contain every or at least one specified
+    // tag in order to be matched and run.
+    // Value should be an array test method ('some' or 'every').
+    match: 'some',
+    // Specifies how long a test should take before it is marked as failed for
+    // timing out.
+    // Value should be a length of time in milliseconds (integer).
+    timeout: 60000,
+    // Specifies whether or not to write the results to a junit report file.
+    // Value should either be a boolean or a string specifying the relative path
+    // of the report file.
+    junit: undefined,
+
+    // Configuration specified under this property will be passed directly to
+    // Puppeteer's launch method. See Puppeteer's documentation for information
+    // on those options:
+    // https://pptr.dev/#?product=Puppeteer&show=api-puppeteerlaunchoptions
+    puppeteer: {
+      // Treat all test files as puppeteer test files regardless of whether the
+      // test file contains the .pptr.js file extension or not.
+      // Value should be a boolean.
+      all: undefined
+    }
+  }
+}
+```
 
 ## Writing tests
 
@@ -57,7 +141,8 @@ test.only('focus', ({ expect }) => {
 
 ## Related
 
-* [`@ianwalter/bff-webdriver`][bffWebdriverUrl] - A bff plugin to enable WebDriver-based testing
+* [`@ianwalter/bff-webdriver`][bffWebdriverUrl] - A bff plugin to enable
+  WebDriver-based testing
 
 ## License
 
