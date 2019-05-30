@@ -14,7 +14,8 @@ yarn add @ianwalter/bff --dev
 You can pass **all** configuration described in the next section through the CLI
 using a dot syntax for nested configuration properties, e.g.
 `bff --puppeteer.dumpio true`. Test files can be specified as input without a
-flag, e.g. `bff tests/example.tests.js`
+flag, e.g. `bff tests/example.tests.js`. Array values can be specified with
+multiple flag instances, e.g. `bff -t dev -t qa`.
 
 The following top-level options are also aliased to shorter flags for
 convenience:
@@ -36,9 +37,9 @@ convenience:
 
 ## Configuration
 
-Configuration can be specified under the `bff` property in your package.json.
-The following is a snapshot of the available options with their **default**
-values:
+Configuration can be specified under the `bff` property in the current working
+directory's `package.json`. The following is a snapshot of the available options
+with their **default** values:
 
 ```js
 {
