@@ -24,7 +24,7 @@ test('bff --failFast', async ({ expect }) => {
 })
 
 test('bff --tags qa', async ({ expect }) => {
-  const result = await run({ tags: ['qa'] })
+  const result = await run({ tags: 'qa' })
   expect(result.testsRegistered).toBe(2)
   expect(result.testsRun).toBe(2)
   expect(result.passed.length).toBe(1)
