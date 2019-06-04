@@ -22,3 +22,19 @@ test('bff --failFast', async ({ expect }) => {
   expect(result.testsRun).toBeGreaterThan(0)
   expect(result.failed.length).toBe(1)
 })
+
+test('bff --tags qa', async ({ expect }) => {
+  const result = await run({ tags: ['qa'] })
+  expect(result.testsRegistered).toBe(2)
+  expect(result.testsRun).toBe(2)
+  expect(result.passed.length).toBe(1)
+  expect(result.failed.length).toBe(1)
+})
+
+test('bff --tags dev --tags qa --match every', async ({ expect }) => {
+  const result = await run({ tags: ['dev', 'qa'], match: 'every' })
+  expect(result.testsRegistered).toBe(1)
+  expect(result.testsRun).toBe(1)
+  expect(result.passed.length).toBe(0)
+  expect(result.failed.length).toBe(1)
+})

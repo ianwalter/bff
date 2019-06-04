@@ -88,11 +88,19 @@ worker({
 
     // Create the registration context with the list of tests that are intended
     // to be run.
-    const needsTag = context.tags && context.tags.length
+    const hasTags = context.tags.length
     const toTests = (acc, [name, { skip, only, tags }]) => {
       const test = { key: name, name, skip, only, tags }
-      const matchesTags = match => context.tags[match](t => tags.includes(t))
-      if (!needsTag || (needsTag && matchesTags(context.match))) {
+      const matchesTags = method => {
+        if (['some', 'every'].includes(method)) {
+          return context.tags[method](tag => tags.includes(tag))
+        } else {
+          throw new Error(
+            `--match value must be 'some' or 'every', not '${method}'`
+          )
+        }
+      }
+      if (!hasTags || (hasTags && matchesTags(context.match))) {
         acc.push(test)
       }
       return acc

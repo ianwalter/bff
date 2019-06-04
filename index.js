@@ -46,9 +46,10 @@ function run (config) {
     }
 
     // Destructure passed configuration and add it to testContext and context.
-    const { timeout, updateSnapshot, ...restOfConfig } = config
+    const { timeout, updateSnapshot, tags = [], ...restOfConfig } = config
     context.testContext.timeout = timeout || 60000
     context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
+    context.tags = Array.isArray(tags) ? tags : [tags]
     merge(context, restOfConfig)
 
     // Add the absolute paths of the test files to the run context.
@@ -154,7 +155,7 @@ function run (config) {
       // For each test file found, pass the filename to a registration pool
       // worker so that the tests within it can be collected and given to a
       // run pool worker to be run.
-      context.files.forEach(async filePath => {
+      await Promise.all(context.files.map(async filePath => {
         // Create the file context to contain information on the test file.
         const relativePath = path.relative(process.cwd(), filePath)
         const file = { path: filePath, relativePath }
@@ -199,7 +200,7 @@ function run (config) {
         )
 
         // Iterate through all tests in the test file.
-        const runAllTestsInFile = Promise.all(tests.map(async test => {
+        await Promise.all(tests.map(async test => {
           // Define the test run promise outside of try-catch-finally so that it
           // can be referenced when it needs to be removed from the inProgress
           // collection.
@@ -248,7 +249,7 @@ function run (config) {
               }
 
               // Output the test name and increment the pass count since the
-              // test didn't throw and error indicating a failure.
+              // test didn't throw an error indicating a failure.
               print.success(test.name)
               context.passed.push({ ...test, file: relativePath })
             }
@@ -288,42 +289,35 @@ function run (config) {
           }
         }))
 
-        // After all the tests in the test file have been run...
-        runAllTestsInFile.then(async () => {
-          try {
-            // The snapshot tests that weren't checked are obsolete and can be
-            // removed from the snapshot file.
-            if (snapshotState.getUncheckedCount()) {
-              snapshotState.removeUncheckedKeys()
-            }
+        // The snapshot tests that weren't checked are obsolete and can be
+        // removed from the snapshot file.
+        if (snapshotState.getUncheckedCount()) {
+          snapshotState.removeUncheckedKeys()
+        }
 
-            // Save the snapshot changes.
-            snapshotState.save()
+        // Save the snapshot changes.
+        snapshotState.save()
 
-            if (
-              context.hasFastFailure ||
-              (context.filesRegistered === context.files.length &&
-              context.testsRun === context.testsRegistered)
-            ) {
-              // Call each function with the run context exported by the files
-              // configured to be called after a run.
-              if (context.plugins && context.plugins.length) {
-                await pSeries(context.plugins.map(toHookRun('after', context)))
-              }
-
-              // Terminate the run pool if all tests have been run.
-              runPool.terminate(context.hasFastFailure)
-                .then(() => print.debug('Run pool terminated'))
-
-              // Resolve the run Promise with the run context which contains
-              // the tests' passed/failed/skipped counts.
-              resolve(context)
-            }
-          } catch (err) {
-            reject(err)
+        if (
+          context.hasFastFailure ||
+          (context.filesRegistered === context.files.length &&
+          context.testsRun === context.testsRegistered)
+        ) {
+          // Call each function with the run context exported by the files
+          // configured to be called after a run.
+          if (context.plugins && context.plugins.length) {
+            await pSeries(context.plugins.map(toHookRun('after', context)))
           }
-        })
-      })
+
+          // Terminate the run pool if all tests have been run.
+          runPool.terminate(context.hasFastFailure)
+            .then(() => print.debug('Run pool terminated'))
+
+          // Resolve the run Promise with the run context which contains
+          // the tests' passed/failed/skipped counts.
+          resolve(context)
+        }
+      }))
     } catch (err) {
       reject(err)
     }
