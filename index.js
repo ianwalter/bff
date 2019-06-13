@@ -162,7 +162,7 @@ function run (config) {
 
         // Construct the path to the snapshot file.
         const snapshotsDir = path.join(path.dirname(filePath), 'snapshots')
-        const snapshotFilename = path.basename(filePath).replace('.js', '.snap')
+        const snapshotFilename = path.basename(filePath) + '.snap'
         file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
 
         if (context.puppeteer.all || pptrRe.test(file.path)) {
