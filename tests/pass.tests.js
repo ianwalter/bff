@@ -70,6 +70,6 @@ test('sleep', async ({ sleep, expect }) => {
   const before = new Date().getTime()
   await sleep(1000)
   const elapsed = new Date().getTime() - before
-  expect(elapsed).toBeGreaterThan(1000)
+  expect(elapsed).toBeGreaterThanOrEqual(1000)
   expect(elapsed).toBeLessThan(2000)
 })

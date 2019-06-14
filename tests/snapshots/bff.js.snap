@@ -66,6 +66,7 @@ Received array: [31m[1, 2][39m",
 exports[`bff 3`] = `
 Array [
   "skip no assertions",
+  "skip with no test function",
   "skip with test specified after name",
 ]
 `;

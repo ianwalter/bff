@@ -330,14 +330,13 @@ function handleTestArgs (name, tags, test = {}) {
   delete require.cache[__filename]
 
   const testFn = tags.pop()
+  Object.assign(test, { testFn, tags })
+  module.parent.exports[oneLine(name)] = test
   if (testFn && typeof testFn === 'function') {
-    Object.assign(test, { testFn, tags })
-    module.parent.exports[oneLine(name)] = test
     return test
   } else {
     return fn => {
       Object.assign(test, { testFn: fn, tags: testFn ? [...tags, testFn] : [] })
-      module.parent.exports[oneLine(name)] = test
       return test
     }
   }
