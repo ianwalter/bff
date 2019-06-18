@@ -5,8 +5,8 @@ module.exports = {
     context.beforeMessage = 'before was here'
     print.log('before executed')
   },
-  registration (file) {
-    file.tests = file.tests.reduce(
+  registration (file, context) {
+    context.processFiles = tests => tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
           return acc.concat([

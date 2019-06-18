@@ -3,7 +3,6 @@ const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 const merge = require('@ianwalter/merge')
-const reduceToTests = require('./lib/reduceToTests')
 
 worker({
   async register (file, context) {
@@ -16,16 +15,6 @@ worker({
     const relativePath = chalk.gray(file.relativePath)
     print.debug(`Registration worker ${threadId}`, relativePath)
 
-    if (!context.testMap) {
-      // If the test file isn't meant for the browser we can simply require it
-      // to ge the map of tests.
-      context.testMap = require(file.path)
-
-      // Add a list of tests from the test file that are intended to be run to
-      // the file context.
-      file.tests = reduceToTests(context, context.tags.length)
-    }
-
     // Call each function with the test names exported by the files configured
     // to be called during test registration.
     const toHookRun = require('./lib/toHookRun')
@@ -33,6 +22,36 @@ worker({
       await pSeries(
         context.plugins.map(toHookRun('registration', file, context))
       )
+    }
+
+    // TODO: updaste comment.
+    // If the test file isn't meant for the browser we can simply require it
+    // to ge the map of tests.
+    if (context.generateTestMap) {
+      context.testMap = await context.generateTestMap(file.path)
+    } else {
+      context.testMap = require(file.path)
+    }
+
+    // Add a list of tests from the test file that are intended to be run to
+    // the file context.
+    const { tags, match } = context
+    const tagsMatch = test => {
+      if (['some', 'every'].includes(match)) {
+        return tags[match](tag => test.tags.includes(tag))
+      }
+      throw new Error(`match value must be 'some' or 'every', not '${match}'`)
+    }
+    file.tests = Object.entries(context.testMap).reduce(
+      (acc, [name, test]) => !tags.length || (tags.length && tagsMatch(test))
+        ? acc.concat([{ key: name, name, runTest: true, ...test, fn: null }])
+        : acc,
+      []
+    )
+
+    // TODO: comment.
+    if (context.processFiles) {
+      file.tests = context.processFiles(file.tests)
     }
 
     // Return the file context with the the list of registered tests.
