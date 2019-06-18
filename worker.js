@@ -21,9 +21,8 @@ worker({
       // to ge the map of tests.
       context.testMap = require(file.path)
 
-      // TODO: update comment.
-      // Create the registration context with the list of tests that are
-      // intended to be run.
+      // Add a list of tests from the test file that are intended to be run to
+      // the file context.
       file.tests = reduceToTests(context, context.tags.length)
     }
 
@@ -36,8 +35,7 @@ worker({
       )
     }
 
-    // TODO: update comment.
-    // Return the list of tests that need to be registered.
+    // Return the file context with the the list of registered tests.
     return file
   },
   async test (file, test, context) {
