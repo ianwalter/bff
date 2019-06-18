@@ -1,9 +1,9 @@
-const path = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
 const merge = require('@ianwalter/merge')
+const reduceToTests = require('./lib/reduceToTests')
 
 worker({
   async register (file, context) {
@@ -16,96 +16,16 @@ worker({
     const relativePath = chalk.gray(file.relativePath)
     print.debug(`Registration worker ${threadId}`, relativePath)
 
-    if (file.puppeteer) {
-      const webpack = require('webpack')
-      const puppeteer = require('puppeteer')
-      const merge = require('@ianwalter/merge')
-
-      // Create a Webpack configuration specific to the test file being
-      // registered.
-      file.puppeteer.webpack = merge(
-        {
-          entry: file.path,
-          output: {
-            path: path.dirname(file.puppeteer.path),
-            filename: path.basename(file.puppeteer.path)
-          }
-        },
-        context.puppeteer.webpack
-      )
-
-      // Define the constant FILE_SERVER_PORT so that the fs-remote client can
-      // be compiled with the correct server address.
-      file.puppeteer.webpack.plugins.push(
-        new webpack.DefinePlugin({ FILE_SERVER_PORT: context.fileServerPort })
-      )
-
-      // Compile the test file using Webpack.
-      print.debug('Compiling Puppeteer file:', chalk.gray(file.puppeteer.path))
-      const compiler = webpack(file.puppeteer.webpack)
-      await new Promise((resolve, reject) => {
-        compiler.run(err => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve()
-          }
-        })
-      })
-
-      // Launch a Puppeteer browser instance and create a new page.
-      context.browser = await puppeteer.launch(context.puppeteer)
-      context.page = await context.browser.newPage()
-
-      // Store any error thrown in the following try catch so that the browser
-      // can be closed before the error is thrown and execution of this worker
-      // action terminates.
-      let error
-      try {
-        // Add the compiled test file to the page.
-        await context.page.addScriptTag({ path: file.puppeteer.path })
-
-        // Return the test map that was stored on the window context when the
-        // compiled script was added to the page.
-        context.testMap = await context.page.evaluate(() => window.testMap)
-      } catch (err) {
-        error = err
-      }
-
-      // Close the Puppeteer instance now that registration has completed.
-      await context.browser.close()
-
-      // If there was an error during regisration, throw it now that the browser
-      // instance has been cleaned up.
-      if (error) {
-        throw error
-      }
-    } else {
+    if (!context.testMap) {
       // If the test file isn't meant for the browser we can simply require it
       // to ge the map of tests.
       context.testMap = require(file.path)
-    }
 
-    // Create the registration context with the list of tests that are intended
-    // to be run.
-    const hasTags = context.tags.length
-    const toTests = (acc, [name, { skip, only, tags }]) => {
-      const test = { key: name, name, skip, only, tags }
-      const matchesTags = method => {
-        if (['some', 'every'].includes(method)) {
-          return context.tags[method](tag => tags.includes(tag))
-        } else {
-          throw new Error(
-            `--match value must be 'some' or 'every', not '${method}'`
-          )
-        }
-      }
-      if (!hasTags || (hasTags && matchesTags(context.match))) {
-        acc.push(test)
-      }
-      return acc
+      // TODO: update comment.
+      // Create the registration context with the list of tests that are
+      // intended to be run.
+      file.tests = reduceToTests(context, context.tags.length)
     }
-    file.tests = Object.entries(context.testMap).reduce(toTests, [])
 
     // Call each function with the test names exported by the files configured
     // to be called during test registration.
@@ -116,10 +36,13 @@ worker({
       )
     }
 
+    // TODO: update comment.
     // Return the list of tests that need to be registered.
-    return file.tests
+    return file
   },
   async test (file, test, context) {
+    const toHookRun = require('./lib/toHookRun')
+
     // Create the Print instance based on the log level set in the context
     // received from the main thread.
     const print = new Print({ level: context.logLevel })
@@ -132,64 +55,35 @@ worker({
     // Add the file and test data to the testContext.
     merge(context.testContext, file, test)
 
-    if (file.puppeteer) {
-      // Launch a Puppeteer browser instance and create a new page.
-      const puppeteer = require('puppeteer')
-      context.browser = await puppeteer.launch(context.puppeteer)
-      context.page = await context.browser.newPage()
-    }
-
     try {
       // Call each function with the test context exported by the files
       // configured to be called before each test.
-      const toHookRun = require('./lib/toHookRun')
       if (context.plugins && context.plugins.length) {
-        await pSeries(context.plugins.map(toHookRun('beforeEach', context)))
+        await pSeries(
+          context.plugins.map(toHookRun('beforeEach', file, context))
+        )
       }
 
-      if (file.puppeteer) {
-        // Add the compiled file to the page.
-        await context.page.addScriptTag({ path: file.puppeteer.path })
-
-        // Run the test in the browser and add the result to the local
-        // testContext.
-        context.testContext.result = await context.page.evaluate(
-          testContext => window.runTest(testContext),
-          context.testContext
-        )
-
-        // If the test failed, re-hydrate the JSON failure data into an Error
-        // instance.
-        if (context.testContext.result.failed) {
-          const { message, stack } = context.testContext.result.failed
-          context.testContext.result.failed = new Error(message)
-          context.testContext.result.failed.stack = stack
-        }
-      } else {
+      if (test.runTest) {
         // Enhance the context passed to the test function with testing
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
         enhanceTestContext(context.testContext)
 
         // Load the test file and extract the relevant test function.
-        const { testFn } = require(file.path)[test.key]
+        const { fn } = require(file.path)[test.key]
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, testFn)
+        await runTest(context.testContext, fn)
       }
-
+    } finally {
       // Call each function with the test context exported by the files
       // configured to be called after each test.
       if (context.plugins && context.plugins.length) {
         await pSeries(
-          context.plugins.map(toHookRun('afterEach', context))
+          context.plugins.map(toHookRun('afterEach', file, context))
         )
-      }
-    } finally {
-      // Close the Puppeteer instance now that the test has completed.
-      if (context.browser) {
-        await context.browser.close()
       }
     }
 

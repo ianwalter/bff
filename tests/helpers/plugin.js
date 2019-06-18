@@ -19,13 +19,13 @@ module.exports = {
       []
     )
   },
-  beforeEach (context) {
+  beforeEach (file, context) {
     context.beforeEachMessage = 'beforeEach was here'
     if (context.testContext.name === 'beforeEach') {
       print.log('beforeEach executed', context.beforeMessage)
     }
   },
-  afterEach (context) {
+  afterEach (file, context) {
     if (context.testContext.name === 'afterEach') {
       print.log(
         'afterEach executed',

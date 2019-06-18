@@ -3,10 +3,7 @@
 exports[`bff 1`] = `
 Array [
   "A test with a multiline name",
-  "arithmetic",
   "beforeEach",
-  "dom snapshot",
-  "manual pass",
   "manual pass",
   "only",
   "only with test specified after name",
@@ -24,12 +21,6 @@ Array [
 exports[`bff 2`] = `
 Array [
   "afterEach: manual failure",
-  "deep equal failure: expect(received).toBe(expected) // Object.is equality
-
-If it should pass with deep equality, replace \\"toBe\\" with \\"toStrictEqual\\"
-
-Expected: {\\"name\\": \\"Joe\\"}
-Received: serializes to the same string",
   "manual fail with reason: because reasons",
   "manual fail: manual failure",
   "no assertions: no assertions made",
@@ -37,7 +28,6 @@ Received: serializes to the same string",
 
 Expected: [32m2[39m
 Received: [31mNaN[39m",
-  "property of undefined failure: Cannot read property 'that' of undefined",
   "snapshot fail: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchSnapshot[2m()[22m
 
 Snapshot name: \`snapshot fail 1\`
