@@ -6,7 +6,7 @@ module.exports = {
     print.log('before executed')
   },
   registration (file, context) {
-    context.processFiles = tests => tests.reduce(
+    context.augmentTests = tests => tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
           return acc.concat([

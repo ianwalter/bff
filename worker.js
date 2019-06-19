@@ -27,9 +27,7 @@ worker({
     // TODO: updaste comment.
     // If the test file isn't meant for the browser we can simply require it
     // to ge the map of tests.
-    if (context.generateTestMap) {
-      context.testMap = await context.generateTestMap(file.path)
-    } else {
+    if (!context.testMap) {
       context.testMap = require(file.path)
     }
 
@@ -44,14 +42,14 @@ worker({
     }
     file.tests = Object.entries(context.testMap).reduce(
       (acc, [name, test]) => !tags.length || (tags.length && tagsMatch(test))
-        ? acc.concat([{ key: name, name, runTest: true, ...test, fn: null }])
+        ? acc.concat([{ key: name, name, shouldRun: true, ...test, fn: null }])
         : acc,
       []
     )
 
     // TODO: comment.
-    if (context.processFiles) {
-      file.tests = context.processFiles(file.tests)
+    if (context.augmentTests) {
+      file.tests = context.augmentTests(file.tests)
     }
 
     // Return the file context with the the list of registered tests.
@@ -81,7 +79,7 @@ worker({
         )
       }
 
-      if (test.runTest) {
+      if (test.shouldRun) {
         // Enhance the context passed to the test function with testing
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')

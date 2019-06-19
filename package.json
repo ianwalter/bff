@@ -4,7 +4,6 @@
   "version": "5.2.1",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
-  "browser": "browser.js",
   "scripts": {
     "lint": "eslint .",
     "test": "./cli.js tests/bff.js"
@@ -14,7 +13,6 @@
   },
   "files": [
     "lib",
-    "browser.js",
     "cli.js",
     "index.js",
     "worker.js"
