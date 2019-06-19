@@ -5,7 +5,6 @@ const { Print, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
-const tempy = require('tempy')
 const merge = require('@ianwalter/merge')
 
 const defaultFiles = [
@@ -14,7 +13,6 @@ const defaultFiles = [
   'tests/**/*tests.js',
   'tests/**/*pptr.js'
 ]
-const pptrRe = /pptr\.js$/
 
 /**
  * Collects test names from test files and assigns them to a worker in a
@@ -60,44 +58,8 @@ function run (config) {
       reject(new Error('No test files found.'))
     }
 
-    // Construct the default Puppeteer / Webpack configuration.
-    const puppeteer = {
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      webpack: {
-        mode: 'development',
-        resolve: {
-          alias: {
-            'fs': path.join(__dirname, 'lib', 'fs.js'),
-            '@ianwalter/bff': path.join(__dirname, 'browser.js')
-          }
-        },
-        plugins: []
-      }
-    }
-
-    // If running in the Puppeteer Docker container, configure Puppeteer to use
-    // the instance of Google Chrome that is already installed.
-    if (process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD) {
-      puppeteer.executablePath = 'google-chrome-unstable'
-    }
-
-    // Merge the default Puppeteer configuration with the user supplied
-    // configuration.
-    context.puppeteer = merge(puppeteer, config.puppeteer)
-
     // Create the print instance with the given log level.
     const print = new Print({ level: context.logLevel })
-
-    // Create the fs-remote file server so that jest-snapshot can work in the
-    // browser.
-    let fileServer
-    if (context.puppeteer.all || context.files.some(f => pptrRe.test(f))) {
-      const createServer = require('fs-remote/createServer')
-      fileServer = createServer()
-      fileServer.listen()
-      context.fileServerPort = `${fileServer.address().port}`
-      print.debug('Set fileServerPort to', context.fileServerPort)
-    }
 
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
@@ -136,11 +98,6 @@ function run (config) {
 
         // Try to cancel each test that it currently running.
         inProgress.forEach(exec => exec.cancel())
-
-        // If a file server is running, try to close it.
-        if (fileServer) {
-          fileServer.close()
-        }
       }
     })
 
@@ -162,17 +119,12 @@ function run (config) {
 
         // Construct the path to the snapshot file.
         const snapshotsDir = path.join(path.dirname(filePath), 'snapshots')
-        const snapshotFilename = path.basename(filePath).replace('.js', '.snap')
+        const snapshotFilename = `${path.basename(filePath)}.snap`
         file.snapshotPath = path.join(snapshotsDir, snapshotFilename)
-
-        if (context.puppeteer.all || pptrRe.test(file.path)) {
-          // Create a temporary path for the compiled test file.
-          file.puppeteer = { path: tempy.file({ extension: 'js' }) }
-        }
 
         // Perform registration on the test file to collect the tests that need
         // to be run.
-        const tests = await registrationPool.exec('register', [file, context])
+        merge(file, await registrationPool.exec('register', [file, context]))
 
         // Increment the registration count now that registration has completed
         // for the current test file.
@@ -187,11 +139,11 @@ function run (config) {
 
         // Add the number of tests returned by test registration to the running
         // total of all tests that need to be run.
-        context.testsRegistered += tests.length
+        context.testsRegistered += file.tests.length
 
         // Determine if any of the tests in the test file have the .only
         // modifier so that tests can be excluded from being run.
-        const hasOnly = Object.values(tests).some(test => test.only)
+        const hasOnly = Object.values(file.tests).some(test => test.only)
 
         // Get the snapshot state for the current test file.
         const snapshotState = new SnapshotState(
@@ -200,7 +152,7 @@ function run (config) {
         )
 
         // Iterate through all tests in the test file.
-        await Promise.all(tests.map(async test => {
+        await Promise.all(file.tests.map(async test => {
           // Define the test run promise outside of try-catch-finally so that it
           // can be referenced when it needs to be removed from the inProgress
           // collection.
@@ -330,14 +282,13 @@ function handleTestArgs (name, tags, test = {}) {
   delete require.cache[__filename]
 
   const testFn = tags.pop()
+  Object.assign(test, { fn: testFn, tags })
+  module.parent.exports[oneLine(name)] = test
   if (testFn && typeof testFn === 'function') {
-    Object.assign(test, { testFn, tags })
-    module.parent.exports[oneLine(name)] = test
     return test
   } else {
     return fn => {
-      Object.assign(test, { testFn: fn, tags: testFn ? [...tags, testFn] : [] })
-      module.parent.exports[oneLine(name)] = test
+      Object.assign(test, { fn, tags: testFn ? [...tags, testFn] : [] })
       return test
     }
   }

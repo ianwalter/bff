@@ -5,8 +5,8 @@ module.exports = {
     context.beforeMessage = 'before was here'
     print.log('before executed')
   },
-  registration (file) {
-    file.tests = file.tests.reduce(
+  registration (file, context) {
+    context.augmentTests = tests => tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
           return acc.concat([
@@ -19,13 +19,13 @@ module.exports = {
       []
     )
   },
-  beforeEach (context) {
+  beforeEach (file, context) {
     context.beforeEachMessage = 'beforeEach was here'
     if (context.testContext.name === 'beforeEach') {
       print.log('beforeEach executed', context.beforeMessage)
     }
   },
-  afterEach (context) {
+  afterEach (file, context) {
     if (context.testContext.name === 'afterEach') {
       print.log(
         'afterEach executed',
