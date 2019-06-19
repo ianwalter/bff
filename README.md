@@ -146,6 +146,8 @@ test.only('focus', ({ expect }) => {
 
 * [`@ianwalter/bff-webdriver`][bffWebdriverUrl] - A bff plugin to enable
   WebDriver-based testing
+* [`@ianwalter/bff-puppeteer`][bffPuppeteerUrl] - A bff plugin to enable
+  Puppeteer-based testing
 
 ## License
 
@@ -158,4 +160,5 @@ Created by [Ian Walter](https://iankwalter.com)
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/bff.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/bff
 [bffWebdriverUrl]: https://github.com/ianwalter/bff-webdriver
+[bffPuppeteerUrl]: https://github.com/ianwalter/bff-puppeteer
 [licenseUrl]: https://github.com/ianwalter/bff/blob/master/LICENSE
