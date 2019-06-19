@@ -25,7 +25,7 @@ worker({
     }
 
     // If the map of tests in the current test file hasn't been added to the
-    // contest, require the test file and use it's exports object as the test
+    // context, require the test file and use it's exports object as the test
     // map.
     if (!context.testMap) {
       context.testMap = require(file.path)
