@@ -85,6 +85,7 @@ worker({
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
         enhanceTestContext(context.testContext)
+        context.testContext.print = print
 
         // Load the test file and extract the relevant test function.
         const { fn } = require(file.path)[test.key]
