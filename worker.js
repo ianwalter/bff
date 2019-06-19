@@ -24,9 +24,9 @@ worker({
       )
     }
 
-    // TODO: updaste comment.
-    // If the test file isn't meant for the browser we can simply require it
-    // to ge the map of tests.
+    // If the map of tests in the current test file hasn't been added to the
+    // contest, require the test file and use it's exports object as the test
+    // map.
     if (!context.testMap) {
       context.testMap = require(file.path)
     }
@@ -47,7 +47,8 @@ worker({
       []
     )
 
-    // TODO: comment.
+    // If an augmentTests method has been added to the context by a plugin, call
+    // it with the list of tests so that the plugin can alter them if necessary.
     if (context.augmentTests) {
       file.tests = context.augmentTests(file.tests)
     }
