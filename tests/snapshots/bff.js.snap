@@ -21,6 +21,7 @@ Array [
 exports[`bff 2`] = `
 Array [
   "afterEach: manual failure",
+  "manual fail inside of try-catch: manual failure",
   "manual fail with reason: because reasons",
   "manual fail: manual failure",
   "no assertions: no assertions made",

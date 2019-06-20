@@ -33,3 +33,12 @@ test('snapshot fail', ({ expect }) => {
 test('timeout', () => new Promise(() => {}))
 
 test('tags', 'dev', 'qa', ({ expect }) => expect([1, 2]).toContain(3))
+
+test('manual fail inside of try-catch', ({ expect, fail }) => {
+  try {
+    expect(1).toBe(1)
+    fail()
+  } catch (err) {
+    console.error(err)
+  }
+})
