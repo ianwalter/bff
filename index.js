@@ -168,19 +168,16 @@ function run (config) {
             // test file.
             snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
+            const skipViaOnly = hasOnly && !test.only
             if (context.hasFastFailure) {
               // Don't run the test if the failFast option is set and there has
               // been a test failure.
               print.debug('Skipping test because of failFast flag:', test.name)
-            } else if (hasOnly && !test.only) {
-              // Don't run the test if there is a test in the current test file
-              // marked with the only modifier and it's not this test.
-              print.debug('Skipping test because of only modifier:', test.name)
-              context.skipped.push({ ...test, file: relativePath })
-            } else if (test.skip) {
+            } else if (skipViaOnly || test.skip) {
               // Output the test name and increment the skip count to remind
               // the user that some tests are being explicitly skipped.
-              print.log('🛌', test.name)
+              const msg = `${context.testsRun + 1}. ${test.name}`
+              print.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
               context.skipped.push({ ...test, file: relativePath })
             } else {
               // Send the test to a worker in the run pool to be run.
@@ -206,7 +203,7 @@ function run (config) {
 
               // Output the test name and increment the pass count since the
               // test didn't throw an error indicating a failure.
-              print.success(test.name)
+              print.success(`${context.testsRun + 1}. ${test.name}`)
               context.passed.push({ ...test, file: relativePath })
             }
           } catch (err) {
@@ -215,10 +212,10 @@ function run (config) {
               // recorded.
               return
             } else if (err.name === 'TimeoutError') {
-              const relativePath = chalk.gray(file.relativePath)
-              print.error(`${test.name}: timeout`, relativePath)
+              const msg = `${context.testsRun + 1}. ${test.name}: timeout`
+              print.error(msg, chalk.dim(file.relativePath))
             } else {
-              print.error(`${test.name}:`, err)
+              print.error(`${context.testsRun + 1}. ${test.name}:`, err)
             }
 
             // Increment the failure count since the test threw an error

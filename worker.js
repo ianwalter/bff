@@ -12,7 +12,7 @@ worker({
 
     // Print a debug statement for this registration action with the relative
     // path of the test file that's having it's tests registered.
-    const relativePath = chalk.gray(file.relativePath)
+    const relativePath = chalk.dim(file.relativePath)
     print.debug(`Registration worker ${threadId}`, relativePath)
 
     // Call each function with the test names exported by the files configured
@@ -65,7 +65,7 @@ worker({
 
     // Print a debug statement for this test action with the test name and
     // relative path of the test file it belongs to.
-    const relativePath = chalk.gray(file.relativePath)
+    const relativePath = chalk.dim(file.relativePath)
     print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
 
     // Add the file and test data to the testContext.
