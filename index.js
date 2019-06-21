@@ -50,16 +50,17 @@ function run (config) {
     context.tags = Array.isArray(tags) ? tags : [tags]
     merge(context, restOfConfig)
 
+    // Create the print instance with the given log level.
+    const print = new Print({ level: context.logLevel })
+
     // Add the absolute paths of the test files to the run context.
     context.files = (await globby(context.tests)).map(f => path.resolve(f))
+    print.debug('Number of test files:', context.files.length)
 
     // Reject the returned promise if there are no tests files found.
     if (context.files.length === 0) {
       reject(new Error('No test files found.'))
     }
-
-    // Create the print instance with the given log level.
-    const print = new Print({ level: context.logLevel })
 
     // Set the worker pool options. For now, it only sets the maximum amount of
     // workers used if the concurrency setting is set.
@@ -133,6 +134,8 @@ function run (config) {
         // Terminate the registration pool if all the test files have been
         // registered.
         if (context.filesRegistered === context.files.length) {
+          const numberOfTests = context.testsRegistered + file.tests.length
+          print.debug('Number of tests:', numberOfTests)
           registrationPool.terminate()
             .then(() => print.debug('Registration pool terminated'))
         }
@@ -173,6 +176,7 @@ function run (config) {
               // Don't run the test if there is a test in the current test file
               // marked with the only modifier and it's not this test.
               print.debug('Skipping test because of only modifier:', test.name)
+              context.skipped.push({ ...test, file: relativePath })
             } else if (test.skip) {
               // Output the test name and increment the skip count to remind
               // the user that some tests are being explicitly skipped.

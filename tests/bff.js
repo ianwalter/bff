@@ -12,7 +12,7 @@ test('bff', async ({ expect }) => {
   expect(result.passed.map(toName).sort()).toMatchSnapshot()
   expect(result.failed.length).toBe(9)
   expect(result.failed.map(toName).sort()).toMatchSnapshot()
-  expect(result.skipped.length).toBe(3)
+  expect(result.skipped.length).toBe(4)
   expect(result.skipped.map(toName).sort()).toMatchSnapshot()
 })
 
