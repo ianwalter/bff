@@ -103,8 +103,7 @@ function run (config) {
     })
 
     try {
-      // Call each function with the run context exported by the files
-      // configured to be called before a run.
+      // Sequentially run any before hooks specified by plugins.
       const toHookRun = require('./lib/toHookRun')
       if (context.plugins && context.plugins.length) {
         await pSeries(context.plugins.map(toHookRun('before', context)))
@@ -256,8 +255,7 @@ function run (config) {
           (context.filesRegistered === context.files.length &&
           context.testsRun === context.testsRegistered)
         ) {
-          // Call each function with the run context exported by the files
-          // configured to be called after a run.
+          // Sequentially run any after hooks specified by plugins.
           if (context.plugins && context.plugins.length) {
             await pSeries(context.plugins.map(toHookRun('after', context)))
           }

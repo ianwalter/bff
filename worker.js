@@ -15,8 +15,7 @@ worker({
     const relativePath = chalk.dim(file.relativePath)
     print.debug(`Registration worker ${threadId}`, relativePath)
 
-    // Call each function with the test names exported by the files configured
-    // to be called during test registration.
+    // Sequentially run any registration hooks specified by plugins.
     const toHookRun = require('./lib/toHookRun')
     if (context.plugins && context.plugins.length) {
       await pSeries(
@@ -42,7 +41,7 @@ worker({
     }
     file.tests = Object.entries(context.testMap).reduce(
       (acc, [name, test]) => !tags.length || (tags.length && tagsMatch(test))
-        ? acc.concat([{ key: name, name, shouldRun: true, ...test, fn: null }])
+        ? acc.concat([{ key: name, name, ...test, fn: null }])
         : acc,
       []
     )
@@ -72,15 +71,17 @@ worker({
     merge(context.testContext, file, test)
 
     try {
-      // Call each function with the test context exported by the files
-      // configured to be called before each test.
       if (context.plugins && context.plugins.length) {
+        // Sequentially run any beforeEach hooks specified by plugins.
         await pSeries(
           context.plugins.map(toHookRun('beforeEach', file, context))
         )
+
+        // Sequentially run any runTest hooks specified by plugins.
+        await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
       }
 
-      if (test.shouldRun) {
+      if (!context.testContext.result) {
         // Enhance the context passed to the test function with testing
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
@@ -95,8 +96,7 @@ worker({
         await runTest(context.testContext, fn)
       }
     } finally {
-      // Call each function with the test context exported by the files
-      // configured to be called after each test.
+      // Sequentially run any afterEach hooks specified by plugins.
       if (context.plugins && context.plugins.length) {
         await pSeries(
           context.plugins.map(toHookRun('afterEach', file, context))
