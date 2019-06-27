@@ -24,7 +24,7 @@ function run (config) {
     const context = {
       logLevel: 'info',
       tests: defaultFiles,
-      testContext: { result: {} },
+      testContext: { hasRun: false, result: {} },
       match: 'some',
       // Initialize a count for each time a test file has been registered so
       // that the main thread can figure out when registration has completed and

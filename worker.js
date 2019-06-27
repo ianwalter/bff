@@ -81,7 +81,7 @@ worker({
         await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
       }
 
-      if (!context.testContext.result) {
+      if (!context.testContext.hasRun) {
         // Enhance the context passed to the test function with testing
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
@@ -94,6 +94,7 @@ worker({
         // Run the test!
         const runTest = require('./lib/runTest')
         await runTest(context.testContext, fn)
+        context.testContext.hasRun = true
       }
     } finally {
       // Sequentially run any afterEach hooks specified by plugins.
