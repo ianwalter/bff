@@ -50,7 +50,7 @@ Snapshot name: \`snapshot fail 1\`
 
 Expected value: [32m3[39m
 Received array: [31m[1, 2][39m",
-  "timeout: Promise timed out after 5000 milliseconds",
+  "timeout: test reached timeout of 5000 milliseconds",
 ]
 `;
 
