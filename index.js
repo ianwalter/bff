@@ -159,11 +159,7 @@ async function run (config) {
           snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
           const skipViaOnly = hasOnly && !test.only
-          if (context.hasFastFailure) {
-            // Don't run the test if the failFast option is set and there has
-            // been a test failure.
-            print.debug('Skipping test because of failFast flag:', test.name)
-          } else if (skipViaOnly || test.skip) {
+          if (skipViaOnly || test.skip) {
             // Output the test name and increment the skip count to remind
             // the user that some tests are being explicitly skipped.
             const msg = `${context.testsRun + 1}. ${test.name}`
@@ -200,8 +196,8 @@ async function run (config) {
           // indicating a test failure.
           context.failed.push({ ...test, err: err.message, file: relativePath })
 
-          // If the failFast option is set, record that there's been a "fast
-          // failure" and try to cancel any in-progress test runs.
+          // If the failFast option is set, throw an error so that tests stop
+          // being executed.
           if (context.failFast) {
             throw new Error(
               'Stopping test run due to test failure with --failFast option'
