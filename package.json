@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@ianwalter/eslint-config": "^2.1.1",
-    "@ianwalter/release": "^1.0.3",
+    "@ianwalter/release": "^1.1.7",
     "@ianwalter/renovate-config": "^1.1.1"
   },
   "eslintConfig": {
