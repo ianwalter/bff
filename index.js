@@ -25,9 +25,9 @@ async function run (config) {
     tests: defaultFiles,
     testContext: { hasRun: false, result: {} },
     match: 'some',
-    // Initialize a count for each time a test file has been registered so
-    // that the main thread can figure out when registration has completed and
-    // the worker pool can be terminated.
+    // Initialize a count for each time a test file has been registered so that
+    // the main thread can figure out when registration has completed and the
+    // worker pool can be terminated.
     filesRegistered: 0,
     // Initialize a count for the total number of tests registered from all of
     // the test files.
@@ -37,8 +37,8 @@ async function run (config) {
     failed: [],
     skipped: [],
     // Initialize a count for the total number of tests that have been run so
-    // that the run can figure out when all tests have completed and the
-    // worker pool can be terminated.
+    // that the run can figure out when all tests have completed and the worker
+    // pool can be terminated.
     testsRun: 0
   }
 
@@ -230,7 +230,6 @@ async function run (config) {
   // Terminate the run pool now that all tests have been run.
   runPool.terminate().then(() => print.debug('Run pool terminated'))
 
-  // TODO:
   return context
 }
 
