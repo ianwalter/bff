@@ -17,7 +17,8 @@ async function run () {
         timeout: 'T',
         failFast: 'f',
         junit: 'j',
-        match: 'm'
+        match: 'm',
+        performance: 'p'
       }
     }
   })
@@ -64,8 +65,8 @@ async function run () {
       const suite = junitBuilder.testSuite().name(file)
       tests.forEach(test => {
         const testCase = suite.testCase().name(test.name)
-        if (test.err) {
-          testCase.failure(test.err)
+        if (test.result instanceof Error) {
+          testCase.failure(test.result.message)
         } else if (test.skip) {
           testCase.skipped()
         }

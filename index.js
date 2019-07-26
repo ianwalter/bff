@@ -167,21 +167,22 @@ async function run (config) {
             context.skipped.push({ ...test, file: relativePath })
           } else {
             // Send the test to a worker in the run pool to be run.
-            const result = await runPool.exec('test', [file, test, context])
+            test.result = await runPool.exec('test', [file, test, context])
 
             // Update the snapshot state with the snapshot data received from
             // the worker.
-            if (result && (result.added || result.updated)) {
+            if (test.result && (test.result.added || test.result.updated)) {
               snapshotState._dirty = true
-              snapshotState._counters = new Map(result.counters)
-              Object.assign(snapshotState._snapshotData, result.snapshots)
-              snapshotState.added += result.added
-              snapshotState.updated += result.updated
+              snapshotState._counters = new Map(test.result.counters)
+              Object.assign(snapshotState._snapshotData, test.result.snapshots)
+              snapshotState.added += test.result.added
+              snapshotState.updated += test.result.updated
             }
 
             // Output the test name and increment the pass count since the
             // test didn't throw an error indicating a failure.
-            print.success(`${context.testsRun + 1}. ${test.name}`)
+            const time = chalk.dim(test.result.duration)
+            print.success(`${context.testsRun + 1}. ${test.name}`, time)
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
@@ -194,7 +195,7 @@ async function run (config) {
 
           // Increment the failure count since the test threw an error
           // indicating a test failure.
-          context.failed.push({ ...test, err: err.message, file: relativePath })
+          context.failed.push({ ...test, result: err, file: relativePath })
 
           // If the failFast option is set, throw an error so that tests stop
           // being executed.
