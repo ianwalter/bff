@@ -197,10 +197,10 @@
   resolved "https://registry.yarnpkg.com/@ianwalter/renovate-config/-/renovate-config-1.1.1.tgz#285c0fe4351d90fe05508930fbedbdc4b9fb8603"
   integrity sha512-72PUwgDGtL1IfzeqxmS9qo2PgO78KheLyRpf30wlp/FQIHULNvJN+U8t9berWxDk2rSW12fNf9CVvPQ/Wpc9tQ==
 
-"@ianwalter/timer@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/timer/-/timer-1.0.0.tgz#2973a14a1f181ac7dd955e05c2ad6fc403cfbcfe"
-  integrity sha512-oaPPeXD44wr0YIEF9w8BPV8fMTym3b9dJoL4aAVDVyGAN4L3hxDwqxfZPzKc3Y9H0fweHTwQ+LQXJVxehjOlaA==
+"@ianwalter/timer@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/timer/-/timer-1.1.0.tgz#3f900563048549490585ed4186d0fd7769a62251"
+  integrity sha512-oro+xaXK/XXy+sNn5tXgQgXoN2w2Me6F6cxp35hlfwMHht5oycZWGGGzcAVjch+J9e9YmhtIsgxNaYJbwr6kMA==
 
 "@ianwalter/update-package@^0.0.2":
   version "0.0.2"
