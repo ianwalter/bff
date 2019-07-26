@@ -181,8 +181,8 @@ async function run (config) {
 
             // Output the test name and increment the pass count since the
             // test didn't throw an error indicating a failure.
-            const time = chalk.dim(test.result.duration)
-            print.success(`${context.testsRun + 1}. ${test.name}`, time)
+            const time = test.result.duration && chalk.dim(test.result.duration)
+            print.success(`${context.testsRun + 1}. ${test.name}`, time || '')
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
