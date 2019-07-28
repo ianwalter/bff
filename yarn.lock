@@ -129,6 +129,11 @@
     getopts "^2.2.5"
     read-pkg-up "^6.0.0"
 
+"@ianwalter/clone@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/clone/-/clone-4.1.0.tgz#635860922699338da607b8e990ae5173e3e3e9c9"
+  integrity sha512-UWlp3DtPvLgZkS3hy6ihHQATjQC1BtoJxk4PCO/v7r8m7P4g0WkdacadpUh0ze3yNqO+uFIRW2RX1boGz7feQQ==
+
 "@ianwalter/commits@^0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@ianwalter/commits/-/commits-0.0.5.tgz#b7e2b7d1f3d6f9c8ce2afc6ee9b730e97b399227"
@@ -174,6 +179,18 @@
     chromafi ianwalter/chromafi
     has-ansi "^3.0.0"
     has-emoji "^1.0.0"
+
+"@ianwalter/print@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.1.0.tgz#8195e77a55eddab0815a2865858e27de9e6d7c3f"
+  integrity sha512-rlsigede8Gq+VauG0KhPAJqlaFq4IM/DqBKLfawGeuwLOKQevTZTySQvYZ9yQJDdLZZuRG7yEkxEL4o50JXNQg==
+  dependencies:
+    "@ianwalter/clone" "^4.1.0"
+    "@ianwalter/log" "^3.0.0"
+    chalk "^2.4.2"
+    chromafi ianwalter/chromafi
+    has-ansi "^3.0.0"
+    has-emoji "^1.1.0"
 
 "@ianwalter/release@^1.1.10":
   version "1.1.10"
@@ -1343,7 +1360,7 @@ has-ansi@^3.0.0:
   dependencies:
     ansi-regex "^3.0.0"
 
-has-emoji@^1.0.0:
+has-emoji@^1.0.0, has-emoji@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/has-emoji/-/has-emoji-1.1.0.tgz#8b9a13c1fedb92099fccc171628869a9dbab4091"
   integrity sha512-5V4f0i0shdp6BzSE5WLBKh0EJky6wAo+b1pRS2Azm8cyJCekNxXhhAQJopYto3iMluh5rKD9n+vjQLZb7iR6+g==

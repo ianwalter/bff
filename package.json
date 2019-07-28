@@ -35,7 +35,7 @@
   "homepage": "https://github.com/ianwalter/bff#readme",
   "dependencies": {
     "@ianwalter/cli": "^1.2.0",
-    "@ianwalter/print": "^3.0.1",
+    "@ianwalter/print": "^3.1.0",
     "@ianwalter/timer": "^1.1.0",
     "common-tags": "^1.8.0",
     "expect": "^24.8.0",
