@@ -180,18 +180,6 @@
     has-ansi "^3.0.0"
     has-emoji "^1.0.0"
 
-"@ianwalter/print@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.1.0.tgz#8195e77a55eddab0815a2865858e27de9e6d7c3f"
-  integrity sha512-rlsigede8Gq+VauG0KhPAJqlaFq4IM/DqBKLfawGeuwLOKQevTZTySQvYZ9yQJDdLZZuRG7yEkxEL4o50JXNQg==
-  dependencies:
-    "@ianwalter/clone" "^4.1.0"
-    "@ianwalter/log" "^3.0.0"
-    chalk "^2.4.2"
-    chromafi ianwalter/chromafi
-    has-ansi "^3.0.0"
-    has-emoji "^1.1.0"
-
 "@ianwalter/print@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.2.0.tgz#f808027992a1565ce6c2c9b222134bef5ffa67ed"
