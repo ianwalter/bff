@@ -64,7 +64,6 @@ async function run (config) {
   // Set the worker pool options. For now, it only sets the maximum amount of
   // workers used if the concurrency setting is set.
   const poolOptions = {
-    nodeWorker: 'auto',
     ...(context.concurrency ? { maxWorkers: context.concurrency } : {})
   }
 
