@@ -37,10 +37,10 @@ Snapshot name: \`snapshot fail 1\`
 [31m+ Received[39m
 
 [33m@@ -1,8 +1,8 @@[39m
-[2m  \\"<html>[22m
+[2m  <html>[22m
 [2m    <head>[22m
-[32m-     <title>Demo</title>[39m
-[31m+     <title>Dema</title>[39m
+[32m-     <title>Dem[7mo[27m</title>[39m
+[31m+     <title>Dem[7ma[27m</title>[39m
 [2m    </head>[22m
 [2m    <body>[22m
 [2m      <main>[22m
