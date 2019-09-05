@@ -18,7 +18,8 @@ async function run () {
         failFast: 'f',
         junit: 'j',
         match: 'm',
-        performance: 'p'
+        performance: 'p',
+        unnumbered: 'U'
       }
     }
   })

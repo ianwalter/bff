@@ -161,8 +161,9 @@ async function run (config) {
           if (skipViaOnly || test.skip) {
             // Output the test name and increment the skip count to remind
             // the user that some tests are being explicitly skipped.
-            const msg = `${context.testsRun + 1}. ${test.name}`
-            print.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
+            const number = context.unnumbered ? '' : `${context.testsRun + 1}. `
+            const note = skipViaOnly ? chalk.dim('(via only)') : ''
+            print.log('🛌', `${number}${test.name}${note}`)
             context.skipped.push({ ...test, file: relativePath })
           } else {
             // Send the test to a worker in the run pool to be run.
@@ -181,15 +182,17 @@ async function run (config) {
             // Output the test name and increment the pass count since the
             // test didn't throw an error indicating a failure.
             const time = test.result.duration && chalk.dim(test.result.duration)
-            print.success(`${context.testsRun + 1}. ${test.name}`, time || '')
+            const number = context.unnumbered ? '' : `${context.testsRun + 1}. `
+            print.success(`${number}${test.name}`, time || '')
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
+          const number = context.unnumbered ? '' : `${context.testsRun + 1}. `
           if (err.name === 'TimeoutError') {
-            const msg = `${context.testsRun + 1}. ${test.name}: timeout`
+            const msg = `${number}${test.name}: timeout`
             print.error(msg, chalk.dim(file.relativePath))
           } else {
-            print.error(`${context.testsRun + 1}. ${test.name}:`, err)
+            print.error(`${number}${test.name}:`, err)
           }
 
           // Increment the failure count since the test threw an error
