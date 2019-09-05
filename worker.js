@@ -2,7 +2,6 @@ const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
 const { threadId } = require('worker_threads')
-const merge = require('@ianwalter/merge')
 
 worker({
   async register (file, context) {
@@ -56,6 +55,8 @@ worker({
     return file
   },
   async test (file, test, context) {
+    const merge = require('@ianwalter/merge')
+    const createTimer = require('@ianwalter/timer')
     const toHookRun = require('./lib/toHookRun')
 
     // Create the Print instance based on the log level set in the context
@@ -77,11 +78,21 @@ worker({
           context.plugins.map(toHookRun('beforeEach', file, context))
         )
 
+        // If the performance option is set, start a timer for the test.
+        if (context.performance) {
+          context.timer = createTimer()
+        }
+
         // Sequentially run any runTest hooks specified by plugins.
         await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
       }
 
       if (!context.testContext.hasRun) {
+        // If the performance option is set, start a timer for the test.
+        if (context.performance) {
+          context.timer = createTimer()
+        }
+
         // Enhance the context passed to the test function with testing
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
@@ -95,6 +106,14 @@ worker({
         const runTest = require('./lib/runTest')
         await runTest(context.testContext, fn)
         context.testContext.hasRun = true
+      }
+
+      // If there was a timer started for the test, stop the timer, get the
+      // timer's duration, and add it to the test result.
+      if (context.timer) {
+        const { duration } = context.timer.stop(2)
+        print.debug('Test duration', duration)
+        context.testContext.result.duration = duration
       }
     } finally {
       // Sequentially run any afterEach hooks specified by plugins.

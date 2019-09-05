@@ -22,20 +22,22 @@ multiple flag instances, e.g. `bff -t dev -t qa`.
 The following top-level options are also aliased to shorter flags for
 convenience:
 
-* `--logLevel, -l` Specifies bff's logging level.
+* `--logLevel, -l [level]` Specifies bff's logging level.
 * `--failFast, -f` Specifies whether to exit when a test fails instead of
   continuing to run tests.
 * `--updateSnapshot, -u` Specifies whether snapshots should be created or
   updated.
-* `--concurrency, -c` Specifies how many tests/workers to run in parallel.
-* `--tags, -t` Specifies which test tags should be used to match tests. How it
-  matches the tags depends on the `match` option below.
-* `--match, -m` Specifies whether tests have to contain every or at least one
-  specified tag in order to be matched and run.
-* `--timeout, -T` Specifies how long a test should take before it is marked as
-  failed for timing out.
-* `--junit, -j` Specifies whether or not to write the results to a junit report
-  file.
+* `--concurrency, -c [#]` Specifies how many tests/workers to run in parallel.
+* `--tags, -t [name]` Specifies which test tags should be used to match tests.
+  How it matches the tags depends on the `match` option below.
+* `--match, -m [type]` Specifies whether a test needs `some` or `every`
+  specified tag in order for it to be run.
+* `--timeout, -T [milliseconds]` Specifies how long a test should take before
+  it's marked as failed for timing out.
+* `--junit, -j [file]` Specifies whether or not to write the results to a junit
+  report file.
+* `--performance, -p` Specifies whether tests should be timed and displayed in
+  the output.
 
 ## Configuration
 
