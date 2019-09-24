@@ -13,4 +13,4 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Test
-        run: yarn test tests/bff.js
+        run: yarn test

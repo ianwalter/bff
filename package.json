@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "./cli.js -p"
+    "test": "./cli.js -p tests/bff.js"
   },
   "bin": {
     "bff": "cli.js"
