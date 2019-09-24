@@ -35,7 +35,7 @@ async function run () {
   const { passed, failed, skipped } = await bff.run(config)
 
   // Log the results of running the tests.
-  process.stdout.write('\n')
+  print.write('\n')
   print.info(oneLine`
     ${passed.length} passed.
     ${failed.length} failed.
@@ -83,7 +83,7 @@ async function run () {
 }
 
 run().catch(err => {
-  process.stdout.write('\n')
+  print.write('\n')
   print.error(err)
   process.exit(1)
 })

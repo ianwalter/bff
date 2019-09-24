@@ -76,21 +76,13 @@ async function run (config) {
   // For actually running the tests:
   const runPool = workerpool.pool(workerPath, poolOptions)
 
-  // Catch an interrupt signal (SIGINT, CTRL+C) so that plugin after hooks can
-  // still run before the process exits (as they may be running cleanup logic)
-  // but still allow the user to force the process to exit immediately if they
-  // press CTRL+C a second time.
-  process.on('SIGINT', () => {
-    if (context.hasSignalInterruption) {
-      process.exit(130)
-    } else {
-      process.stdout.write('\n')
-      print.warn(
-        'Cancelling tests and running plugin after hooks', '\n',
-        'Hit CTRL+C again to have the process exit immediately'
-      )
-      context.hasSignalInterruption = true
-    }
+  // Terminate the worker pools when a user presses CTRL+C.
+  process.on('SIGINT', async () => {
+    print.write('\n\n')
+    print.fatal('RUN CANCELLED!')
+    print.write('\n')
+    registrationPool.terminate(true)
+    runPool.terminate(true)
   })
 
   // Sequentially run any before hooks specified by plugins.
