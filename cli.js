@@ -19,7 +19,8 @@ async function run () {
         junit: 'j',
         match: 'm',
         performance: 'p'
-      }
+      },
+      boolean: ['p']
     }
   })
 
