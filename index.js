@@ -177,7 +177,7 @@ async function run (config) {
           }
         } catch (err) {
           if (test.warn) {
-            print.warn(`${context.testsRun + 1}. ${test.name}`, err)
+            print.warn(`${context.testsRun + 1}. ${test.name}:`, err)
             return context.warnings.push(test)
           } else if (err.name === 'TimeoutError') {
             const msg = `${context.testsRun + 1}. ${test.name}: timeout`

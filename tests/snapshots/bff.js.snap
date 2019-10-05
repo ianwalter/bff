@@ -15,6 +15,7 @@ Array [
   "snapshot pass",
   "strict equality",
   "tags second call",
+  "warn pass",
 ]
 `;
 
@@ -55,6 +56,12 @@ Received array: [31m[1, 2][39m",
 `;
 
 exports[`bff 3`] = `
+Array [
+  "warn fail",
+]
+`;
+
+exports[`bff 4`] = `
 Array [
   "skip no assertions",
   "skip via only",
