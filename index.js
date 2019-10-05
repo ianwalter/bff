@@ -189,17 +189,17 @@ async function run (config) {
           // Increment the failure count since the test threw an error
           // indicating a test failure.
           context.failed.push({ ...test, err: err.message, file: relativePath })
-
-          // If the failFast option is set, throw an error so that tests stop
-          // being executed.
-          if (context.failFast) {
-            throw new Error(
-              'Stopping test run due to test failure with --failFast option'
-            )
-          }
         } finally {
           // Increment the test run count now that the test has completed.
           context.testsRun++
+        }
+
+        // If the failFast option is set, throw an error so that the test run is
+        // immediately failed.
+        const [err] = context.failed
+        if (err && context.failFast) {
+          print.debug('Failing run due to test failure with failFast option')
+          throw err
         }
       }))
 
