@@ -35,6 +35,7 @@ async function run (config) {
     // Initialize collections for tests that passed, failed, or were skipped.
     passed: [],
     failed: [],
+    warnings: [],
     skipped: [],
     // Initialize a count for the total number of tests that have been run so
     // that the run can figure out when all tests have completed and the worker
@@ -78,9 +79,7 @@ async function run (config) {
 
   // Terminate the worker pools when a user presses CTRL+C.
   process.on('SIGINT', async () => {
-    print.write('\n\n')
-    print.fatal('RUN CANCELLED!')
-    print.write('\n')
+    context.err = new Error('RUN CANCELLED!')
     registrationPool.terminate(true)
     runPool.terminate(true)
   })
@@ -177,7 +176,10 @@ async function run (config) {
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
-          if (err.name === 'TimeoutError') {
+          if (test.warn) {
+            print.warn(`${context.testsRun + 1}. ${test.name}`, err)
+            return context.warnings.push(test)
+          } else if (err.name === 'TimeoutError') {
             const msg = `${context.testsRun + 1}. ${test.name}: timeout`
             print.error(msg, chalk.dim(file.relativePath))
           } else {

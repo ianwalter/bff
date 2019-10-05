@@ -32,9 +32,10 @@ async function run () {
 
   // Run the tests and wait for a response with the passed/failed/skipped
   // counts.
-  const { err, passed, failed, skipped } = await bff.run(config)
+  const { err, passed, failed, warnings, skipped } = await bff.run(config)
 
-  // Add a newline between test output and test results.
+  // Add a blank line between the test output and result summary so it's easier
+  // to spot.
   print.write('\n')
 
   // If there was an error thrown outside of the test functions (e.g. requiring
@@ -48,8 +49,12 @@ async function run () {
   print.info(oneLine`
     ${passed.length} passed.
     ${failed.length} failed.
+    ${warnings.length} warnings.
     ${skipped.length} skipped.
   `)
+
+  // Add blank line after the result summary so it's easier to spot.
+  print.write('\n')
 
   // If configured, generate a junit XML report file based on the test results.
   if (config.junit) {

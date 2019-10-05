@@ -144,6 +144,15 @@ test.only('focus', ({ expect }) => {
 })
 ```
 
+If you have flaky tests and you don't necessarily want them to fail a test run
+but would like to be warned when they fail, you can use the `.warn` modifier:
+
+```js
+test.warn('Payfail checkout', asnyc ({ expect }) => {
+  expect(await payfailCheckout()).toEqual({ success: true })
+})
+```
+
 ## Related
 
 * [`@ianwalter/bff-webdriver`][bffWebdriverUrl] - A bff plugin to enable
