@@ -38,3 +38,9 @@ test('bff --tags dev --tags qa --match every', async ({ expect }) => {
   expect(result.passed.length).toBe(0)
   expect(result.failed.length).toBe(1)
 })
+
+test('uncaught exception in test file', async ({ expect }) => {
+  const result = await run({ tests: ['tests/uncaught.js'] })
+  expect(result.err instanceof Error).toBe(true)
+  expect(result.err.message).toContain('Cannot find module')
+})

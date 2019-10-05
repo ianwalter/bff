@@ -32,10 +32,19 @@ async function run () {
 
   // Run the tests and wait for a response with the passed/failed/skipped
   // counts.
-  const { passed, failed, skipped } = await bff.run(config)
+  const { err, passed, failed, skipped } = await bff.run(config)
+
+  // Add a newline between test output and test results.
+  print.write('\n')
+
+  // If there was an error thrown outside of the test functions (e.g. requiring 
+  // a module that wasn't found) then output a fatal error.
+  if (err) {
+    print.fatal(err)
+    process.exit(1)
+  }
 
   // Log the results of running the tests.
-  print.write('\n')
   print.info(oneLine`
     ${passed.length} passed.
     ${failed.length} failed.

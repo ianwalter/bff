@@ -211,7 +211,8 @@ async function run (config) {
       snapshotState.save()
     }))
   } catch (err) {
-    print.debug(err)
+    // Add the fatal error to the context so the CLI can fail the run.
+    context.err = err
   }
 
   // Sequentially run any after hooks specified by plugins.
