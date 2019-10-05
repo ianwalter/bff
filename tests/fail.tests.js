@@ -39,6 +39,6 @@ test('manual fail inside of try-catch', ({ expect, fail }) => {
     expect(1).toBe(1)
     fail()
   } catch (err) {
-    console.error(err)
+    //console.error(err)
   }
 })

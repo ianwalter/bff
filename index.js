@@ -14,6 +14,12 @@ const defaultFiles = [
   'tests/**/*pptr.js'
 ]
 
+class FailFastError extends Error {
+  constructor () {
+    super('Run failed immediately since failFast option is set')
+  }
+}
+
 /**
  * Collects test names from test files and assigns them to a worker in a
  * worker pool that runs the associated test.
@@ -198,7 +204,7 @@ async function run (config) {
         // immediately failed.
         const [err] = context.failed
         if (err && context.failFast) {
-          throw new Error('Run failed immediately since failFast option is set')
+          throw new FailFastError()
         }
       }))
 
@@ -261,4 +267,4 @@ test.warn = function warn (name, ...tags) {
   return handleTestArgs(name, tags, { warn: true })
 }
 
-module.exports = { run, test }
+module.exports = { run, test, FailFastError }

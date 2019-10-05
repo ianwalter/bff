@@ -41,7 +41,11 @@ async function run () {
   // a module that wasn't found) then output a fatal error.
   if (err) {
     print.fatal(err)
-    process.exit(1)
+    if (err instanceof bff.FailFastError) {
+      print.write('\n')
+    } else {
+      process.exit(1)
+    }
   }
 
   // Log the results of running the tests.
