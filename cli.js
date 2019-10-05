@@ -37,7 +37,7 @@ async function run () {
   // Add a newline between test output and test results.
   print.write('\n')
 
-  // If there was an error thrown outside of the test functions (e.g. requiring 
+  // If there was an error thrown outside of the test functions (e.g. requiring
   // a module that wasn't found) then output a fatal error.
   if (err) {
     print.fatal(err)
