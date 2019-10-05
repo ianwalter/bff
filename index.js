@@ -182,7 +182,11 @@ async function run (config) {
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
-          if (test.warn) {
+          if (err.message === 'Worker terminated') {
+            // Ignore 'Worker terminated' errors since there is already output
+            // when a run is cancelled.
+            return
+          } if (test.warn) {
             print.warn(`${context.testsRun + 1}. ${test.name}:`, err)
             return context.warnings.push(test)
           } else if (err.name === 'TimeoutError') {
