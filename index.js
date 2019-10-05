@@ -255,4 +255,8 @@ test.only = function only (name, ...tags) {
   return handleTestArgs(name, tags, { only: true })
 }
 
+test.warn = function warn (name, ...tags) {
+  return handleTestArgs(name, tags, { warn: true })
+}
+
 module.exports = { run, test }
