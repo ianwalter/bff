@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 const cli = require('@ianwalter/cli')
-const { print } = require('@ianwalter/print')
-const { oneLine } = require('common-tags')
+const { print, chalk } = require('@ianwalter/print')
 const bff = require('.')
 
 async function run () {
@@ -46,12 +45,12 @@ async function run () {
   }
 
   // Log the results of running the tests.
-  print.info(oneLine`
-    ${passed.length} passed.
-    ${failed.length} failed.
-    ${warnings.length} warnings.
-    ${skipped.length} skipped.
-  `)
+  print.info(
+    chalk.green.bold(`${passed.length} passed.`),
+    chalk.red.bold(`${failed.length} failed.`),
+    chalk.yellow.bold(`${warnings.length} warnings.`),
+    chalk.white.bold(`${skipped.length} skipped.`)
+  )
 
   // Add blank line after the result summary so it's easier to spot.
   print.write('\n')
