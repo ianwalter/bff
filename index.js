@@ -198,8 +198,7 @@ async function run (config) {
         // immediately failed.
         const [err] = context.failed
         if (err && context.failFast) {
-          print.debug('Failing run immediately since failFast option is set')
-          throw err
+          throw new Error('Run failed immediately since failFast option is set')
         }
       }))
 
