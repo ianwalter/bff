@@ -18,9 +18,8 @@ class FailFastError extends Error {
   constructor () {
     super(FailFastError.message)
   }
-
-  static message = 'Run failed immediately since failFast option is set'
 }
+FailFastError.message = 'Run failed immediately since failFast option is set'
 
 /**
  * Collects test names from test files and assigns them to a worker in a
