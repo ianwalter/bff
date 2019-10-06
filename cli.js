@@ -101,6 +101,6 @@ async function run () {
 
 run().catch(err => {
   print.write('\n')
-  print.error(err)
+  print.fatal(err)
   process.exit(1)
 })

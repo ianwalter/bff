@@ -1,7 +1,9 @@
-const { test, run } = require('..')
+const execa = require('execa')
+const { test, run, FailFastError } = require('..')
 
 const config = { timeout: 5000, plugins: ['tests/helpers/plugin.js'] }
 const toName = ({ name, err }) => name + (err ? `: ${err}` : '')
+const execaOpts = { reject: false }
 
 test('bff', async ({ expect }) => {
   const result = await run(config)
@@ -19,10 +21,8 @@ test('bff', async ({ expect }) => {
 })
 
 test('bff --failFast', async ({ expect }) => {
-  const result = await run({ ...config, failFast: true })
-  expect(result.testsRegistered).toBeGreaterThan(0)
-  expect(result.testsRun).toBeGreaterThan(0)
-  expect(result.failed.length).toBe(1)
+  const { stdout } = await execa('./cli.js', ['--failFast'], execaOpts)
+  expect(stdout).toContain(FailFastError.message)
 })
 
 test('bff --tags qa', async ({ expect }) => {
@@ -42,7 +42,7 @@ test('bff --tags dev --tags qa --match every', async ({ expect }) => {
 })
 
 test('uncaught exception in test file', async ({ expect }) => {
-  const result = await run({ tests: ['tests/uncaught.js'] })
-  expect(result.err instanceof Error).toBe(true)
-  expect(result.err.message).toContain('Cannot find module')
+  const { stdout } = await execa('./cli.js', ['tests/uncaught.js'], execaOpts)
+  const [error] = stdout.split('    at ')
+  expect(error).toMatchSnapshot()
 })

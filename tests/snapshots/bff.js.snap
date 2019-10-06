@@ -69,3 +69,12 @@ Array [
   "skip with test specified after name",
 ]
 `;
+
+exports[`uncaught exception in test file 1`] = `
+"
+☠️   [31m[1mCannot find module 'thing-that-doesnt-exist'[22m[39m
+[31m[1m    Require stack:[22m[39m
+[31m[1m    - /Users/ian/ianwalter/bff/tests/uncaught.js[22m[39m
+[31m[1m    - /Users/ian/ianwalter/bff/worker.js[22m[39m 
+"
+`;

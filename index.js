@@ -16,8 +16,10 @@ const defaultFiles = [
 
 class FailFastError extends Error {
   constructor () {
-    super('Run failed immediately since failFast option is set')
+    super(FailFastError.message)
   }
+
+  static message = 'Run failed immediately since failFast option is set'
 }
 
 /**
