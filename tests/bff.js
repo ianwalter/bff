@@ -43,6 +43,5 @@ test('bff --tags dev --tags qa --match every', async ({ expect }) => {
 
 test('uncaught exception in test file', async ({ expect }) => {
   const { stdout } = await execa('./cli.js', ['tests/uncaught.js'], execaOpts)
-  const [error] = stdout.split('    at ')
-  expect(error).toMatchSnapshot()
+  expect(stdout).toContain("Cannot find module 'thing-that-doesnt-exist'")
 })
