@@ -183,23 +183,24 @@ async function run (config) {
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
+          const file = relativePath
           if (err.message === 'Worker terminated') {
             // Ignore 'Worker terminated' errors since there is already output
             // when a run is cancelled.
             return
           } if (test.warn) {
             print.warn(`${context.testsRun + 1}. ${test.name}:`, err)
-            return context.warnings.push(test)
+            return context.warnings.push({ ...test, err: err.message, file })
           } else if (err.name === 'TimeoutError') {
             const msg = `${context.testsRun + 1}. ${test.name}: timeout`
-            print.error(msg, chalk.dim(file.relativePath))
+            print.error(msg, chalk.dim(file))
           } else {
             print.error(`${context.testsRun + 1}. ${test.name}:`, err)
           }
 
           // Increment the failure count since the test threw an error
           // indicating a test failure.
-          context.failed.push({ ...test, err: err.message, file: relativePath })
+          context.failed.push({ ...test, err: err.message, file })
         } finally {
           // Increment the test run count now that the test has completed.
           context.testsRun++

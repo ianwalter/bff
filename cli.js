@@ -68,7 +68,8 @@ async function run () {
 
     // Group tests by test file so that the test file relative path can be used
     // as the suite name.
-    const files = [...passed, ...failed, ...skipped].reduce((acc, test) => {
+    const allTests = [...passed, ...failed, ...warnings, ...skipped]
+    const files = allTests.reduce((acc, test) => {
       if (acc[test.file]) {
         acc[test.file].push(test)
       } else {
@@ -83,10 +84,10 @@ async function run () {
       const suite = junitBuilder.testSuite().name(file)
       tests.forEach(test => {
         const testCase = suite.testCase().name(test.name)
-        if (test.err) {
-          testCase.failure(test.err)
-        } else if (test.skip) {
+        if (test.skip || (test.err && test.warn)) {
           testCase.skipped()
+        } else if (test.err) {
+          testCase.failure(test.err)
         }
       })
     })
