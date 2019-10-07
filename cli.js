@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 const cli = require('@ianwalter/cli')
-const { print } = require('@ianwalter/print')
-const { oneLine } = require('common-tags')
+const { print, chalk } = require('@ianwalter/print')
 const bff = require('.')
 
 async function run () {
@@ -32,15 +31,33 @@ async function run () {
 
   // Run the tests and wait for a response with the passed/failed/skipped
   // counts.
-  const { passed, failed, skipped } = await bff.run(config)
+  const { err, passed, failed, warnings, skipped } = await bff.run(config)
+
+  // Add a blank line between the test output and result summary so it's easier
+  // to spot.
+  print.write('\n')
+
+  // If there was an error thrown outside of the test functions (e.g. requiring
+  // a module that wasn't found) then output a fatal error.
+  if (err) {
+    print.fatal(err)
+    if (err instanceof bff.FailFastError) {
+      print.write('\n')
+    } else {
+      process.exit(1)
+    }
+  }
 
   // Log the results of running the tests.
+  print.info(
+    chalk.green.bold(`${passed.length} passed.`),
+    chalk.red.bold(`${failed.length} failed.`),
+    chalk.yellow.bold(`${warnings.length} warnings.`),
+    chalk.white.bold(`${skipped.length} skipped.`)
+  )
+
+  // Add blank line after the result summary so it's easier to spot.
   print.write('\n')
-  print.info(oneLine`
-    ${passed.length} passed.
-    ${failed.length} failed.
-    ${skipped.length} skipped.
-  `)
 
   // If configured, generate a junit XML report file based on the test results.
   if (config.junit) {
@@ -51,7 +68,8 @@ async function run () {
 
     // Group tests by test file so that the test file relative path can be used
     // as the suite name.
-    const files = [...passed, ...failed, ...skipped].reduce((acc, test) => {
+    const allTests = [...passed, ...failed, ...warnings, ...skipped]
+    const files = allTests.reduce((acc, test) => {
       if (acc[test.file]) {
         acc[test.file].push(test)
       } else {
@@ -66,10 +84,10 @@ async function run () {
       const suite = junitBuilder.testSuite().name(file)
       tests.forEach(test => {
         const testCase = suite.testCase().name(test.name)
-        if (test.err) {
-          testCase.failure(test.err)
-        } else if (test.skip) {
+        if (test.skip || (test.err && test.warn)) {
           testCase.skipped()
+        } else if (test.err) {
+          testCase.failure(test.err)
         }
       })
     })
@@ -84,6 +102,6 @@ async function run () {
 
 run().catch(err => {
   print.write('\n')
-  print.error(err)
+  print.fatal(err)
   process.exit(1)
 })

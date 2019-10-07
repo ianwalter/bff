@@ -116,10 +116,10 @@
     marked "^0.7.0"
     marked-terminal "^3.3.0"
 
-"@ianwalter/print@^3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.5.0.tgz#13a594f29330b0be28e27355b7c707a01251d93f"
-  integrity sha512-5NYDzTSPeNMzY5OljmyF2w6NDw8A8MWUfGvkiS/e/mZIKaS61AhRqMb3/gLreb/UyqonsdMqzI0lYMmZThfSyA==
+"@ianwalter/print@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.6.0.tgz#2de0528d599f241f1ea5560fa04220b057f5d43c"
+  integrity sha512-/ceB61lZaH6vap6R1oI0aLKLUtcu2yL/StZdRH47Yxbxu1beUAkMTKI5iYd4M50bsxhvX4WuLihIMQFVz/kFDQ==
   dependencies:
     "@ianwalter/chromafi" "^1.0.1"
     "@ianwalter/clone" "^4.1.0"
@@ -1087,6 +1087,21 @@ execa@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/execa/-/execa-2.0.4.tgz#2f5cc589c81db316628627004ea4e37b93391d8e"
   integrity sha512-VcQfhuGD51vQUQtKIq2fjGDLDbL6N1DTQVpYzxZ7LPIXw3HqTuIz6uxRmpV1qf8i31LHf2kjiaGI+GdHwRgbnQ==
+  dependencies:
+    cross-spawn "^6.0.5"
+    get-stream "^5.0.0"
+    is-stream "^2.0.0"
+    merge-stream "^2.0.0"
+    npm-run-path "^3.0.0"
+    onetime "^5.1.0"
+    p-finally "^2.0.0"
+    signal-exit "^3.0.2"
+    strip-final-newline "^2.0.0"
+
+execa@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/execa/-/execa-2.0.5.tgz#5be3e2ea7e61bd038da5a0e11dc6ab2097357f2f"
+  integrity sha512-SwmwZZyJjflcqLSgllk4EQlMLst2p9muyzwNugKGFlpAz6rZ7M+s2nBR97GAq4Vzjwx2y9rcMcmqzojwN+xwNA==
   dependencies:
     cross-spawn "^6.0.5"
     get-stream "^5.0.0"

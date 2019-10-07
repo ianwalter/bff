@@ -14,6 +14,13 @@ const defaultFiles = [
   'tests/**/*pptr.js'
 ]
 
+class FailFastError extends Error {
+  constructor () {
+    super(FailFastError.message)
+  }
+}
+FailFastError.message = 'Run failed immediately since failFast option is set'
+
 /**
  * Collects test names from test files and assigns them to a worker in a
  * worker pool that runs the associated test.
@@ -35,6 +42,7 @@ async function run (config) {
     // Initialize collections for tests that passed, failed, or were skipped.
     passed: [],
     failed: [],
+    warnings: [],
     skipped: [],
     // Initialize a count for the total number of tests that have been run so
     // that the run can figure out when all tests have completed and the worker
@@ -78,9 +86,7 @@ async function run (config) {
 
   // Terminate the worker pools when a user presses CTRL+C.
   process.on('SIGINT', async () => {
-    print.write('\n\n')
-    print.fatal('RUN CANCELLED!')
-    print.write('\n')
+    context.err = new Error('RUN CANCELLED!')
     registrationPool.terminate(true)
     runPool.terminate(true)
   })
@@ -177,27 +183,34 @@ async function run (config) {
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
-          if (err.name === 'TimeoutError') {
+          const file = relativePath
+          if (err.message === 'Worker terminated') {
+            // Ignore 'Worker terminated' errors since there is already output
+            // when a run is cancelled.
+            return
+          } if (test.warn) {
+            print.warn(`${context.testsRun + 1}. ${test.name}:`, err)
+            return context.warnings.push({ ...test, err: err.message, file })
+          } else if (err.name === 'TimeoutError') {
             const msg = `${context.testsRun + 1}. ${test.name}: timeout`
-            print.error(msg, chalk.dim(file.relativePath))
+            print.error(msg, chalk.dim(file))
           } else {
             print.error(`${context.testsRun + 1}. ${test.name}:`, err)
           }
 
           // Increment the failure count since the test threw an error
           // indicating a test failure.
-          context.failed.push({ ...test, err: err.message, file: relativePath })
-
-          // If the failFast option is set, throw an error so that tests stop
-          // being executed.
-          if (context.failFast) {
-            throw new Error(
-              'Stopping test run due to test failure with --failFast option'
-            )
-          }
+          context.failed.push({ ...test, err: err.message, file })
         } finally {
           // Increment the test run count now that the test has completed.
           context.testsRun++
+        }
+
+        // If the failFast option is set, throw an error so that the test run is
+        // immediately failed.
+        const [err] = context.failed
+        if (err && context.failFast) {
+          throw new FailFastError()
         }
       }))
 
@@ -211,7 +224,8 @@ async function run (config) {
       snapshotState.save()
     }))
   } catch (err) {
-    print.debug(err)
+    // Add the fatal error to the context so the CLI can fail the run.
+    context.err = err
   }
 
   // Sequentially run any after hooks specified by plugins.
@@ -255,4 +269,8 @@ test.only = function only (name, ...tags) {
   return handleTestArgs(name, tags, { only: true })
 }
 
-module.exports = { run, test }
+test.warn = function warn (name, ...tags) {
+  return handleTestArgs(name, tags, { warn: true })
+}
+
+module.exports = { run, test, FailFastError }
