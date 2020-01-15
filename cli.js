@@ -7,19 +7,35 @@ const bff = require('.')
 async function run () {
   const config = cli({
     name: 'bff',
-    opts: {
-      alias: {
-        concurrency: 'c',
-        updateSnapshot: 'u',
-        logLevel: 'l',
-        tags: 't',
-        timeout: 'T',
-        failFast: 'f',
-        junit: 'j',
-        match: 'm',
-        performance: 'p'
+    options: {
+      concurrency: {
+        alias: 'c'
       },
-      boolean: ['p']
+      updateSnapshot: {
+        alias: 'u'
+      },
+      logLevel: {
+        alias: 'l'
+      },
+      tags: {
+        alias: 't'
+      },
+      timeout: {
+        alias: 'T'
+      },
+      failFast: {
+        alias: 'f'
+      },
+      junit: {
+        alias: 'j'
+      },
+      match: {
+        alias: 'm'
+      },
+      performance: {
+        alias: 'p',
+        default: false
+      }
     }
   })
 
