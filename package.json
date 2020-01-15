@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "./cli.js -p tests/bff.js",
-    "bff": "./cli.js -p"
+    "test:ci": "./cli.js -p tests/bff.js",
+    "test": "./cli.js -p"
   },
   "bin": {
     "bff": "cli.js"
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/ianwalter/bff#readme",
   "dependencies": {
-    "@ianwalter/cli": "^1.2.0",
+    "@ianwalter/cli": "^3.0.0",
     "@ianwalter/print": "^5.0.0",
     "@ianwalter/timer": "^1.1.0",
     "common-tags": "^1.8.0",

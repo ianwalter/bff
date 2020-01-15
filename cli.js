@@ -7,21 +7,67 @@ const bff = require('.')
 async function run () {
   const config = cli({
     name: 'bff',
-    opts: {
-      alias: {
-        concurrency: 'c',
-        updateSnapshot: 'u',
-        logLevel: 'l',
-        tags: 't',
-        timeout: 'T',
-        failFast: 'f',
-        junit: 'j',
-        match: 'm',
-        performance: 'p'
+    usage: 'bff [path-to-tests] [options]',
+    options: {
+      concurrency: {
+        alias: 'c',
+        description: 'Specifies how many tests/workers to run in parallel'
       },
-      boolean: ['p']
+      updateSnapshot: {
+        alias: 'u',
+        description: 'Specifies whether snapshots should be created or updated'
+      },
+      logLevel: {
+        alias: 'l',
+        description: "Specifies bff's logging level"
+      },
+      tags: {
+        alias: 't',
+        description: `
+          Specifies which test tags should be used to match tests. How it
+          matches the tags depends on the \`match\` option below
+        `
+      },
+      timeout: {
+        alias: 'T',
+        description: `
+          Specifies how long a test should take before it's marked as failed for
+          timing out
+        `
+      },
+      failFast: {
+        alias: 'f',
+        description: `
+          Specifies whether to exit when a test fails instead of continuing to
+          run tests
+        `
+      },
+      junit: {
+        alias: 'j',
+        description: `
+          Specifies whether or not to write the results to a junit report file
+        `
+      },
+      match: {
+        alias: 'm',
+        description: `
+          Specifies whether a test needs \`some\` or \`every\` specified tag in
+          order for it to be run
+        `
+      },
+      performance: {
+        alias: 'p',
+        description: `
+          Specifies whether tests should be timed and displayed in the output
+        `,
+        default: false
+      }
     }
   })
+
+  if (config.help) {
+    return print.info(config.helpText)
+  }
 
   // Set tests as whatever paths were passed as input to the CLI or whatever
   // is configured and delete the _ (input) attribute to get rid of duplicate
