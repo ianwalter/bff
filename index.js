@@ -62,7 +62,7 @@ async function run (config) {
 
   // Add the absolute paths of the test files to the run context.
   context.files = (await globby(context.tests)).map(f => path.resolve(f))
-  print.debug('Number of test files:', context.files.length)
+  print.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
   if (context.files.length === 0) {
