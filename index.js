@@ -184,7 +184,8 @@ async function run (config) {
           }
         } catch (err) {
           const file = relativePath
-          if (err.message === 'Worker terminated') {
+          const workerpoolErrors = ['Worker terminated', 'Pool terminated']
+          if (workerpoolErrors.includes(err.message)) {
             // Ignore 'Worker terminated' errors since there is already output
             // when a run is cancelled.
             return
