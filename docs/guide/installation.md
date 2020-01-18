@@ -1,5 +1,5 @@
 # Installation
 
 ```sh
-yarn add @ianwalter/bff
+yarn add @ianwalter/bff --dev
 ```
