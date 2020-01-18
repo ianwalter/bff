@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Letter</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="7.9854923%" x2="100%" y2="92.0145077%" id="linearGradient-1">
+            <stop stop-color="#30E8BF" offset="0%"></stop>
+            <stop stop-color="#38EF7D" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Letter" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iconmonstr-favorite-11" transform="translate(28.000000, 34.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <path d="M117,54 C102.08925,54 90,66.08925 90,81 C90,95.91075 102.08925,108 117,108 C131.91075,108 144,95.91075 144,81 C144,66.08925 131.91075,54 117,54 Z M114.1875,92.907 L104.0625,83.088 L108.24075,78.9075 L114.1875,84.546 L126.88425,71.532 L131.0625,75.71025 L114.1875,92.907 Z M92.838,111.558 C86.19,118.074 79.188,124.872 72,132 C33.42,93.714 0,65.118 0,37.152 C0,-3.462 53.112,-12.924 72,19.488 C90.75,-12.684 144,-3.6 144,37.152 C144,41.628 143.064,46.128 141.462,50.67 C134.766,45.258 126.258,42 117,42 C95.496,42 78,59.496 78,81 C78,93.378 83.82,104.406 92.838,111.558 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

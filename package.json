@@ -7,7 +7,9 @@
   "scripts": {
     "lint": "eslint .",
     "test:ci": "./cli.js -p tests/bff.js",
-    "test": "./cli.js -p"
+    "test": "./cli.js -p",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "bin": {
     "bff": "cli.js"
@@ -51,7 +53,8 @@
     "@ianwalter/eslint-config": "^3.1.0",
     "@ianwalter/release": "^5.0.0",
     "@ianwalter/renovate-config": "^1.2.0",
-    "execa": "^4.0.0"
+    "execa": "^4.0.0",
+    "vuepress": "^1.2.0"
   },
   "eslintConfig": {
     "root": true,
