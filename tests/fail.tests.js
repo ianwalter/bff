@@ -42,3 +42,5 @@ test('manual fail inside of try-catch', ({ expect, fail }) => {
     // console.error(err)
   }
 })
+
+test('done.fail', (ctx, done) => setTimeout(done.fail, 300, new Error('DONE')))

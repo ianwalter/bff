@@ -37,6 +37,7 @@
   "dependencies": {
     "@ianwalter/cli": "^3.0.0",
     "@ianwalter/print": "^5.0.0",
+    "@ianwalter/subpub": "^2.0.0",
     "@ianwalter/timer": "^1.1.0",
     "common-tags": "^1.8.0",
     "expect": "^24.9.0",

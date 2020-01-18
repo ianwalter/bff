@@ -4,6 +4,8 @@ exports[`bff 1`] = `
 Array [
   "A test with a multiline name",
   "beforeEach",
+  "done",
+  "done.pass",
   "manual pass",
   "only",
   "only with test specified after name",
@@ -22,6 +24,7 @@ Array [
 exports[`bff 2`] = `
 Array [
   "afterEach: manual failure",
+  "done.fail: Error: DONE",
   "manual fail inside of try-catch: manual failure",
   "manual fail with reason: because reasons",
   "manual fail: manual failure",

@@ -55,6 +55,7 @@ worker({
     return file
   },
   async test (file, test, context) {
+    const Subpub = require('@ianwalter/subpub')
     const merge = require('@ianwalter/merge')
     const createTimer = require('@ianwalter/timer')
     const toHookRun = require('./lib/toHookRun')
@@ -70,6 +71,10 @@ worker({
 
     // Add the file and test data to the testContext.
     merge(context.testContext, file, test)
+
+    // Add a Subpub instance to the testContext so it can listen for the 'done'
+    // event.
+    context.testContext.sp = new Subpub()
 
     try {
       if (context.plugins && context.plugins.length) {

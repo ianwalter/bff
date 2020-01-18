@@ -73,3 +73,12 @@ test('sleep', async ({ sleep, expect }) => {
   expect(elapsed).toBeGreaterThanOrEqual(1000)
   expect(elapsed).toBeLessThan(2000)
 })
+
+test('done', ({ expect }, done) => {
+  setTimeout(() => {
+    expect('truth').toContain('ruth')
+    done()
+  }, 500)
+})
+
+test('done.pass', (ctx, done) => setTimeout(done.pass, 400))

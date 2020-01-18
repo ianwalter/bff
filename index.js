@@ -61,7 +61,7 @@ async function run (config) {
   const print = new Print({ level: context.logLevel })
 
   // Add the absolute paths of the test files to the run context.
-  context.files = (await globby(context.tests)).map(f => path.resolve(f))
+  context.files = await globby(context.tests, { absolute: true })
   print.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
