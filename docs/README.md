@@ -17,7 +17,7 @@ footer: Hippocratic License | Copyright © 2020-present Ian Walter
 
 ## Features
 
-✅ &nbsp; Flexiblr test functions with a swiss army knife context argument.
+✅ &nbsp; Flexible test functions with a swiss army knife context argument
 
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/nrg.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/nrg
