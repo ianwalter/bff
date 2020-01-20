@@ -1,7 +1,12 @@
 const execa = require('execa')
 const { test, run, FailFastError } = require('..')
 
-const config = { timeout: 5000, plugins: ['tests/helpers/plugin.js'] }
+const config = {
+  timeout: 5000,
+  plugins: ['tests/helpers/plugin.js'],
+  logLevel: 'info',
+  match: 'some'
+}
 const toName = ({ name, err }) => name + (err ? `: ${err}` : '')
 const execaOpts = { reject: false }
 
@@ -26,7 +31,7 @@ test('bff --failFast', async ({ expect }) => {
 })
 
 test('bff --tags qa', async ({ expect }) => {
-  const result = await run({ tags: 'qa' })
+  const result = await run({ ...config, tags: 'qa' })
   expect(result.testsRegistered).toBe(2)
   expect(result.testsRun).toBe(2)
   expect(result.passed.length).toBe(1)
@@ -34,7 +39,7 @@ test('bff --tags qa', async ({ expect }) => {
 })
 
 test('bff --tags dev --tags qa --match every', async ({ expect }) => {
-  const result = await run({ tags: ['dev', 'qa'], match: 'every' })
+  const result = await run({ ...config, tags: ['dev', 'qa'], match: 'every' })
   expect(result.testsRegistered).toBe(1)
   expect(result.testsRun).toBe(1)
   expect(result.passed.length).toBe(0)

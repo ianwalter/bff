@@ -15,11 +15,13 @@ async function run () {
       },
       updateSnapshot: {
         alias: 'u',
-        description: 'Specifies whether snapshots should be created or updated'
+        description: 'Specifies whether snapshots should be created or updated',
+        default: false
       },
       logLevel: {
         alias: 'l',
-        description: "Specifies bff's logging level"
+        description: "Specifies bff's logging level",
+        default: 'info'
       },
       tags: {
         alias: 't',
@@ -55,7 +57,8 @@ async function run () {
         description: `
           Specifies whether a test needs \`some\` or \`every\` specified tag in
           order for it to be run
-        `
+        `,
+        default: 'some'
       },
       performance: {
         alias: 'p',

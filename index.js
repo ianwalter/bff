@@ -28,10 +28,8 @@ FailFastError.message = 'Run failed immediately since failFast option is set'
 async function run (config) {
   // Create the run context using the passed configuration and defaults.
   const context = {
-    logLevel: 'info',
     tests: defaultFiles,
-    testContext: { hasRun: false, result: {} },
-    match: 'some',
+    testContext: { hasRun: false, result: {}, timeout: config.timeout },
     // Initialize a count for each time a test file has been registered so that
     // the main thread can figure out when registration has completed and the
     // worker pool can be terminated.
@@ -52,7 +50,6 @@ async function run (config) {
 
   // Destructure passed configuration and add it to testContext and context.
   const { updateSnapshot, tags = [], ...restOfConfig } = config
-  context.testContext.timeout = config.timeout
   context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
   context.tags = Array.isArray(tags) ? tags : [tags]
   merge(context, restOfConfig)
