@@ -31,9 +31,10 @@ async function run () {
       timeout: {
         alias: 'T',
         description: `
-          Specifies how long a test should take before it's marked as failed for
-          timing out
-        `
+          Specifies how long a test should take in milliseconds before it's
+          marked as failed for timing out
+        `,
+        default: 60000
       },
       failFast: {
         alias: 'f',

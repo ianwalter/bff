@@ -51,8 +51,8 @@ async function run (config) {
   }
 
   // Destructure passed configuration and add it to testContext and context.
-  const { timeout, updateSnapshot, tags = [], ...restOfConfig } = config
-  context.testContext.timeout = timeout || 60000
+  const { updateSnapshot, tags = [], ...restOfConfig } = config
+  context.testContext.timeout = config.timeout
   context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
   context.tags = Array.isArray(tags) ? tags : [tags]
   merge(context, restOfConfig)
