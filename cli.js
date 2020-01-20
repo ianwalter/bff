@@ -40,7 +40,8 @@ async function run () {
         description: `
           Specifies whether to exit when a test fails instead of continuing to
           run tests
-        `
+        `,
+        default: false
       },
       junit: {
         alias: 'j',
