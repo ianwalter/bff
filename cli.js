@@ -61,10 +61,11 @@ async function run () {
         `,
         default: 'some'
       },
-      performance: {
-        alias: 'p',
+      verbose: {
+        alias: 'V',
         description: `
-          Specifies whether tests should be timed and displayed in the output
+          Prints more information for each test: relative test file path,
+          tags, and timing information
         `,
         default: false
       }
