@@ -49,9 +49,9 @@ async function run (config) {
   }
 
   // Destructure passed configuration and add it to testContext and context.
-  const { updateSnapshot, tags = [], ...restOfConfig } = config
+  const { updateSnapshot, tag = [], ...restOfConfig } = config
   context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
-  context.tags = Array.isArray(tags) ? tags : [tags]
+  context.tags = Array.isArray(tag) ? tag : [tag]
   merge(context, restOfConfig)
 
   // Create the print instance with the given log level.
