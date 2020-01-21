@@ -1,3 +1,5 @@
+const { promises: fs } = require('fs')
+const path = require('path')
 const execa = require('execa')
 const { test, run, FailFastError } = require('..')
 
@@ -49,4 +51,10 @@ test('bff --tags dev --tags qa --match every', async ({ expect }) => {
 test('uncaught exception in test file', async ({ expect }) => {
   const { stdout } = await execa('./cli.js', ['tests/uncaught.js'], execaOpts)
   expect(stdout).toContain("Cannot find module 'thing-that-doesnt-exist'")
+})
+
+test('junit', async ({ expect }) => {
+  await execa('./cli.js', ['--timeout', config.timeout, '--junit'], execaOpts)
+  const junit = await fs.readFile(path.resolve('junit.xml'), 'utf8')
+  expect(junit).toMatchSnapshot()
 })

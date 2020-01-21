@@ -50,6 +50,7 @@ async function run () {
         alias: 'j',
         description: `
           Specifies whether or not to write the results to a junit report file
+          and optionally the relative path of the file
         `
       },
       match: {
