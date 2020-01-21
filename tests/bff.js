@@ -25,8 +25,8 @@ test('bff', async ({ expect }) => {
   expect(result.skipped.map(toName).sort()).toMatchSnapshot()
 })
 
-test('bff --failFast', async ({ expect }) => {
-  const { stdout } = await execa('./cli.js', ['--failFast'], execaOpts)
+test('bff --fail-fast', async ({ expect }) => {
+  const { stdout } = await execa('./cli.js', ['--fail-fast'], execaOpts)
   expect(stdout).toContain(FailFastError.message)
 })
 
