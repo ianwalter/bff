@@ -29,10 +29,10 @@ Array [
   "manual fail with reason: because reasons",
   "manual fail: manual failure",
   "no assertions: no assertions made",
-  "parseInt with the wrong base: expect(received).toBe(expected) // Object.is equality
+  "parseInt with the wrong base: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
 
-Expected: 2
-Received: NaN",
+Expected: [32m2[39m
+Received: [31mNaN[39m",
   "snapshot fail: expect(received).toMatchSnapshot()
 
 Snapshot name: \`snapshot fail 1\`
@@ -50,10 +50,10 @@ Snapshot name: \`snapshot fail 1\`
       <main>
         <h1>Demo</h1>
       </main>",
-  "tags: expect(received).toContain(expected) // indexOf
+  "tags: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
 
-Expected value: 3
-Received array: [1, 2]",
+Expected value: [32m3[39m
+Received array: [31m[1, 2][39m",
   "timeout: test reached timeout of 5000 milliseconds",
 ]
 `;
@@ -76,21 +76,15 @@ Array [
 exports[`junit 1`] = `
 "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
 <testsuites>
-  <testsuite name=\\"tests/warn.tests.js\\" tests=\\"2\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"1\\">
-    <testcase name=\\"warn pass\\"/>
-    <testcase name=\\"warn fail\\">
-      <skipped/>
-    </testcase>
-  </testsuite>
   <testsuite name=\\"tests/pass.tests.js\\" tests=\\"12\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"strict equality\\"/>
-    <testcase name=\\"manual pass\\"/>
     <testcase name=\\"beforeEach\\"/>
-    <testcase name=\\"registration\\"/>
     <testcase name=\\"snapshot pass\\"/>
-    <testcase name=\\"tags second call\\"/>
-    <testcase name=\\"second snapshot pass\\"/>
+    <testcase name=\\"strict equality\\"/>
     <testcase name=\\"A test with a multiline name\\"/>
+    <testcase name=\\"second snapshot pass\\"/>
+    <testcase name=\\"manual pass\\"/>
+    <testcase name=\\"tags second call\\"/>
+    <testcase name=\\"registration\\"/>
     <testcase name=\\"done.pass\\"/>
     <testcase name=\\"done\\"/>
     <testcase name=\\"parseInt after a 1 second timeout\\"/>
@@ -101,18 +95,21 @@ exports[`junit 1`] = `
     <testcase name=\\"only with test specified after name\\"/>
     <testcase name=\\"skip via only\\"/>
   </testsuite>
-  <testsuite name=\\"tests/fail.tests.js\\" tests=\\"10\\" failures=\\"10\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"manual fail with reason\\">
-      <failure message=\\"because reasons\\"/>
+  <testsuite name=\\"tests/warn.tests.js\\" tests=\\"2\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"1\\">
+    <testcase name=\\"warn pass\\"/>
+    <testcase name=\\"warn fail\\">
+      <skipped/>
     </testcase>
+  </testsuite>
+  <testsuite name=\\"tests/fail.tests.js\\" tests=\\"10\\" failures=\\"10\\" errors=\\"0\\" skipped=\\"0\\">
     <testcase name=\\"no assertions\\">
       <failure message=\\"no assertions made\\"/>
     </testcase>
-    <testcase name=\\"manual fail\\">
-      <failure message=\\"manual failure\\"/>
+    <testcase name=\\"manual fail with reason\\">
+      <failure message=\\"because reasons\\"/>
     </testcase>
-    <testcase name=\\"parseInt with the wrong base\\">
-      <failure message=\\"expect(received).toBe(expected) // Object.is equality&#xA;&#xA;Expected: 2&#xA;Received: NaN\\"/>
+    <testcase name=\\"afterEach\\">
+      <failure message=\\"manual failure\\"/>
     </testcase>
     <testcase name=\\"snapshot fail\\">
       <failure message=\\"expect(received).toMatchSnapshot()&#xA;&#xA;Snapshot name: \`snapshot fail 1\`&#xA;&#xA;- Snapshot&#xA;+ Received&#xA;&#xA;@@ -1,8 +1,8 @@&#xA;  &lt;html>&#xA;    &lt;head>&#xA;-     &lt;title>Demo&lt;/title>&#xA;+     &lt;title>Dema&lt;/title>&#xA;    &lt;/head>&#xA;    &lt;body>&#xA;      &lt;main>&#xA;        &lt;h1>Demo&lt;/h1>&#xA;      &lt;/main>\\"/>
@@ -123,8 +120,11 @@ exports[`junit 1`] = `
     <testcase name=\\"manual fail inside of try-catch\\">
       <failure message=\\"manual failure\\"/>
     </testcase>
-    <testcase name=\\"afterEach\\">
+    <testcase name=\\"manual fail\\">
       <failure message=\\"manual failure\\"/>
+    </testcase>
+    <testcase name=\\"parseInt with the wrong base\\">
+      <failure message=\\"expect(received).toBe(expected) // Object.is equality&#xA;&#xA;Expected: 2&#xA;Received: NaN\\"/>
     </testcase>
     <testcase name=\\"done.fail\\">
       <failure message=\\"Error: DONE\\"/>
