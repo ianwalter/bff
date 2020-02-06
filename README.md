@@ -25,7 +25,7 @@ convenience:
 * `--log-level, -l [level]` Specifies bff's logging level.
 * `--fail-fast, -f` Specifies whether to exit when a test fails instead of
   continuing to run tests.
-* `--update-snapshots, -u` Specifies whether snapshots should be created or
+* `--update-snapshot, -u` Specifies whether snapshots should be created or
   updated.
 * `--concurrency, -c [#]` Specifies how many tests/workers to run in parallel.
 * `--tag, -t [name]` Specifies which test tags should be used to match tests.

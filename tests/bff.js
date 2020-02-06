@@ -12,7 +12,7 @@ const config = {
 const toName = ({ name, err }) => name + (err ? `: ${err}` : '')
 const execaOpts = { reject: false }
 
-test.only('bff', async ({ expect }) => {
+test('bff', async ({ expect }) => {
   const result = await run(config)
   expect(result.filesRegistered).toBe(5)
   expect(result.testsRegistered).toBe(31)
