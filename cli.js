@@ -14,7 +14,7 @@ async function run () {
         arg: '[number]',
         description: 'Specifies how many tests/workers to run in parallel'
       },
-      updateSnapshot: {
+      updateSnapshots: {
         alias: 'u',
         description: 'Specifies whether snapshots should be created or updated',
         default: false

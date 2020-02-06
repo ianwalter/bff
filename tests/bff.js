@@ -32,16 +32,16 @@ test('bff --fail-fast', async ({ expect }) => {
   expect(stdout).toContain(FailFastError.message)
 })
 
-test('bff --tags qa', async ({ expect }) => {
-  const result = await run({ ...config, tags: 'qa' })
+test('bff --tag qa', async ({ expect }) => {
+  const result = await run({ ...config, tag: 'qa' })
   expect(result.testsRegistered).toBe(2)
   expect(result.testsRun).toBe(2)
   expect(result.passed.length).toBe(1)
   expect(result.failed.length).toBe(1)
 })
 
-test('bff --tags dev --tags qa --match every', async ({ expect }) => {
-  const result = await run({ ...config, tags: ['dev', 'qa'], match: 'every' })
+test('bff --tag dev --tag qa --match every', async ({ expect }) => {
+  const result = await run({ ...config, tag: ['dev', 'qa'], match: 'every' })
   expect(result.testsRegistered).toBe(1)
   expect(result.testsRun).toBe(1)
   expect(result.passed.length).toBe(0)
@@ -53,7 +53,7 @@ test('uncaught exception in test file', async ({ expect }) => {
   expect(stdout).toContain("Cannot find module 'thing-that-doesnt-exist'")
 })
 
-test('junit', async ({ expect }) => {
+test.only('junit', async ({ expect }) => {
   await execa('./cli.js', ['--timeout', config.timeout, '--junit'], execaOpts)
   const junit = await fs.readFile(path.resolve('junit.xml'), 'utf8')
   expect(junit).toMatchSnapshot()

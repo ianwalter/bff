@@ -49,8 +49,8 @@ async function run (config) {
   }
 
   // Destructure passed configuration and add it to testContext and context.
-  const { updateSnapshot, tag = [], ...restOfConfig } = config
-  context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
+  const { updateSnapshots, tag = [], ...restOfConfig } = config
+  context.testContext.updateSnapshots = updateSnapshots ? 'all' : 'none'
   context.tags = Array.isArray(tag) ? tag : [tag]
   merge(context, restOfConfig)
 
@@ -136,7 +136,7 @@ async function run (config) {
       // Get the snapshot state for the current test file.
       const snapshotState = new SnapshotState(
         file.snapshotPath,
-        context.testContext.updateSnapshot
+        context.testContext.updateSnapshots
       )
 
       // Iterate through all tests in the test file.

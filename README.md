@@ -25,7 +25,7 @@ convenience:
 * `--log-level, -l [level]` Specifies bff's logging level.
 * `--fail-fast, -f` Specifies whether to exit when a test fails instead of
   continuing to run tests.
-* `--update-snapshot, -u` Specifies whether snapshots should be created or
+* `--update-snapshots, -u` Specifies whether snapshots should be created or
   updated.
 * `--concurrency, -c [#]` Specifies how many tests/workers to run in parallel.
 * `--tag, -t [name]` Specifies which test tags should be used to match tests.
@@ -66,7 +66,7 @@ with their **default** values:
     // Specifies whether snapshots should be created or updated.
     // Value should be a boolean (although in practice it only makes sense to
     // use this option with the CLI).
-    updateSnapshot: undefined,
+    updateSnapshots: undefined,
     // Specifies how many tests/workers to run in parallel.
     // Value should be a integer.
     concurrency: 4, // This defaults to the number of the host system's CPU
