@@ -33,23 +33,23 @@ Array [
 
 Expected: 2
 Received: NaN",
-  "snapshot fail: expect(received).toMatchSnapshot()
+  "snapshot fail: [2mexpect([22m[38;2;0;95;95m[48;2;215;255;255mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
 
 Snapshot name: \`snapshot fail 1\`
 
-- Snapshot
-+ Received
+[38;2;128;0;128m[48;2;255;215;255m- Snapshot  - 1[49m[39m
+[38;2;0;95;95m[48;2;215;255;255m+ Received  + 1[49m[39m
 
-@@ -1,8 +1,8 @@
-  <html>
-    <head>
--     <title>Demo</title>
-+     <title>Dema</title>
-    </head>
-    <body>
-      <main>
-        <h1>Demo</h1>
-      </main>",
+[33m@@ -1,8 +1,8 @@[39m
+[2m  <html>[22m
+[2m    <head>[22m
+[38;2;128;0;128m[48;2;255;215;255m-     <title>Dem[7mo[27m</title>[49m[39m
+[38;2;0;95;95m[48;2;215;255;255m+     <title>Dem[7ma[27m</title>[49m[39m
+[2m    </head>[22m
+[2m    <body>[22m
+[2m      <main>[22m
+[2m        <h1>Demo</h1>[22m
+[2m      </main>[22m",
   "tags: expect(received).toContain(expected) // indexOf
 
 Expected value: 3

@@ -66,7 +66,7 @@ with their **default** values:
     // Specifies whether snapshots should be created or updated.
     // Value should be a boolean (although in practice it only makes sense to
     // use this option with the CLI).
-    updateSnapshots: undefined,
+    updateSnapshot: undefined,
     // Specifies how many tests/workers to run in parallel.
     // Value should be a integer.
     concurrency: 4, // This defaults to the number of the host system's CPU

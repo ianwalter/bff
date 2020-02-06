@@ -12,7 +12,7 @@ const config = {
 const toName = ({ name, err }) => name + (err ? `: ${err}` : '')
 const execaOpts = { reject: false }
 
-test('bff', async ({ expect }) => {
+test.only('bff', async ({ expect }) => {
   const result = await run(config)
   expect(result.filesRegistered).toBe(5)
   expect(result.testsRegistered).toBe(31)
@@ -53,7 +53,7 @@ test('uncaught exception in test file', async ({ expect }) => {
   expect(stdout).toContain("Cannot find module 'thing-that-doesnt-exist'")
 })
 
-test.only('junit', async ({ expect }) => {
+test('junit', async ({ expect }) => {
   await execa('./cli.js', ['--timeout', config.timeout, '--junit'], execaOpts)
   const junit = await fs.readFile(path.resolve('junit.xml'), 'utf8')
   expect(junit).toMatchSnapshot()
