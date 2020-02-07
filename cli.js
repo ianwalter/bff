@@ -11,7 +11,7 @@ async function run () {
     options: {
       concurrency: {
         alias: 'c',
-        arg: '[number]',
+        arg: '<number>',
         description: 'Specifies how many tests/workers to run in parallel'
       },
       updateSnapshot: {
@@ -21,13 +21,13 @@ async function run () {
       },
       logLevel: {
         alias: 'l',
-        arg: '[level]',
+        arg: '<level>',
         description: "Specifies bff's logging level",
         default: 'info'
       },
       tag: {
         alias: 't',
-        arg: '[tag]',
+        arg: '<tag>',
         description: `
           Specifies which test tags should be used to match tests. How it
           matches the tags depends on the \`match\` option below
@@ -35,7 +35,7 @@ async function run () {
       },
       timeout: {
         alias: 'T',
-        arg: '[milliseconds]',
+        arg: '<milliseconds>',
         description: `
           Specifies how long a test should take in milliseconds before it's
           marked as failed for timing out
@@ -52,7 +52,7 @@ async function run () {
       },
       junit: {
         alias: 'j',
-        arg: '([path])',
+        arg: '[path]',
         description: `
           Specifies whether or not to write the results to a junit report file
           and optionally the relative path of the file
@@ -60,7 +60,7 @@ async function run () {
       },
       match: {
         alias: 'm',
-        arg: '[type]',
+        arg: '<type>',
         description: `
           Specifies whether a test needs \`some\` or \`every\` specified tag in
           order for it to be run
