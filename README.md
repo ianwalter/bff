@@ -3,7 +3,7 @@
 
 [![npm page][npmImage]][npmUrl]
 
-<img src="./screenshot.png">
+[<img src="./screenshot.png">](https://raw.githubusercontent.com/ianwalter/bff/master/screenshot.png)
 
 ## Installation
 
