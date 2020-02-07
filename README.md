@@ -2,6 +2,7 @@
 > Your friendly test runner/framework
 
 [![npm page][npmImage]][npmUrl]
+[![CI][ciImage]][ciUrl]
 
 [<img src="./screenshot.png">](https://raw.githubusercontent.com/ianwalter/bff/master/screenshot.png)
 
@@ -170,6 +171,8 @@ Created by [Ian Walter](https://iankwalter.com)
 
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/bff.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/bff
+[ciImage]: https://github.com/ianwalter/bff/workflows/CI/badge.svg
+[ciUrl]: https://github.com/ianwalter/bff/actions
 [bffWebdriverUrl]: https://github.com/ianwalter/bff-webdriver
 [bffPuppeteerUrl]: https://github.com/ianwalter/bff-puppeteer
 [licenseUrl]: https://github.com/ianwalter/bff/blob/master/LICENSE
