@@ -9,7 +9,7 @@ const config = {
   logLevel: 'info',
   match: 'some'
 }
-const toName = ({ name, err }) => name + (err ? `: ${err}` : '')
+const toName = ({ name }) => name
 const execaOpts = { reject: false }
 
 test('bff', async ({ expect }) => {
