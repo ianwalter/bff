@@ -6,6 +6,7 @@ const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
 const merge = require('@ianwalter/merge')
+const callsites = require('callsites')
 
 const defaultFiles = [
   'tests.js',
@@ -145,6 +146,7 @@ async function run (config) {
           throw new Error('Stopping test run due to signal interruption')
         }
 
+        let result
         try {
           // Mark all tests as having been checked for snapshot changes so
           // that tests that have been removed can have their associated
@@ -161,7 +163,7 @@ async function run (config) {
             context.skipped.push({ ...test, file: relativePath })
           } else {
             // Send the test to a worker in the run pool to be run.
-            const result = await runPool.exec('test', [file, test, context])
+            result = await runPool.exec('test', [file, test, context])
 
             // Update the snapshot state with the snapshot data received from
             // the worker.
@@ -175,8 +177,7 @@ async function run (config) {
 
             // Output the test name and increment the pass count since the
             // test didn't throw an error indicating a failure.
-            const time = result.duration && chalk.dim(result.duration)
-            print.success(`${context.testsRun + 1}. ${test.name}`, time || '')
+            print.success(`${context.testsRun + 1}. ${test.name}`)
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
@@ -202,6 +203,15 @@ async function run (config) {
         } finally {
           // Increment the test run count now that the test has completed.
           context.testsRun++
+
+          // Log the relative file path and test duration if in verbose mode.
+          if (context.verbose) {
+            const pad = ''.padEnd((context.testsRun * 100).toString().length)
+            print.log('', `${pad}${file.relativePath}:${test.lineNumber}`)
+            if (result && result.duration) {
+              print.log('', chalk.dim(`${pad}in`, result.duration))
+            }
+          }
         }
 
         // If the failFast option is set, throw an error so that the test run is
@@ -241,6 +251,9 @@ function handleTestArgs (name, tags, test = {}) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
+
+  // Add the test line number to the object so it can be shown in verbose mode.
+  test.lineNumber = callsites()[2].getLineNumber()
 
   const testFn = tags.pop()
   Object.assign(test, { fn: testFn, tags })
