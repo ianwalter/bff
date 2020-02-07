@@ -83,8 +83,8 @@ worker({
           context.plugins.map(toHookRun('beforeEach', file, context))
         )
 
-        // If the performance option is set, start a timer for the test.
-        if (context.performance) {
+        // If the verbose option is set, start a timer for the test.
+        if (context.verbose) {
           context.timer = createTimer()
         }
 
@@ -93,8 +93,8 @@ worker({
       }
 
       if (!context.testContext.hasRun) {
-        // If the performance option is set, start a timer for the test.
-        if (context.performance) {
+        // If the verbose option is set, start a timer for the test.
+        if (context.verbose) {
           context.timer = createTimer()
         }
 

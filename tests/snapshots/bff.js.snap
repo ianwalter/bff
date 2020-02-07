@@ -33,23 +33,23 @@ Array [
 
 Expected: 2
 Received: NaN",
-  "snapshot fail: expect(received).toMatchSnapshot()
+  "snapshot fail: [2mexpect([22m[38;2;0;95;95m[48;2;215;255;255mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
 
 Snapshot name: \`snapshot fail 1\`
 
-- Snapshot
-+ Received
+[38;2;128;0;128m[48;2;255;215;255m- Snapshot  - 1[49m[39m
+[38;2;0;95;95m[48;2;215;255;255m+ Received  + 1[49m[39m
 
-@@ -1,8 +1,8 @@
-  <html>
-    <head>
--     <title>Demo</title>
-+     <title>Dema</title>
-    </head>
-    <body>
-      <main>
-        <h1>Demo</h1>
-      </main>",
+[33m@@ -1,8 +1,8 @@[39m
+[2m  <html>[22m
+[2m    <head>[22m
+[38;2;128;0;128m[48;2;255;215;255m-     <title>Dem[7mo[27m</title>[49m[39m
+[38;2;0;95;95m[48;2;215;255;255m+     <title>Dem[7ma[27m</title>[49m[39m
+[2m    </head>[22m
+[2m    <body>[22m
+[2m      <main>[22m
+[2m        <h1>Demo</h1>[22m
+[2m      </main>[22m",
   "tags: expect(received).toContain(expected) // indexOf
 
 Expected value: 3
@@ -76,55 +76,55 @@ Array [
 exports[`junit 1`] = `
 "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
 <testsuites>
-  <testsuite name=\\"tests/warn.tests.js\\" tests=\\"2\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"1\\">
-    <testcase name=\\"warn pass\\"/>
-    <testcase name=\\"warn fail\\">
-      <skipped/>
-    </testcase>
-  </testsuite>
   <testsuite name=\\"tests/pass.tests.js\\" tests=\\"12\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"strict equality\\"/>
     <testcase name=\\"manual pass\\"/>
-    <testcase name=\\"beforeEach\\"/>
     <testcase name=\\"registration\\"/>
     <testcase name=\\"snapshot pass\\"/>
     <testcase name=\\"tags second call\\"/>
     <testcase name=\\"second snapshot pass\\"/>
+    <testcase name=\\"strict equality\\"/>
     <testcase name=\\"A test with a multiline name\\"/>
+    <testcase name=\\"beforeEach\\"/>
     <testcase name=\\"done.pass\\"/>
     <testcase name=\\"done\\"/>
-    <testcase name=\\"parseInt after a 1 second timeout\\"/>
     <testcase name=\\"sleep\\"/>
+    <testcase name=\\"parseInt after a 1 second timeout\\"/>
   </testsuite>
   <testsuite name=\\"tests/only.tests.js\\" tests=\\"3\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"0\\">
     <testcase name=\\"only\\"/>
     <testcase name=\\"only with test specified after name\\"/>
     <testcase name=\\"skip via only\\"/>
   </testsuite>
+  <testsuite name=\\"tests/warn.tests.js\\" tests=\\"2\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"1\\">
+    <testcase name=\\"warn pass\\"/>
+    <testcase name=\\"warn fail\\">
+      <skipped/>
+    </testcase>
+  </testsuite>
   <testsuite name=\\"tests/fail.tests.js\\" tests=\\"10\\" failures=\\"10\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"manual fail with reason\\">
-      <failure message=\\"because reasons\\"/>
-    </testcase>
-    <testcase name=\\"no assertions\\">
-      <failure message=\\"no assertions made\\"/>
-    </testcase>
     <testcase name=\\"manual fail\\">
+      <failure message=\\"manual failure\\"/>
+    </testcase>
+    <testcase name=\\"manual fail inside of try-catch\\">
       <failure message=\\"manual failure\\"/>
     </testcase>
     <testcase name=\\"parseInt with the wrong base\\">
       <failure message=\\"expect(received).toBe(expected) // Object.is equality&#xA;&#xA;Expected: 2&#xA;Received: NaN\\"/>
     </testcase>
     <testcase name=\\"snapshot fail\\">
-      <failure message=\\"expect(received).toMatchSnapshot()&#xA;&#xA;Snapshot name: \`snapshot fail 1\`&#xA;&#xA;- Snapshot&#xA;+ Received&#xA;&#xA;@@ -1,8 +1,8 @@&#xA;  &lt;html>&#xA;    &lt;head>&#xA;-     &lt;title>Demo&lt;/title>&#xA;+     &lt;title>Dema&lt;/title>&#xA;    &lt;/head>&#xA;    &lt;body>&#xA;      &lt;main>&#xA;        &lt;h1>Demo&lt;/h1>&#xA;      &lt;/main>\\"/>
+      <failure message=\\"expect(received).toMatchSnapshot()&#xA;&#xA;Snapshot name: \`snapshot fail 1\`&#xA;&#xA;- Snapshot  - 1&#xA;+ Received  + 1&#xA;&#xA;@@ -1,8 +1,8 @@&#xA;  &lt;html>&#xA;    &lt;head>&#xA;-     &lt;title>Demo&lt;/title>&#xA;+     &lt;title>Dema&lt;/title>&#xA;    &lt;/head>&#xA;    &lt;body>&#xA;      &lt;main>&#xA;        &lt;h1>Demo&lt;/h1>&#xA;      &lt;/main>\\"/>
+    </testcase>
+    <testcase name=\\"afterEach\\">
+      <failure message=\\"manual failure\\"/>
     </testcase>
     <testcase name=\\"tags\\">
       <failure message=\\"expect(received).toContain(expected) // indexOf&#xA;&#xA;Expected value: 3&#xA;Received array: [1, 2]\\"/>
     </testcase>
-    <testcase name=\\"manual fail inside of try-catch\\">
-      <failure message=\\"manual failure\\"/>
+    <testcase name=\\"manual fail with reason\\">
+      <failure message=\\"because reasons\\"/>
     </testcase>
-    <testcase name=\\"afterEach\\">
-      <failure message=\\"manual failure\\"/>
+    <testcase name=\\"no assertions\\">
+      <failure message=\\"no assertions made\\"/>
     </testcase>
     <testcase name=\\"done.fail\\">
       <failure message=\\"Error: DONE\\"/>
