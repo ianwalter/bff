@@ -4,6 +4,10 @@ const cli = require('@ianwalter/cli')
 const { print, chalk } = require('@ianwalter/print')
 const bff = require('.')
 
+// Set stdout to blocking so that the program doesn't exit with log statements
+// still waiting to be printed to the console.
+process.stdout._handle.setBlocking(true)
+
 async function run () {
   const config = cli({
     name: 'bff',

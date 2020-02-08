@@ -6,8 +6,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test:ci": "./cli.js tests/bff.js",
     "test": "./cli.js",
+    "test:ci": "./cli.js tests/bff.js",
+    "test:out": "./cli.js tests/stdout.js | wc -c",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
