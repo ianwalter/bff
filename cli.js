@@ -6,7 +6,9 @@ const bff = require('.')
 
 // Set stdout to blocking so that the program doesn't exit with log statements
 // still waiting to be printed to the console.
-process.stdout._handle.setBlocking(true)
+if (process.stdout._handle) {
+  process.stdout._handle.setBlocking(true)
+}
 
 async function run () {
   const config = cli({
