@@ -102,7 +102,10 @@ async function run () {
 
   // Run the tests and wait for a response with the passed/failed/skipped
   // counts.
-  let passed = [], failed = [], warnings = [], skipped = []
+  const passed = []
+  const failed = []
+  const warnings = []
+  const skipped = []
   for (let runs = 0; runs < config.runs; runs++) {
     const result = await bff.run(config)
 
