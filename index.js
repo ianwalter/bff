@@ -50,7 +50,7 @@ async function run (config) {
   }
 
   // Destructure passed configuration and add it to testContext and context.
-  const { updateSnapshot, tag = [], ...restOfConfig } = config
+  const { updateSnapshot, tag = [], failed, ...restOfConfig } = config
   context.testContext.updateSnapshot = updateSnapshot ? 'all' : 'none'
   context.tags = Array.isArray(tag) ? tag : [tag]
   merge(context, restOfConfig)
@@ -161,7 +161,7 @@ async function run (config) {
             const msg = `${context.testsRun + 1}. ${test.name}`
             print.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
             context.skipped.push({ ...test, file: relativePath })
-          } else {
+          } else if (!failed || failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
             result = await runPool.exec('test', [file, test, context])
 

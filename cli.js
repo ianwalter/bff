@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
+const { promises: fs } = require('fs')
+const path = require('path')
 const cli = require('@ianwalter/cli')
 const { print, chalk } = require('@ianwalter/print')
 const bff = require('.')
+const camaro = require('camaro')
 
 // Set stdout to blocking so that the program doesn't exit with log statements
 // still waiting to be printed to the console.
@@ -86,12 +89,32 @@ async function run () {
         arg: '<count>',
         description: 'Specifies the number of test runs to execute',
         default: 1
+      },
+      failed: {
+        type: 'string',
+        alias: 'F',
+        arg: '(junit file)',
+        description: `
+          Only run tests marked as failed in ./junit.xml (or specified file)
+        `
       }
     }
   })
 
   if (config.help) {
     return print.info(config.helpText)
+  }
+
+  // Only run tests marked as failed in a JUnit file.
+  if (config.failed) {
+    const file = typeof config.failed === 'string' ? config.failed : 'junit.xml'
+    const xml = await fs.readFile(path.resolve(file), 'utf8')
+    const template = { failed: ['//testcase[failure]', '@name'] }
+    const { failed } = await camaro.transform(xml, template)
+    print.write('\n')
+    print.info(`Running failed tests in ${file}:`, '\n', failed.join('\n'))
+    print.write('\n')
+    config.failed = failed
   }
 
   // Set tests as whatever paths were passed as input to the CLI or whatever

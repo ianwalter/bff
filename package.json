@@ -45,6 +45,7 @@
     "@ianwalter/subpub": "^2.0.0",
     "@ianwalter/timer": "^1.1.0",
     "callsites": "^3.1.0",
+    "camaro": "^4.1.2",
     "common-tags": "^1.8.0",
     "expect": "^25.1.0",
     "globby": "^11.0.0",
