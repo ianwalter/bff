@@ -91,9 +91,8 @@ async function run () {
         default: 1
       },
       failed: {
-        type: 'string',
         alias: 'F',
-        arg: '(junit file)',
+        arg: '[junit file]',
         description: `
           Only run tests marked as failed in ./junit.xml (or specified file)
         `
