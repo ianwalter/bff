@@ -997,10 +997,10 @@
     marked-terminal "^4.0.0"
     strip-ansi "^6.0.0"
 
-"@ianwalter/print@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-5.2.0.tgz#cdfc03feac02caec9ee4e032098fd27379849c3a"
-  integrity sha512-NeNTX4xU5V4wPT3+mdDNxCf1bY2FXftcApf3dvZ8RZbUWgnaUULDhekgqVtM6E1N83ZMhuw69ZXPwMNRuO8sdw==
+"@ianwalter/print@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-5.2.1.tgz#c45eee0cc9eae1a03dcef5fcdcad2bea74614bd8"
+  integrity sha512-kbdwljHZKZXcDmlDV9XpCVLtc/gNAFID3jGSPExfwcX3CQaFqcdHvZ2otm1Zsen0ES9ybt4SJXoOddc/zyVXUg==
   dependencies:
     "@ianwalter/chromafi" "^1.0.1"
     "@ianwalter/clone" "^5.0.0"
