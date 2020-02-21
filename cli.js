@@ -5,7 +5,6 @@ const path = require('path')
 const cli = require('@ianwalter/cli')
 const { print, chalk } = require('@ianwalter/print')
 const bff = require('.')
-const camaro = require('camaro')
 
 // Set stdout to blocking so that the program doesn't exit with log statements
 // still waiting to be printed to the console.
@@ -106,6 +105,7 @@ async function run () {
 
   // Only run tests marked as failed in a JUnit file.
   if (config.failed) {
+    const camaro = require('camaro')
     const file = typeof config.failed === 'string' ? config.failed : 'junit.xml'
     const xml = await fs.readFile(path.resolve(file), 'utf8')
     const template = { failed: ['//testcase[failure]', '@name'] }
