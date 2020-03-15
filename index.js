@@ -7,6 +7,7 @@ const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
 const merge = require('@ianwalter/merge')
 const callsites = require('callsites')
+const shuffle = require('array-shuffle')
 
 const defaultFiles = [
   'tests.js',
@@ -59,7 +60,7 @@ async function run (config) {
   const print = new Print({ level: context.logLevel })
 
   // Add the absolute paths of the test files to the run context.
-  context.files = await globby(context.tests, { absolute: true })
+  context.files = shuffle(await globby(context.tests, { absolute: true }))
   print.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
@@ -141,7 +142,7 @@ async function run (config) {
       )
 
       // Iterate through all tests in the test file.
-      await Promise.all(file.tests.map(async test => {
+      await Promise.all(shuffle(file.tests).map(async test => {
         if (context.hasSignalInterruption) {
           throw new Error('Stopping test run due to signal interruption')
         }
