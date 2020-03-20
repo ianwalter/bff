@@ -1,7 +1,14 @@
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
-const { threadId } = require('worker_threads')
+
+let threadId = process.pid
+try {
+  const workerThreads = require('worker_threads')
+  threadId = workerThreads.threadId
+} catch (err) {
+  // Ignore error.
+}
 
 worker({
   async register (file, context) {
