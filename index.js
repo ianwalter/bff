@@ -10,8 +10,8 @@ const callsites = require('callsites')
 const shuffle = require('array-shuffle')
 
 const defaultFiles = [
-  'tests.js',
-  'tests.pptr.js',
+  '*tests.js',
+  '*pptr.js',
   'tests/**/*tests.js',
   'tests/**/*pptr.js'
 ]
