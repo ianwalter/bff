@@ -1,7 +1,5 @@
 const { test } = require('..')
 
-test.only('only', ({ pass }) => pass())
+test.only`only ${t => t.pass()}`
 
-test('skip via only', ({ expect }) => expect(1).toBe('1'))
-
-test.only('only with test specified after name')(({ pass }) => pass())
+test`skip via only ${t => t.expect(1).toBe('1')}`

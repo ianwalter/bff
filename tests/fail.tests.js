@@ -1,20 +1,20 @@
-const { test } = require('..')
+const { test, tag } = require('..')
 const { html } = require('common-tags')
 
-test('no assertions', () => true)
+test`no assertions ${() => true}`
 
-test('parseInt with the wrong base', ({ expect }) => {
+test`parseInt with the wrong base ${t => {
   const two = '2'
-  expect(parseInt(two, 2)).toBe(2)
-})
+  t.expect(parseInt(two, 2)).toBe(2)
+}}`
 
-test('manual fail', ({ fail }) => fail())
+test`manual fail ${t => t.fail()}`
 
-test('manual fail with reason', ({ fail }) => fail('because reasons'))
+test`manual fail with reason ${t => t.fail('because reasons')}`
 
-test('afterEach', ({ fail }) => fail())
+test`afterEach ${t => t.fail()}`
 
-test('snapshot fail', ({ expect }) => {
+test`snapshot fail ${t => {
   const markup = html`
     <html>
       <head>
@@ -27,20 +27,20 @@ test('snapshot fail', ({ expect }) => {
       </body>
     </html>
   `
-  expect(markup).toMatchSnapshot()
-})
+  t.expect(markup).toMatchSnapshot()
+}}`
 
-test('timeout', () => new Promise(() => {}))
+test`timeout ${() => new Promise(() => {})}`
 
-test('tags', 'dev', 'qa', ({ expect }) => expect([1, 2]).toContain(3))
+test`tags ${tag`dev`} ${tag`qa`} ${t => t.expect([1, 2]).toContain(3)}`
 
-test('manual fail inside of try-catch', ({ expect, fail }) => {
+test`manual fail inside of try-catch ${t => {
   try {
-    expect(1).toBe(1)
-    fail()
+    t.expect(1).toBe(1)
+    t.fail()
   } catch (err) {
     // console.error(err)
   }
-})
+}}`
 
-test('done.fail', (ctx, done) => setTimeout(done.fail, 300, new Error('DONE')))
+test`done.fail ${(t, done) => setTimeout(done.fail, 300, new Error('DONE'))}`

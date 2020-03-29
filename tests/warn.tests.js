@@ -1,5 +1,5 @@
 const { test } = require('..')
 
-test.warn('warn fail', ({ fail }) => fail())
+test.warn`warn fail ${t => t.fail()}`
 
-test.warn('warn pass', ({ pass }) => pass())
+test.warn`warn pass ${t => t.pass()}`
