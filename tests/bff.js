@@ -15,15 +15,15 @@ const execaOpts = { reject: false }
 test`bff ${async t => {
   const result = await run(config)
   t.expect(result.filesRegistered).toBe(5)
-  t.expect(result.testsRegistered).toBe(31)
-  t.expect(result.testsRun).toBe(31)
-  t.expect(result.passed.length).toBe(16)
+  t.expect(result.testsRegistered).toBe(28)
+  t.expect(result.testsRun).toBe(28)
+  t.expect(result.passed.length).toBe(14)
   t.expect(result.passed.map(toName).sort()).toMatchSnapshot()
   t.expect(result.failed.length).toBe(10)
   t.expect(result.failed.map(toName).sort()).toMatchSnapshot()
   t.expect(result.warnings.length).toBe(1)
   t.expect(result.warnings.map(toName).sort()).toMatchSnapshot()
-  t.expect(result.skipped.length).toBe(4)
+  t.expect(result.skipped.length).toBe(3)
   t.expect(result.skipped.map(toName).sort()).toMatchSnapshot()
 }}`
 

@@ -2,13 +2,11 @@
 
 exports[`bff 1`] = `
 Array [
-  "A test with a multiline name",
   "beforeEach",
   "done",
   "done.pass",
   "manual pass",
   "only",
-  "only with test specified after name",
   "parseInt after a 1 second timeout",
   "registration [ONE]",
   "registration [TWO]",
@@ -47,7 +45,6 @@ Array [
   "skip no assertions",
   "skip via only",
   "skip with no test function",
-  "skip with test specified after name",
 ]
 `;
 
