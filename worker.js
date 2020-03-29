@@ -1,6 +1,7 @@
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { Print, chalk } = require('@ianwalter/print')
+const buildTest = require('./lib/buildTest')
 
 let threadId = process.pid
 try {
@@ -35,6 +36,7 @@ worker({
     if (!context.testMap) {
       context.testMap = require(file.path)
     }
+    console.log(context.testMap)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
@@ -46,12 +48,43 @@ worker({
       throw new Error(`match value must be 'some' or 'every', not '${match}'`)
     }
     file.tests = Object.entries(context.testMap).reduce(
-      (acc, [name, test]) => !tags.length || (tags.length && tagsMatch(test))
-        ? acc.concat([{ key: name, name, ...test, fn: null }])
-        : acc,
+      (acc, [name, test]) => {
+        if (Array.isArray(test)) {
+          // TODO: move this right after testMap generated.
+          const key = name
+          if (typeof test[0] === 'string') {
+            name = test.shift()
+          }
+
+          const testFn = test.pop()
+          const tags = [testFn]
+          if (Array.isArray(test[0])) {
+            tags.unshift(tags)
+          }
+
+          const options = {
+            key,
+            skip: testFn.name === 'skip',
+            only: testFn.name === 'only',
+            warn: testFn.name === 'warn'
+          }
+
+          test = buildTest(name, options, tags)
+          console.log('test', test)
+        } else if (typeof test !== 'object') {
+          // TODO: add a debug statement describing how the test is ignored
+          // because it is not an Array or Object.
+          return print.debug('TODO')
+        }
+
+        // TODO: Move logic to context map build test logic.
+        const testShouldRun = !tags.length || (tags.length && tagsMatch(test))
+        return testShouldRun ? acc.concat([test]) : acc
+      },
       []
     )
 
+    // TODO: make this plugin hook and move above tag filtering
     // If an augmentTests method has been added to the context by a plugin, call
     // it with the list of tests so that the plugin can alter them if necessary.
     if (context.augmentTests) {

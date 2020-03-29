@@ -1,16 +1,17 @@
 const { test } = require('..')
 const { html } = require('common-tags')
 
-test(`
-  A
-  test
-  with
-  a
-  multiline
-  name
-`)(({ expect }) => {
-  expect('ok').toBeTruthy()
-})
+exports.test = [
+  `
+    A
+    test
+    with
+    a
+    multiline
+    name
+  `,
+  ({ expect }) => expect('ok').toBeTruthy()
+]
 
 test('strict equality', ({ expect }) => {
   const thing = 1
@@ -59,10 +60,8 @@ test('second snapshot pass', ({ expect }) => {
   expect(source.replace('World', 'Universe')).toMatchSnapshot()
 })
 
-test(
-  'tags second call',
-  'qa'
-)(({ expect }) => {
+exports.test2 = ['tags second call', ['qa']]
+exports.test2.push(({ expect }) => {
   expect(['one', 'two', 'three']).toContain('two')
 })
 
