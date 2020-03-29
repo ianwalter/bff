@@ -248,41 +248,56 @@ async function run (config) {
   return context
 }
 
-function handleTestArgs (name, tags, test = {}) {
+class Tag {
+  constructor (name) {
+    this.name = name
+  }
+}
+
+function tag (strings) {
+  return new Tag(oneLine(strings.join('')))
+}
+
+function toTest (test, value) {
+  if (Array.isArray(value)) {
+    return value.reduce(toTest, test)
+  } else if (value instanceof Tag) {
+    test.tags.push(value.name)
+  } else if (typeof value === 'object') {
+    return Object.assign(test, value)
+  } else if (typeof value === 'function') {
+    test.fn = value
+  }
+  return test
+}
+
+function test (strings, ...values) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
 
-  // Add the test line number to the object so it can be shown in verbose mode.
-  test.lineNumber = callsites()[2].getLineNumber()
+  const test = {
+    description: oneLine(strings.join('')),
+    tags: [],
 
-  const testFn = tags.pop()
-  Object.assign(test, { fn: testFn, tags })
-  module.parent.exports[oneLine(name)] = test
-  if (testFn && typeof testFn === 'function') {
-    return test
-  } else {
-    return fn => {
-      Object.assign(test, { fn, tags: testFn ? [...tags, testFn] : [] })
-      return test
-    }
+    // Add the test line number to the object so it can be shown in verbose
+    // mode.
+    lineNumber: callsites()[2].getLineNumber()
   }
+
+  module.parent.exports[test.description] = values.reduce(toTest, test)
 }
 
-function test (name, ...tags) {
-  return handleTestArgs(name, tags)
+test.skip = function skip (strings, ...values) {
+  test(strings, { skip: true }, ...values)
 }
 
-test.skip = function skip (name, ...tags) {
-  return handleTestArgs(name, tags, { skip: true })
+test.only = function only (strings, ...values) {
+  test(strings, { only: true }, ...values)
 }
 
-test.only = function only (name, ...tags) {
-  return handleTestArgs(name, tags, { only: true })
+test.warn = function warn (strings, ...values) {
+  test(strings, { warn: true }, ...values)
 }
 
-test.warn = function warn (name, ...tags) {
-  return handleTestArgs(name, tags, { warn: true })
-}
-
-module.exports = { run, test, FailFastError }
+module.exports = { run, test, tag, Tag, FailFastError }
