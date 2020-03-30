@@ -258,11 +258,24 @@ function tag (strings) {
   return new Tag(oneLine(strings.join('')))
 }
 
+class Benchmark {
+  constructor (name) {
+    this.name = name
+  }
+}
+
+function bench (strings) {
+  const name = oneLine(Array.isArray(strings) ? strings.join('') : strings)
+  return new Benchmark(name)
+}
+
 function toTest (test, value) {
   if (Array.isArray(value)) {
     return value.reduce(toTest, test)
   } else if (value instanceof Tag) {
     test.tags.push(value.name)
+  } else if (value instanceof Benchmark) {
+    test.benchmark = value
   } else if (typeof value === 'object') {
     return Object.assign(test, value)
   } else if (typeof value === 'function') {
@@ -271,7 +284,7 @@ function toTest (test, value) {
   return test
 }
 
-function test (strings, ...values) {
+function test (strings, ...rest) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
@@ -279,25 +292,27 @@ function test (strings, ...values) {
   const test = {
     description: oneLine(strings.join('')),
     tags: [],
-
-    // Add the test line number to the object so it can be shown in verbose
-    // mode.
-    lineNumber: callsites()[2].getLineNumber()
+    state: {},
+    callsites: rest[0] && typeof rest[0] === 'object' && rest[0].callsites
   }
 
-  module.parent.exports[test.description] = values.reduce(toTest, test)
+  // Add the test line number to the object so it can be shown in verbose
+  // mode.
+  test.lineNumber = (test.callsites || callsites())[1].getLineNumber()
+
+  module.parent.exports[test.description] = rest.reduce(toTest, test)
 }
 
-test.skip = function skip (strings, ...values) {
-  test(strings, { skip: true }, ...values)
+test.skip = function skip (strings, ...rest) {
+  test(strings, { skip: true, callsites: callsites() }, ...rest)
 }
 
-test.only = function only (strings, ...values) {
-  test(strings, { only: true }, ...values)
+test.only = function only (strings, ...rest) {
+  test(strings, { only: true, callsites: callsites() }, ...rest)
 }
 
-test.warn = function warn (strings, ...values) {
-  test(strings, { warn: true }, ...values)
+test.warn = function warn (strings, ...rest) {
+  test(strings, { warn: true, callsites: callsites() }, ...rest)
 }
 
-module.exports = { run, test, tag, Tag, FailFastError }
+module.exports = { run, test, tag, Tag, bench, Benchmark, FailFastError }
