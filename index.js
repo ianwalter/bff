@@ -157,8 +157,8 @@ async function run (config) {
 
           const skipViaOnly = hasOnly && !test.only
           if (skipViaOnly || test.skip) {
-            // Output the test name and increment the skip count to remind
-            // the user that some tests are being explicitly skipped.
+            // Output the test name and increment the skip count to remind the
+            // user that some tests are being explicitly skipped.
             const msg = `${context.testsRun + 1}. ${test.name}`
             print.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
             context.skipped.push({ ...test, file: relativePath })
@@ -176,8 +176,8 @@ async function run (config) {
               snapshotState.updated += result.updated
             }
 
-            // Output the test name and increment the pass count since the
-            // test didn't throw an error indicating a failure.
+            // Output the test name and increment the pass count since the test
+            // didn't throw an error indicating a failure.
             print.success(`${context.testsRun + 1}. ${test.name}`)
             context.passed.push({ ...test, file: relativePath })
           }
@@ -248,40 +248,35 @@ async function run (config) {
   return context
 }
 
+function extractStringFromStrings (strings) {
+  return oneLine(Array.isArray(strings) ? strings.join('') : strings)
+}
+
 class Tag {
-  constructor (name) {
-    this.name = name
+  constructor (strings) {
+    this.name = extractStringFromStrings(strings)
   }
 }
 
-function tag (strings) {
-  return new Tag(oneLine(strings.join('')))
-}
+const tag = strings => new Tag(strings)
 
-class Benchmark {
-  constructor (name) {
-    this.name = name
-  }
-}
+class Bench extends Tag {}
 
-function bench (strings) {
-  const name = oneLine(Array.isArray(strings) ? strings.join('') : strings)
-  return new Benchmark(name)
-}
+const bench = strings => new Bench(strings)
 
-function toTest (test, value) {
+function toUnit (unit, value) {
   if (Array.isArray(value)) {
-    return value.reduce(toTest, test)
+    return value.reduce(toUnit, unit)
+  } else if (value instanceof Bench) {
+    unit.bench = value.name || unit.name
   } else if (value instanceof Tag) {
-    test.tags.push(value.name)
-  } else if (value instanceof Benchmark) {
-    test.benchmark = value
+    unit.tags.push(value.name)
   } else if (typeof value === 'object') {
-    return Object.assign(test, value)
+    return Object.assign(unit, value)
   } else if (typeof value === 'function') {
-    test.fn = value
+    unit.fn = value
   }
-  return test
+  return unit
 }
 
 function test (strings, ...rest) {
@@ -289,18 +284,17 @@ function test (strings, ...rest) {
   // sindresorhus/meow.
   delete require.cache[__filename]
 
-  const test = {
-    description: oneLine(strings.join('')),
+  const unit = rest.reduce(toUnit, {
+    name: extractStringFromStrings(strings),
     tags: [],
-    state: {},
-    callsites: rest[0] && typeof rest[0] === 'object' && rest[0].callsites
-  }
+    state: {}
+  })
 
   // Add the test line number to the object so it can be shown in verbose
   // mode.
-  test.lineNumber = (test.callsites || callsites())[1].getLineNumber()
+  unit.lineNumber = (unit.callsites || callsites())[1].getLineNumber()
 
-  module.parent.exports[test.description] = rest.reduce(toTest, test)
+  module.parent.exports[unit.name] = unit
 }
 
 test.skip = function skip (strings, ...rest) {
@@ -315,4 +309,8 @@ test.warn = function warn (strings, ...rest) {
   test(strings, { warn: true, callsites: callsites() }, ...rest)
 }
 
-module.exports = { run, test, tag, Tag, bench, Benchmark, FailFastError }
+test.win = function win (strings, ...rest) {
+  test(strings, { win: true, callsites: callsites() }, ...rest)
+}
+
+module.exports = { run, test, tag, Tag, bench, Bench, FailFastError }
