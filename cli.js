@@ -3,7 +3,7 @@
 const { promises: fs } = require('fs')
 const path = require('path')
 const cli = require('@ianwalter/cli')
-const { print, chalk } = require('@ianwalter/print')
+const { print } = require('@ianwalter/print')
 const bff = require('.')
 
 // Set stdout to blocking so that the program doesn't exit with log statements
