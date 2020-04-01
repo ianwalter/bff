@@ -131,37 +131,11 @@ async function run () {
   for (let runs = 0; runs < config.runs; runs++) {
     const result = await bff.run(config)
 
-    // Add a blank line between the test output and result summary so it's
-    // easier to spot.
-    print.write('\n')
-
-    // If there was an error thrown outside of the test functions (e.g.
-    // requiring a module that wasn't found) then output a fatal error.
-    if (result.err) {
-      print.fatal(result.err)
-      if (result.err instanceof bff.FailFastError) {
-        print.write('\n')
-      } else {
-        process.exit(1)
-      }
-    }
-
-    // Log the results of running the tests.
-    print.info(
-      chalk.green.bold(`${result.passed.length} passed.`),
-      chalk.red.bold(`${result.failed.length} failed.`),
-      chalk.yellow.bold(`${result.warnings.length} warnings.`),
-      chalk.white.bold(`${result.skipped.length} skipped.`)
-    )
-
     // Aggregate test results accross runs.
     passed.push(...result.passed)
     failed.push(...result.failed)
     warnings.push(...result.warnings)
     skipped.push(...result.skipped)
-
-    // Add blank line after the result summary so it's easier to spot.
-    print.write('\n')
   }
 
   // If configured, generate a junit XML report file based on the test results.

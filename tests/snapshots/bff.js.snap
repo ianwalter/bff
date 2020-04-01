@@ -48,6 +48,20 @@ Array [
 ]
 `;
 
+exports[`bff 5`] = `
+Array [
+  "Float#toFixed",
+  "Math#round",
+  "RegExp#test",
+  "String#includes",
+  "String#indexOf",
+  "String#match",
+  "bench fail",
+  "print.log",
+  "util.inspect",
+]
+`;
+
 exports[`junit 1`] = `
 "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
 <testsuites>

@@ -4,7 +4,7 @@ const execa = require('execa')
 const { test, run, FailFastError } = require('..')
 
 const config = {
-  timeout: 5000,
+  timeout: 10000,
   plugins: ['tests/helpers/plugin.js'],
   logLevel: 'info',
   match: 'some'
@@ -14,7 +14,7 @@ const execaOpts = { reject: false }
 
 test`bff ${async t => {
   const result = await run(config)
-  t.expect(result.filesRegistered).toBe(5)
+  t.expect(result.filesRegistered).toBe(6)
   t.expect(result.testsRegistered).toBe(28)
   t.expect(result.testsRun).toBe(28)
   t.expect(result.passed.length).toBe(14)
@@ -25,6 +25,8 @@ test`bff ${async t => {
   t.expect(result.warnings.map(toName).sort()).toMatchSnapshot()
   t.expect(result.skipped.length).toBe(3)
   t.expect(result.skipped.map(toName).sort()).toMatchSnapshot()
+  t.expect(result.benchmarks.length).toBe(9)
+  t.expect(result.benchmarks.map(toName).sort()).toMatchSnapshot()
 }}`
 
 test`bff --fail-fast ${async t => {

@@ -23,6 +23,10 @@ class FailFastError extends Error {
 }
 FailFastError.message = 'Run failed immediately since failFast option is set'
 
+// A special instance for print used to just return the formatted string instead
+// of printing to the console.
+const fmt = new Print({ stream: false })
+
 /**
  * Collects test names from test files and assigns them to a worker in a
  * worker pool that runs the associated test.
@@ -44,6 +48,7 @@ async function run (config) {
     failed: [],
     warnings: [],
     skipped: [],
+    benchmarks: [],
     // Initialize a count for the total number of tests that have been run so
     // that the run can figure out when all tests have completed and the worker
     // pool can be terminated.
@@ -96,6 +101,59 @@ async function run (config) {
     await pSeries(context.plugins.map(toHookRun('before', context)))
   }
 
+  // Log the test callsite and test duration if in verbose mode.
+  function printVerbose (file, lineNumber, duration, pad = '') {
+    print.log(chalk.bold(`${pad}${file}:${lineNumber}`))
+    if (duration) {
+      print.log(chalk.dim(`${pad}in`, duration))
+    }
+  }
+
+  // Print the error separately, but inline with, the test failure.
+  function printError (err, pad = '') {
+    const lines = fmt.error(err).substring(4).split('\n')
+    print.log(lines.map(l => pad + l.trimStart()).join('\n').trimEnd())
+  }
+
+  // Handle test / benchmark results.
+  function handleResult (file, test, result) {
+    if (test.bench) {
+      // Collect any tests that are marked as benchmarks.
+      context.benchmarks.push({ ...test, ...result, file })
+    } else {
+      // Print the test result.
+      const msg = `${context.testsRun + 1}. ${test.name}`
+      if (result.status === 'skipped') {
+        print.log('🛌', msg, result.only ? chalk.dim('(via only)') : '')
+      } else if (result.status === 'passed') {
+        print.success(msg)
+      } else if (result.status === 'warnings') {
+        print.warn(msg)
+      } else if (result.status === 'failed') {
+        print.error(msg)
+      }
+
+      // Increment the test run count now that the test has completed.
+      context.testsRun++
+
+      // Collect tests based on their result status.
+      context[result.status].push({ ...test, file })
+
+      // Create a string of spaces to indent test output appropriately.
+      const pad = ''.padEnd((context.testsRun * 100).toString().length)
+
+      // Print the extra test information if in verbose mode.
+      if (context.verbose) {
+        printVerbose(file, test.lineNumber, result.duration, pad)
+      }
+
+      // Print the reason for the test failure.
+      if (result.err) {
+        printError(result.err, pad)
+      }
+    }
+  }
+
   try {
     // For each test file found, pass the filename to a registration pool
     // worker so that the tests within it can be collected and given to a
@@ -129,7 +187,14 @@ async function run (config) {
 
       // Add the number of tests returned by test registration to the running
       // total of all tests that need to be run.
-      context.testsRegistered += file.tests.length
+      context.testsRegistered += file.tests.filter(t => !t.bench).length
+
+      // If there are tests registered and not just benchmarks, print the tests
+      // title / separator.
+      if (context.testsRegistered) {
+        print.write('\n')
+        print.write(chalk.dim.bold('TESTS –––––––––––––––––––––––––––––––––\n'))
+      }
 
       // Determine if any of the tests in the test file have the .only
       // modifier so that tests can be excluded from being run.
@@ -147,7 +212,7 @@ async function run (config) {
           throw new Error('Stopping test run due to signal interruption')
         }
 
-        let result
+        let result = { only: hasOnly && !test.only }
         try {
           // Mark all tests as having been checked for snapshot changes so
           // that tests that have been removed can have their associated
@@ -155,13 +220,8 @@ async function run (config) {
           // test file.
           snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
-          const skipViaOnly = hasOnly && !test.only
-          if (skipViaOnly || test.skip) {
-            // Output the test name and increment the skip count to remind the
-            // user that some tests are being explicitly skipped.
-            const msg = `${context.testsRun + 1}. ${test.name}`
-            print.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
-            context.skipped.push({ ...test, file: relativePath })
+          if (test.skip || result.only) {
+            result.status = 'skipped'
           } else if (!failed || failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
             result = await runPool.exec('test', [file, test, context])
@@ -176,43 +236,19 @@ async function run (config) {
               snapshotState.updated += result.updated
             }
 
-            // Output the test name and increment the pass count since the test
-            // didn't throw an error indicating a failure.
-            print.success(`${context.testsRun + 1}. ${test.name}`)
-            context.passed.push({ ...test, file: relativePath })
+            result.status = 'passed'
           }
         } catch (err) {
-          const file = relativePath
           const workerpoolErrors = ['Worker terminated', 'Pool terminated']
           if (workerpoolErrors.includes(err.message)) {
             // Ignore 'Worker terminated' errors since there is already output
             // when a run is cancelled.
             return
-          } if (test.warn) {
-            print.warn(`${context.testsRun + 1}. ${test.name}:`, err)
-            return context.warnings.push({ ...test, err: err.message, file })
-          } else if (err.name === 'TimeoutError') {
-            const msg = `${context.testsRun + 1}. ${test.name}: timeout`
-            print.error(msg, chalk.dim(file))
-          } else {
-            print.error(`${context.testsRun + 1}. ${test.name}:`, err)
           }
 
-          // Increment the failure count since the test threw an error
-          // indicating a test failure.
-          context.failed.push({ ...test, err: err.message, file })
+          merge(result, { status: test.warn ? 'warnings' : 'failed', err })
         } finally {
-          // Increment the test run count now that the test has completed.
-          context.testsRun++
-
-          // Log the relative file path and test duration if in verbose mode.
-          if (context.verbose) {
-            const pad = ''.padEnd((context.testsRun * 100).toString().length)
-            print.log('', `${pad}${file.relativePath}:${test.lineNumber}`)
-            if (result && result.duration) {
-              print.log('', chalk.dim(`${pad}in`, result.duration))
-            }
-          }
+          handleResult(relativePath, test, result)
         }
 
         // If the failFast option is set, throw an error so that the test run is
@@ -244,6 +280,117 @@ async function run (config) {
 
   // Terminate the run pool now that all tests have been run.
   runPool.terminate().then(() => print.debug('Run pool terminated'))
+
+  // Add a blank line between the test output and result summary so it's
+  // easier to spot.
+  print.write('\n')
+
+  // If there was an error thrown outside of the test functions (e.g.
+  // requiring a module that wasn't found) then output a fatal error.
+  if (context.err) {
+    print.fatal(context.err)
+    if (context.err instanceof FailFastError) {
+      print.write('\n')
+    } else {
+      process.exit(1)
+    }
+  }
+
+  // Log the results of running the tests.
+  if (context.testsRun) {
+    print.info(
+      chalk.green.bold(`${context.passed.length} passed.`),
+      chalk.red.bold(`${context.failed.length} failed.`),
+      chalk.yellow.bold(`${context.warnings.length} warnings.`),
+      chalk.white.bold(`${context.skipped.length} skipped.`)
+    )
+
+    // Add blank line after the result summary so it's easier to spot.
+    print.write('\n')
+  }
+
+  if (context.benchmarks.length) {
+    // If there were non-benchmark tests run, print a separator before printing
+    // the benchmark results.
+    if (context.testsRun) {
+      print.write(chalk.dim.bold('BENCHMARKS ––––––––––––––––––––––––––––––\n'))
+    }
+
+    // Reduce the individual benchmarks into groups of related benchmarks.
+    const benchmarks = context.benchmarks.reduce(
+      ({ suites, pad, ...acc }, b) => {
+        // If an error was thrown during the benchmark, print it.
+        if (b.err) {
+          print.error(b.name)
+          if (context.verbose) {
+            printVerbose(b.file, b.lineNumber)
+          }
+          printError(b.err)
+          return { suites, pad, ...acc }
+        }
+
+        // Create a suite so that benchmarks with multiple results can be
+        // compared.
+        const suite = suites[b.bench] || { name: b.bench, results: [], pad: 0 }
+
+        // Format the performance in terms of operations per second.
+        // FIXME: get locale from environment variable?
+        b.perf = b.hz.toLocaleString('en-US') + ' ops/s'
+
+        // Create a pad between the suite / result names and their values.
+        pad = b.name.length > pad ? b.name.length : pad
+
+        // Create a pad so that performance values are "right-aligned".
+        suite.pad = b.perf.length > suite.pad ? b.perf.length : suite.pad
+
+        // Add the result to the suite.
+        suite.results.push(b)
+
+        // Sort the results by highest performance.
+        suite.results.sort((a, b) => b.hz - a.hz)
+
+        return { suites: { ...suites, [b.bench]: suite }, pad }
+      },
+      { suites: {}, pad: 0 }
+    )
+
+    for (const suite of Object.values(benchmarks.suites)) {
+      // Determine if the benchmark has multiple results so that they can be
+      // displayed in a way that makes it easier to compare them.
+      const hasMultipleResults = suite.results.length > 1
+
+      // Format the name of the result based on the pad created from all result
+      // names.
+      let resultName = suite.name.padEnd(benchmarks.pad + 1)
+
+      if (hasMultipleResults) {
+        print.log('⏱️', chalk.bold(suite.name + ':'))
+        for (const [index, result] of suite.results.entries()) {
+          resultName = result.name.padEnd(benchmarks.pad + 1)
+
+          // Determine the result percentage as compared to the fastest result.
+          const pct = (result.hz / suite.results[0].hz * 100).toFixed() + '%'
+
+          // Print the result based on it's relative performance.
+          const resultVal = `${result.perf.padStart(suite.pad)} ${pct}`
+          if (index === 0) {
+            print.log(chalk.green(resultName), chalk.green(resultVal))
+          } else if (index + 1 === suite.results.length) {
+            print.log(chalk.red(resultName), chalk.red(resultVal))
+          } else {
+            print.log(chalk.yellow(resultName), chalk.yellow(resultVal))
+          }
+        }
+      } else {
+        // If there is only one result for the suite, just print it with it's
+        // number of operations per second.
+        print.log('⏱️', chalk.bold(resultName), suite.results[0].perf)
+      }
+    }
+
+    // Add blank line after the result summary so it's easier to spot.
+    print.write('\n')
+  }
 
   return context
 }
@@ -307,10 +454,6 @@ test.only = function only (strings, ...rest) {
 
 test.warn = function warn (strings, ...rest) {
   test(strings, { warn: true, callsites: callsites() }, ...rest)
-}
-
-test.win = function win (strings, ...rest) {
-  test(strings, { win: true, callsites: callsites() }, ...rest)
 }
 
 module.exports = { run, test, tag, Tag, bench, Bench, FailFastError }
