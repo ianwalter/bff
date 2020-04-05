@@ -62,7 +62,7 @@ async function run (config) {
   merge(context, restOfConfig)
 
   // Create the print instance with the given log level.
-  const print = new Print({ level: context.logLevel })
+  const print = new Print(context.log)
 
   // Add the absolute paths of the test files to the run context.
   context.files = shuffle(await globby(context.tests, { absolute: true }))

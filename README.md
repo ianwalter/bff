@@ -57,9 +57,8 @@ with their **default** values:
       'tests/**/*tests.js',
       'tests/**/*pptr.js'
     ],
-    // Specifies bff's logging level.
-    // Possible values include: 'debug', 'info', 'warn', 'error', 'fatal'
-    logLevel: 'info',
+    // Specifies bff's logging (@ianwalter/print) configuration.
+    log: { level: 'info' },
     // Specifies whether to exit when a test fails instead of continuing to run
     // tests.
     // Value should be a boolean.

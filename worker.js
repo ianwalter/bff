@@ -14,7 +14,7 @@ worker({
   async register (file, context) {
     // Create the Print instance based on the log level set in the context
     // received from the main thread.
-    const print = new Print({ level: context.logLevel })
+    const print = new Print(context.log)
 
     // Print a debug statement for this registration action with the relative
     // path of the test file that's having it's tests registered.
@@ -69,7 +69,7 @@ worker({
 
     // Create the Print instance based on the log level set in the context
     // received from the main thread.
-    const print = new Print({ level: context.logLevel })
+    const print = new Print(context.log)
 
     // Print a debug statement for this test action with the test name and
     // relative path of the test file it belongs to.

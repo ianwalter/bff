@@ -27,11 +27,10 @@ async function run () {
         description: 'Specifies whether snapshots should be created or updated',
         default: false
       },
-      logLevel: {
+      log: {
         alias: 'l',
-        arg: '<level>',
         description: "Specifies bff's logging level",
-        default: 'info'
+        default: { level: 'info' }
       },
       tag: {
         alias: 't',
