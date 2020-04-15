@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: node:13.7
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v2
