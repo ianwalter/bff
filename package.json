@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff",
   "description": "Your friendly test runner/framework",
-  "version": "9.8.0",
+  "version": "9.8.2",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "@ianwalter/clone": "^6.0.1",
     "@ianwalter/cloneable": "^2.0.0",
     "@ianwalter/print": "^6.0.0",
-    "@ianwalter/subpub": "^2.0.0",
+    "@ianwalter/subpub": "^3.0.0",
     "@ianwalter/timer": "^1.1.0",
     "array-shuffle": "^1.0.1",
     "benchmark": "^2.1.4",
@@ -64,7 +64,7 @@
     "@ianwalter/release": "^5.0.0",
     "@ianwalter/renovate-config": "^1.3.0",
     "execa": "^4.0.0",
-    "vuepress": "^1.4.0"
+    "vuepress": "^1.4.1"
   },
   "eslintConfig": {
     "root": true,
