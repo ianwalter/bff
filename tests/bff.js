@@ -17,14 +17,14 @@ test`bff ${async t => {
   t.expect(result.filesRegistered).toBe(6)
   t.expect(result.testsRegistered).toBe(28)
   t.expect(result.testsRun).toBe(28)
-  t.expect(result.passed.length).toBe(14)
-  t.expect(result.passed.map(toName).sort()).toMatchSnapshot()
-  t.expect(result.failed.length).toBe(10)
-  t.expect(result.failed.map(toName).sort()).toMatchSnapshot()
-  t.expect(result.warnings.length).toBe(1)
-  t.expect(result.warnings.map(toName).sort()).toMatchSnapshot()
-  t.expect(result.skipped.length).toBe(3)
-  t.expect(result.skipped.map(toName).sort()).toMatchSnapshot()
+  t.expect(result.pass.length).toBe(14)
+  t.expect(result.pass.map(toName).sort()).toMatchSnapshot()
+  t.expect(result.fail.length).toBe(10)
+  t.expect(result.fail.map(toName).sort()).toMatchSnapshot()
+  t.expect(result.warn.length).toBe(1)
+  t.expect(result.warn.map(toName).sort()).toMatchSnapshot()
+  t.expect(result.skip.length).toBe(3)
+  t.expect(result.skip.map(toName).sort()).toMatchSnapshot()
   t.expect(result.benchmarks.length).toBe(9)
   t.expect(result.benchmarks.map(toName).sort()).toMatchSnapshot()
 }}`
@@ -38,16 +38,16 @@ test`bff --tag qa ${async t => {
   const result = await run({ ...config, tag: 'qa' })
   t.expect(result.testsRegistered).toBe(2)
   t.expect(result.testsRun).toBe(2)
-  t.expect(result.passed.length).toBe(1)
-  t.expect(result.failed.length).toBe(1)
+  t.expect(result.pass.length).toBe(1)
+  t.expect(result.fail.length).toBe(1)
 }}`
 
 test`bff --tag dev --tag qa --match every ${async t => {
   const result = await run({ ...config, tag: ['dev', 'qa'], match: 'every' })
   t.expect(result.testsRegistered).toBe(1)
   t.expect(result.testsRun).toBe(1)
-  t.expect(result.passed.length).toBe(0)
-  t.expect(result.failed.length).toBe(1)
+  t.expect(result.pass.length).toBe(0)
+  t.expect(result.fail.length).toBe(1)
 }}`
 
 test`uncaught exception in test file ${async t => {
@@ -56,7 +56,7 @@ test`uncaught exception in test file ${async t => {
 }}`
 
 test`junit ${async t => {
-  await execa('./cli.js', ['--timeout', config.timeout, '--junit'], execaOpts)
+  await run({ ...config, junit: true })
   const junit = await fs.readFile(path.resolve('junit.xml'), 'utf8')
   // TODO: Fix toMatchSnapshotLines() to properly unescape string.
   // expect(junit).toMatchSnapshotLines()

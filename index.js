@@ -1,4 +1,5 @@
 const path = require('path')
+const { promises: fs } = require('fs')
 const workerpool = require('workerpool')
 const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
@@ -43,11 +44,11 @@ async function run (config) {
     // Initialize a count for the total number of tests registered from all of
     // the test files.
     testsRegistered: 0,
-    // Initialize collections for tests that passed, failed, or were skipped.
-    passed: [],
-    failed: [],
-    warnings: [],
-    skipped: [],
+    // Initialize collections for tests based on their result status.
+    pass: [],
+    fail: [],
+    warn: [],
+    skip: [],
     benchmarks: [],
     // Initialize a count for the total number of tests that have been run so
     // that the run can figure out when all tests have completed and the worker
@@ -63,6 +64,19 @@ async function run (config) {
 
   // Create the print instance with the given log level.
   const print = new Print(context.log)
+
+  // Only run tests marked as failed in a JUnit file.
+  if (failed) {
+    const camaro = require('camaro')
+    const file = typeof failed === 'string' ? failed : 'junit.xml'
+    const xml = await fs.readFile(path.resolve(file), 'utf8')
+    const template = { tests: ['//testcase[failure]', '@name'] }
+    const { tests } = await camaro.transform(xml, template)
+    print.write('\n')
+    print.info(`Running failed tests in ${file}:`, '\n', tests.join('\n'))
+    print.write('\n')
+    context.failed = tests
+  }
 
   // Add the absolute paths of the test files to the run context.
   context.files = shuffle(await globby(context.tests, { absolute: true }))
@@ -123,13 +137,13 @@ async function run (config) {
     } else {
       // Print the test result.
       const msg = `${context.testsRun + 1}. ${test.name}`
-      if (result.status === 'skipped') {
+      if (result.status === 'skip') {
         print.log('🛌', msg, result.only ? chalk.dim('(via only)') : '')
-      } else if (result.status === 'passed') {
+      } else if (result.status === 'pass') {
         print.success(msg)
-      } else if (result.status === 'warnings') {
+      } else if (result.status === 'warn') {
         print.warn(msg)
-      } else if (result.status === 'failed') {
+      } else if (result.status === 'fail') {
         print.error(msg)
       }
 
@@ -154,6 +168,7 @@ async function run (config) {
     }
   }
 
+  let testsRegistered = false
   try {
     // For each test file found, pass the filename to a registration pool
     // worker so that the tests within it can be collected and given to a
@@ -191,7 +206,8 @@ async function run (config) {
 
       // If there are tests registered and not just benchmarks, print the tests
       // title / separator.
-      if (context.testsRegistered) {
+      if (!testsRegistered && context.testsRegistered) {
+        testsRegistered = true
         print.write('\n')
         print.write(chalk.dim.bold('TESTS –––––––––––––––––––––––––––––––––\n'))
       }
@@ -212,7 +228,7 @@ async function run (config) {
           throw new Error('Stopping test run due to signal interruption')
         }
 
-        let result = { only: hasOnly && !test.only }
+        let result = { only: hasOnly && !test.only, status: 'fail' }
         try {
           // Mark all tests as having been checked for snapshot changes so
           // that tests that have been removed can have their associated
@@ -221,8 +237,8 @@ async function run (config) {
           snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
           if (test.skip || result.only) {
-            result.status = 'skipped'
-          } else if (!failed || failed.includes(test.name)) {
+            result.status = 'skip'
+          } else if (!context.failed || context.failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
             result = await runPool.exec('test', [file, test, context])
 
@@ -236,7 +252,7 @@ async function run (config) {
               snapshotState.updated += result.updated
             }
 
-            result.status = 'passed'
+            result.status = 'pass'
           }
         } catch (err) {
           const workerpoolErrors = ['Worker terminated', 'Pool terminated']
@@ -246,14 +262,14 @@ async function run (config) {
             return
           }
 
-          merge(result, { status: test.warn ? 'warnings' : 'failed', err })
+          merge(result, { status: test.warn ? 'warn' : 'fail', err })
         } finally {
           handleResult(relativePath, test, result)
         }
 
         // If the failFast option is set, throw an error so that the test run is
         // immediately failed.
-        const [err] = context.failed
+        const [err] = context.fail
         if (err && context.failFast) {
           throw new FailFastError()
         }
@@ -299,10 +315,10 @@ async function run (config) {
   // Log the results of running the tests.
   if (context.testsRun) {
     print.info(
-      chalk.green.bold(`${context.passed.length} passed.`),
-      chalk.red.bold(`${context.failed.length} failed.`),
-      chalk.yellow.bold(`${context.warnings.length} warnings.`),
-      chalk.white.bold(`${context.skipped.length} skipped.`)
+      chalk.green.bold(`${context.pass.length} passed.`),
+      chalk.red.bold(`${context.fail.length} failed.`),
+      chalk.yellow.bold(`${context.warn.length} warned.`),
+      chalk.white.bold(`${context.skip.length} skipped.`)
     )
 
     // Add blank line after the result summary so it's easier to spot.
@@ -390,6 +406,43 @@ async function run (config) {
 
     // Add blank line after the result summary so it's easier to spot.
     print.write('\n')
+  }
+
+  // If configured, generate a junit XML report file based on the test results.
+  if (config.junit) {
+    const junitBuilder = require('junit-report-builder')
+
+    // Determine the junit report file path.
+    const junit = typeof config.junit === 'string' ? config.junit : 'junit.xml'
+
+    // Group tests by test file so that the test file relative path can be used
+    // as the suite name.
+    const { pass, fail, warn, skip } = context
+    const files = [...pass, ...fail, ...warn, ...skip].reduce((acc, test) => {
+      if (acc[test.file]) {
+        acc[test.file].push(test)
+      } else {
+        acc[test.file] = [test]
+      }
+      return acc
+    }, {})
+
+    // Create a test for each test file and add the containing tests to the
+    // suite as test cases.
+    for (const [file, tests] of Object.entries(files)) {
+      const suite = junitBuilder.testSuite().name(file)
+      for (const test of tests) {
+        const testCase = suite.testCase().name(test.name)
+        if (test.skip || (test.err && test.warn)) {
+          testCase.skipped()
+        } else if (test.err) {
+          testCase.failure(test.err)
+        }
+      }
+    }
+
+    // Write the junit report file to the filesystem.
+    junitBuilder.writeTo(junit)
   }
 
   return context
