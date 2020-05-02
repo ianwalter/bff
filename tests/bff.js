@@ -56,7 +56,7 @@ test`uncaught exception in test file ${async t => {
 }}`
 
 test`junit ${async t => {
-  await run({ ...config, junit: true })
+  await execa('./cli.js', ['--timeout', config.timeout, '--junit'], execaOpts)
   const junit = await fs.readFile(path.resolve('junit.xml'), 'utf8')
   // TODO: Fix toMatchSnapshotLines() to properly unescape string.
   // expect(junit).toMatchSnapshotLines()
