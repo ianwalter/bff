@@ -168,7 +168,7 @@ async function run (config) {
     }
   }
 
-  let testsRegistered = false
+  let hasTestRegistered = false
   try {
     // For each test file found, pass the filename to a registration pool
     // worker so that the tests within it can be collected and given to a
@@ -206,8 +206,8 @@ async function run (config) {
 
       // If there are tests registered and not just benchmarks, print the tests
       // title / separator.
-      if (!testsRegistered && context.testsRegistered) {
-        testsRegistered = true
+      if (!hasTestRegistered && context.testsRegistered) {
+        hasTestRegistered = true
         print.write('\n')
         print.write(chalk.dim.bold('TESTS –––––––––––––––––––––––––––––––––\n'))
       }
