@@ -118,7 +118,7 @@ worker({
       // If there was a timer started for the test, stop the timer, get the
       // timer's duration, and add it to the test result.
       if (context.timer) {
-        const { duration } = context.timer.stop(2)
+        const duration = context.timer.duration()
         print.debug('Test duration', duration)
         context.testContext.result.duration = duration
       }
