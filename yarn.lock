@@ -1040,10 +1040,10 @@
   dependencies:
     patrun "^3.0.0"
 
-"@ianwalter/timer@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/timer/-/timer-1.1.0.tgz#3f900563048549490585ed4186d0fd7769a62251"
-  integrity sha512-oro+xaXK/XXy+sNn5tXgQgXoN2w2Me6F6cxp35hlfwMHht5oycZWGGGzcAVjch+J9e9YmhtIsgxNaYJbwr6kMA==
+"@ianwalter/timer@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@ianwalter/timer/-/timer-2.0.2.tgz#157e4228f411a0bc2756a59ee1c71ed6b20120fb"
+  integrity sha512-mBO22Powof68cFoVhet4/F1+Rp85zaU+U8r38w416daACZkEOFg8Kn/9I4O48WyC6BUy29rXJB1i+1nAGF8wgg==
 
 "@ianwalter/update-package@^0.0.2":
   version "0.0.2"
