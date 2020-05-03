@@ -115,55 +115,80 @@ async function run (config) {
     await pSeries(context.plugins.map(toHookRun('before', context)))
   }
 
-  // Log the test callsite and test duration if in verbose mode.
-  function printVerbose (file, lineNumber, duration, pad = '') {
-    print.log(chalk.bold(`${pad}${file}:${lineNumber}`))
-    if (duration) {
-      print.log(chalk.dim(`${pad}in`, duration))
+  function printResult (test, benchmarks) {
+    let testName = test.name
+
+    // Determine if the benchmark has multiple results so that they can be
+    // displayed in a way that makes it easier to compare them.
+    const hasMultipleResults = test.results && test.results.length > 1
+
+    // TODO: comment.
+    let perf = ''
+    if (test.results && !hasMultipleResults) {
+      testName = testName.padEnd(benchmarks.pad.name + 2)
+      perf = test.results[0].perf.padStart(benchmarks.pad.perf)
     }
-  }
 
-  // Print the error separately, but inline with, the test failure.
-  function printError (err, pad = '') {
-    const lines = fmt.error(err).substring(4).split('\n')
-    print.log(lines.map(l => pad + l.trimStart()).join('\n').trimEnd())
-  }
+    // TODO: comment.
+    print.write('\n')
 
-  // Handle test / benchmark results.
-  function handleResult (file, test, result) {
-    if (test.bench) {
-      // Collect any tests that are marked as benchmarks.
-      context.benchmarks.push({ ...test, ...result, file })
-    } else {
-      // Print the test result.
-      const msg = `${context.testsRun + 1}. ${test.name}`
-      if (result.status === 'skip') {
-        print.log('🛌', msg, result.only ? chalk.dim('(via only)') : '')
-      } else if (result.status === 'pass') {
-        print.success(msg)
-      } else if (result.status === 'warn') {
-        print.warn(msg)
-      } else if (result.status === 'fail') {
-        print.error(msg)
+    // TODO: comment.
+    const msg = `${context.testsRun + 1}. ${testName}`
+    if (test.results) {
+      print.log('⏱️', chalk.white.bold(msg), perf)
+    } else if (test.result.status === 'skip') {
+      print.log('🛌', msg, test.result.only ? chalk.dim('(via only)') : '')
+    } else if (test.result.status === 'pass') {
+      print.success(msg)
+    } else if (test.result.status === 'warn') {
+      print.warn(msg)
+    } else if (test.result.status === 'fail') {
+      print.error(msg)
+    }
+
+    // Increment the test run count now that the test has completed.
+    context.testsRun++
+
+    // Collect tests based on their result status.
+    if (test.result) context[test.result.status].push(test)
+
+    // Create a string of spaces to indent test output appropriately.
+    const pad = ''.padEnd((context.testsRun * 100).toString().length)
+
+    // Print the extra test information if in verbose mode.
+    if (context.verbose) {
+      // Log the test callsite and test duration if in verbose mode.
+      const m = chalk.bold(`${pad}${test.file.relativePath}:${test.lineNumber}`)
+      print.log(m)
+      if (test.result && test.result.duration) {
+        print.log(chalk.dim(`${pad}in`, test.result.duration))
       }
+    }
 
-      // Increment the test run count now that the test has completed.
-      context.testsRun++
+    // Print the reason for the test failure.
+    if (test.result && test.result.err) {
+      // Print the error separately, but inline with, the test failure.
+      const lines = fmt.error(test.result.err).substring(4).split('\n')
+      print.log(lines.map(l => pad + l.trimStart()).join('\n').trimEnd())
+    } else if (hasMultipleResults) {
+      for (const [index, b] of test.results.entries()) {
+        // Format the name of the result based on the pad created from all
+        // result names.
+        const resultName = pad + b.name.padEnd(benchmarks.pad.name + 2)
 
-      // Collect tests based on their result status.
-      context[result.status].push({ ...test, file })
+        // Determine the result percentage as compared to the fastest result.
+        const { hz } = test.results[0].result
+        const pct = (b.result.hz / hz * 100).toFixed() + '%'
 
-      // Create a string of spaces to indent test output appropriately.
-      const pad = ''.padEnd((context.testsRun * 100).toString().length)
-
-      // Print the extra test information if in verbose mode.
-      if (context.verbose) {
-        printVerbose(file, test.lineNumber, result.duration, pad)
-      }
-
-      // Print the reason for the test failure.
-      if (result.err) {
-        printError(result.err, pad)
+        // Print the result based on it's relative performance.
+        const resultVal = `${b.perf.padStart(benchmarks.pad.perf)} ${pct}`
+        if (index === 0) {
+          print.log(chalk.green(resultName), chalk.green(resultVal))
+        } else if (index + 1 === test.results.length) {
+          print.log(chalk.red(resultName), chalk.red(resultVal))
+        } else {
+          print.log(chalk.yellow(resultName), chalk.yellow(resultVal))
+        }
       }
     }
   }
@@ -209,7 +234,7 @@ async function run (config) {
       if (!hasTestRegistered && context.testsRegistered) {
         hasTestRegistered = true
         print.write('\n')
-        print.write(chalk.dim.bold('TESTS –––––––––––––––––––––––––––––––––\n'))
+        print.write(chalk.dim.bold('TESTS –––––––––––––––––––––––––––––––––––'))
       }
 
       // Determine if any of the tests in the test file have the .only
@@ -228,7 +253,7 @@ async function run (config) {
           throw new Error('Stopping test run due to signal interruption')
         }
 
-        let result = { only: hasOnly && !test.only, status: 'fail' }
+        test.result = { only: hasOnly && !test.only, status: 'fail' }
         try {
           // Mark all tests as having been checked for snapshot changes so
           // that tests that have been removed can have their associated
@@ -236,23 +261,23 @@ async function run (config) {
           // test file.
           snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
-          if (test.skip || result.only) {
-            result.status = 'skip'
+          if (test.skip || test.result.only) {
+            test.result.status = 'skip'
           } else if (!context.failed || context.failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
-            result = await runPool.exec('test', [file, test, context])
+            test.result = await runPool.exec('test', [file, test, context])
 
             // Update the snapshot state with the snapshot data received from
             // the worker.
-            if (result && (result.added || result.updated)) {
+            if (test.result && (test.result.added || test.result.updated)) {
               snapshotState._dirty = true
-              snapshotState._counters = new Map(result.counters)
-              Object.assign(snapshotState._snapshotData, result.snapshots)
-              snapshotState.added += result.added
-              snapshotState.updated += result.updated
+              snapshotState._counters = new Map(test.result.counters)
+              Object.assign(snapshotState._snapshotData, test.result.snapshots)
+              snapshotState.added += test.result.added
+              snapshotState.updated += test.result.updated
             }
 
-            result.status = 'pass'
+            test.result.status = 'pass'
           }
         } catch (err) {
           const workerpoolErrors = ['Worker terminated', 'Pool terminated']
@@ -262,9 +287,14 @@ async function run (config) {
             return
           }
 
-          merge(result, { status: test.warn ? 'warn' : 'fail', err })
+          merge(test.result, { status: test.warn ? 'warn' : 'fail', err })
         } finally {
-          handleResult(relativePath, test, result)
+          if (test.bench) {
+            // Collect any tests that are marked as benchmarks.
+            context.benchmarks.push({ ...test, file })
+          } else {
+            printResult({ ...test, file })
+          }
         }
 
         // If the failFast option is set, throw an error so that the test run is
@@ -328,81 +358,48 @@ async function run (config) {
   if (context.benchmarks.length) {
     // If there were non-benchmark tests run, print a separator before printing
     // the benchmark results.
-    if (context.testsRun) {
-      print.write(chalk.dim.bold('BENCHMARKS ––––––––––––––––––––––––––––––\n'))
+    if (hasTestRegistered) {
+      print.write('\n')
+      print.write(chalk.dim.bold('BENCHMARKS ––––––––––––––––––––––––––––––––'))
     }
 
     // Reduce the individual benchmarks into groups of related benchmarks.
     const benchmarks = context.benchmarks.reduce(
       ({ suites, pad, ...acc }, b) => {
         // If an error was thrown during the benchmark, print it.
-        if (b.err) {
-          print.error(b.name)
-          if (context.verbose) {
-            printVerbose(b.file, b.lineNumber)
-          }
-          printError(b.err)
+        if (b.err || b.result.status === 'skip') {
+          printResult(b)
           return { suites, pad, ...acc }
         }
 
         // Create a suite so that benchmarks with multiple results can be
         // compared.
-        const suite = suites[b.bench] || { name: b.bench, results: [], pad: 0 }
+        const { bench: name, file, lineNumber, result, results = [] } = b
+        const suite = suites[name] || { name, results, pad, file, lineNumber }
 
         // Format the performance in terms of operations per second.
         // FIXME: get locale from environment variable?
-        b.perf = b.hz.toLocaleString('en-US') + ' ops/s'
+        b.perf = result.hz.toLocaleString('en-US') + ' ops/s'
 
         // Create a pad between the suite / result names and their values.
-        pad = b.name.length > pad ? b.name.length : pad
+        pad.name = b.name.length > pad.name ? b.name.length : pad.name
 
         // Create a pad so that performance values are "right-aligned".
-        suite.pad = b.perf.length > suite.pad ? b.perf.length : suite.pad
+        pad.perf = b.perf.length > pad.perf ? b.perf.length : pad.perf
 
         // Add the result to the suite.
         suite.results.push(b)
 
         // Sort the results by highest performance.
-        suite.results.sort((a, b) => b.hz - a.hz)
+        suite.results.sort((a, b) => b.result.hz - a.result.hz)
 
         return { suites: { ...suites, [b.bench]: suite }, pad }
       },
-      { suites: {}, pad: 0 }
+      { suites: {}, pad: { name: 0, perf: 0 } }
     )
 
-    for (const suite of Object.values(benchmarks.suites)) {
-      // Determine if the benchmark has multiple results so that they can be
-      // displayed in a way that makes it easier to compare them.
-      const hasMultipleResults = suite.results.length > 1
-
-      // Format the name of the result based on the pad created from all result
-      // names.
-      let resultName = suite.name.padEnd(benchmarks.pad + 1)
-
-      if (hasMultipleResults) {
-        print.log('⏱️', chalk.bold(suite.name + ':'))
-        for (const [index, result] of suite.results.entries()) {
-          resultName = result.name.padEnd(benchmarks.pad + 1)
-
-          // Determine the result percentage as compared to the fastest result.
-          const pct = (result.hz / suite.results[0].hz * 100).toFixed() + '%'
-
-          // Print the result based on it's relative performance.
-          const resultVal = `${result.perf.padStart(suite.pad)} ${pct}`
-          if (index === 0) {
-            print.log(chalk.green(resultName), chalk.green(resultVal))
-          } else if (index + 1 === suite.results.length) {
-            print.log(chalk.red(resultName), chalk.red(resultVal))
-          } else {
-            print.log(chalk.yellow(resultName), chalk.yellow(resultVal))
-          }
-        }
-      } else {
-        // If there is only one result for the suite, just print it with it's
-        // number of operations per second.
-        print.log('⏱️', chalk.bold(resultName), suite.results[0].perf)
-      }
-    }
+    // TODO: comment
+    Object.values(benchmarks.suites).forEach(s => printResult(s, benchmarks))
 
     // Add blank line after the result summary so it's easier to spot.
     print.write('\n')

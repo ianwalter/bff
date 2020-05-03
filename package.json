@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "./cli.js",
-    "test:ci": "./cli.js tests/bff.js",
+    "test:ci": "./cli.js tests/bff.js -V",
     "test:out": "./cli.js tests/stdout.js | wc -c",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"

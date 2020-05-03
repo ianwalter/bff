@@ -30,7 +30,7 @@ test`snapshot fail ${t => {
   t.expect(markup).toMatchSnapshot()
 }}`
 
-test`timeout ${() => new Promise(() => {})}`
+test.only`timeout ${() => new Promise(() => {})}`
 
 test`tags ${tag`dev`} ${tag`qa`} ${t => t.expect([1, 2]).toContain(3)}`
 
