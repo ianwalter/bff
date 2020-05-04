@@ -83,9 +83,7 @@ async function run (config) {
   print.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
-  if (context.files.length === 0) {
-    throw new Error('No test files found.')
-  }
+  if (context.files.length === 0) throw new Error('No test files found.')
 
   // Set the worker pool options. For now, it only sets the maximum amount of
   // workers used if the concurrency setting is set.
@@ -103,7 +101,7 @@ async function run (config) {
   const runPool = workerpool.pool(workerPath, poolOptions)
 
   // Terminate the worker pools when a user presses CTRL+C.
-  process.on('SIGINT', async () => {
+  process.on('SIGINT', function handleSignalInterruption () {
     context.err = new Error('RUN CANCELLED!')
     registrationPool.terminate(true)
     runPool.terminate(true)
@@ -148,9 +146,6 @@ async function run (config) {
 
     // Increment the test run count now that the test has completed.
     context.testsRun++
-
-    // Collect tests based on their result status.
-    if (test.result) context[test.result.status].push(test)
 
     // Create a string of spaces to indent test output appropriately.
     const pad = ''.padEnd((context.testsRun * 100).toString().length)
@@ -242,18 +237,14 @@ async function run (config) {
       const hasOnly = Object.values(file.tests).some(test => test.only)
 
       // Get the snapshot state for the current test file.
-      const snapshotState = new SnapshotState(
-        file.snapshotPath,
-        { updateSnapshot: context.testContext.updateSnapshot }
-      )
+      const options = { updateSnapshot: context.testContext.updateSnapshot }
+      const snapshotState = new SnapshotState(file.snapshotPath, options)
 
       // Iterate through all tests in the test file.
       await Promise.all(shuffle(file.tests).map(async test => {
-        if (context.hasSignalInterruption) {
-          throw new Error('Stopping test run due to signal interruption')
-        }
-
+        // TODO: comment
         test.result = { only: hasOnly && !test.only, status: 'fail' }
+
         try {
           // Mark all tests as having been checked for snapshot changes so
           // that tests that have been removed can have their associated
@@ -262,10 +253,14 @@ async function run (config) {
           snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
           if (test.skip || test.result.only) {
+            // TODO: comment
             test.result.status = 'skip'
           } else if (!context.failed || context.failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
-            test.result = await runPool.exec('test', [file, test, context])
+            test.result = await runPool
+              .exec('test', [file, test, context])
+              // TODO:
+              // .timeout(context.timeout)
 
             // Update the snapshot state with the snapshot data received from
             // the worker.
@@ -277,22 +272,26 @@ async function run (config) {
               snapshotState.updated += test.result.updated
             }
 
+            // TODO: comment
             test.result.status = 'pass'
           }
         } catch (err) {
+          // Ignore 'Worker terminated' errors since there is already output
+          // when a run is cancelled.
           const workerpoolErrors = ['Worker terminated', 'Pool terminated']
-          if (workerpoolErrors.includes(err.message)) {
-            // Ignore 'Worker terminated' errors since there is already output
-            // when a run is cancelled.
-            return
-          }
+          if (workerpoolErrors.includes(err.message)) return
 
+          // TODO: comment
           merge(test.result, { status: test.warn ? 'warn' : 'fail', err })
         } finally {
           if (test.bench) {
             // Collect any tests that are marked as benchmarks.
             context.benchmarks.push({ ...test, file })
           } else {
+            // Collect tests based on their result status.
+            context[test.result.status].push(test)
+
+            // TODO: comment
             printResult({ ...test, file })
           }
         }
@@ -300,16 +299,12 @@ async function run (config) {
         // If the failFast option is set, throw an error so that the test run is
         // immediately failed.
         const [err] = context.fail
-        if (err && context.failFast) {
-          throw new FailFastError()
-        }
+        if (err && context.failFast) throw new FailFastError()
       }))
 
       // The snapshot tests that weren't checked are obsolete and can be
       // removed from the snapshot file.
-      if (snapshotState.getUncheckedCount()) {
-        snapshotState.removeUncheckedKeys()
-      }
+      if (snapshotState.getUncheckedCount()) snapshotState.removeUncheckedKeys()
 
       // Save the snapshot changes.
       snapshotState.save()
@@ -325,11 +320,9 @@ async function run (config) {
   }
 
   // Terminate the run pool now that all tests have been run.
-  runPool.terminate().then(() => print.debug('Run pool terminated'))
-
-  // Add a blank line between the test output and result summary so it's
-  // easier to spot.
-  print.write('\n')
+  runPool
+    .terminate()
+    .then(() => print.debug('Run pool terminated', runPool.stats()))
 
   // If there was an error thrown outside of the test functions (e.g.
   // requiring a module that wasn't found) then output a fatal error.
@@ -344,6 +337,10 @@ async function run (config) {
 
   // Log the results of running the tests.
   if (context.testsRun) {
+    // Add a blank line between the test output and result summary so it's
+    // easier to spot.
+    print.write('\n')
+
     print.info(
       chalk.green.bold(`${context.pass.length} passed.`),
       chalk.red.bold(`${context.fail.length} failed.`),
@@ -351,7 +348,7 @@ async function run (config) {
       chalk.white.bold(`${context.skip.length} skipped.`)
     )
 
-    // Add blank line after the result summary so it's easier to spot.
+    // Add blank line after the test result summary.
     print.write('\n')
   }
 
@@ -367,7 +364,7 @@ async function run (config) {
     const benchmarks = context.benchmarks.reduce(
       ({ suites, pad, ...acc }, b) => {
         // If an error was thrown during the benchmark, print it.
-        if (b.err || b.result.status === 'skip') {
+        if (b.result.err || b.result.status === 'skip') {
           printResult(b)
           return { suites, pad, ...acc }
         }
@@ -401,7 +398,7 @@ async function run (config) {
     // TODO: comment
     Object.values(benchmarks.suites).forEach(s => printResult(s, benchmarks))
 
-    // Add blank line after the result summary so it's easier to spot.
+    // Add blank line after the benchmark results.
     print.write('\n')
   }
 

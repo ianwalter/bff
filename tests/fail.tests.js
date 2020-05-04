@@ -45,4 +45,4 @@ test`manual fail inside of try-catch ${t => {
 
 test`done.fail ${(t, done) => setTimeout(done.fail, 300, new Error('DONE'))}`
 
-test`bench fail ${bench``} ${() => { throw new Error('I feel sick!') }}`
+// test.skip`bench fail ${bench``} ${() => { throw new Error('I feel sick!') }}`
