@@ -2422,10 +2422,10 @@ callsites@^3.0.0, callsites@^3.1.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-camaro@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/camaro/-/camaro-4.1.2.tgz#69a8d89f7fb524f9ee79cfb137e27645b26072eb"
-  integrity sha512-pogQ/I2Ijr4Z+hNoCjgBzw9S/6PZkqDNK9UMAcietgUHVZ4Lw2bq8SkfHonqIYW+bDjk6VBNm+XkURrf6iaLAQ==
+camaro@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/camaro/-/camaro-4.2.0.tgz#e2aa7135c172a31ba07ebbda63f904a9485f91e8"
+  integrity sha512-/zFdFGg2Bw/BB6HScryaTqIwNHXOHEkUKL6SoBAj9ANo4in1ko16l/9jgZTDX0R3W2ycvlOZTHQnahVm/b7afg==
 
 camel-case@3.0.x:
   version "3.0.0"
