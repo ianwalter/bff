@@ -1032,10 +1032,10 @@
   dependencies:
     patrun "^3.0.0"
 
-"@ianwalter/timer@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/timer/-/timer-1.1.0.tgz#3f900563048549490585ed4186d0fd7769a62251"
-  integrity sha512-oro+xaXK/XXy+sNn5tXgQgXoN2w2Me6F6cxp35hlfwMHht5oycZWGGGzcAVjch+J9e9YmhtIsgxNaYJbwr6kMA==
+"@ianwalter/timer@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@ianwalter/timer/-/timer-2.0.2.tgz#157e4228f411a0bc2756a59ee1c71ed6b20120fb"
+  integrity sha512-mBO22Powof68cFoVhet4/F1+Rp85zaU+U8r38w416daACZkEOFg8Kn/9I4O48WyC6BUy29rXJB1i+1nAGF8wgg==
 
 "@ianwalter/update-package@^0.0.2":
   version "0.0.2"
@@ -1979,6 +1979,14 @@ bcrypt-pbkdf@^1.0.0:
   integrity sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=
   dependencies:
     tweetnacl "^0.14.3"
+
+benchmark@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/benchmark/-/benchmark-2.1.4.tgz#09f3de31c916425d498cc2ee565a0ebf3c2a5629"
+  integrity sha1-CfPeMckWQl1JjMLuVloOvzwqVik=
+  dependencies:
+    lodash "^4.17.4"
+    platform "^1.3.3"
 
 big.js@^3.1.3:
   version "3.2.0"
@@ -5775,7 +5783,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.5:
+lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -6927,6 +6935,11 @@ pkg-dir@^3.0.0:
   integrity sha512-/E57AYkoeQ25qkxMj5PBOVgF8Kiu/h7cYS30Z5+R7WaiCCBfLq58ZI/dSeaEKb9WVJV5n/03QwrN3IeWIFllvw==
   dependencies:
     find-up "^3.0.0"
+
+platform@^1.3.3:
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/platform/-/platform-1.3.5.tgz#fb6958c696e07e2918d2eeda0f0bc9448d733444"
+  integrity sha512-TuvHS8AOIZNAlE77WUDiR4rySV/VMptyMfcfeoMgs4P8apaZM3JrnbzBiixKUv+XR6i+BXrQh8WAnjaSPFO65Q==
 
 portfinder@^1.0.13, portfinder@^1.0.25:
   version "1.0.25"

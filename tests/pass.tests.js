@@ -1,39 +1,28 @@
-const { test } = require('..')
+const { test, tag } = require('..')
 const { html } = require('common-tags')
 
-test(`
-  A
-  test
-  with
-  a
-  multiline
-  name
-`)(({ expect }) => {
-  expect('ok').toBeTruthy()
-})
-
-test('strict equality', ({ expect }) => {
+test`strict equality ${t => {
   const thing = 1
-  expect(thing).toBe(1)
-})
+  t.expect(thing).toBe(1)
+}}`
 
-test('parseInt after a 1 second timeout', ({ expect }) => {
+test`parseInt after a 1 second timeout ${t => {
   const one = '1'
   return new Promise(resolve => {
     setTimeout(() => {
-      expect(parseInt(one, 10)).toBe(1)
+      t.expect(parseInt(one, 10)).toBe(1)
       resolve()
     }, 1000)
   })
-})
+}}`
 
-test('manual pass', ({ pass }) => pass())
+test`manual pass ${t => t.pass()}` // AKA a CharlieCard, am I right Boston?
 
-test('beforeEach', ({ pass }) => pass())
+test`beforeEach ${t => t.pass()}`
 
-test('registration', ({ pass }) => pass())
+test`registration ${t => t.pass()}`
 
-test('snapshot pass', ({ expect }) => {
+test`snapshot pass ${t => {
   const source = html`
     <html>
       <head>
@@ -46,39 +35,41 @@ test('snapshot pass', ({ expect }) => {
       </body>
     </html>
   `
-  expect(source).toMatchSnapshot()
-})
+  t.expect(source).toMatchSnapshot()
+}}`
 
-test('second snapshot pass', ({ expect }) => {
+test`second snapshot pass ${t => {
   const source = html`
     export default () => {
       console.log('Hello World!')
     }
   `
-  expect(source).toMatchSnapshot()
-  expect(source.replace('World', 'Universe')).toMatchSnapshot()
-})
+  t.expect(source).toMatchSnapshot()
+  t.expect(source.replace('World', 'Universe')).toMatchSnapshot()
+}}`
 
-test(
-  'tags second call',
-  'qa'
-)(({ expect }) => {
-  expect(['one', 'two', 'three']).toContain('two')
-})
+test`
 
-test('sleep', async ({ sleep, expect }) => {
+tags second call
+
+${tag`qa`}
+
+${t => t.expect(['one', 'two', 'three']).toContain('two')}
+`
+
+test`sleep ${async t => {
   const before = new Date().getTime()
-  await sleep(1000)
+  await t.sleep(1000)
   const elapsed = new Date().getTime() - before
-  expect(elapsed).toBeGreaterThanOrEqual(1000)
-  expect(elapsed).toBeLessThan(2000)
-})
+  t.expect(elapsed).toBeGreaterThanOrEqual(1000)
+  t.expect(elapsed).toBeLessThan(2000)
+}}`
 
-test('done', ({ expect }, done) => {
+test`done ${(t, done) => {
   setTimeout(() => {
-    expect('truth').toContain('ruth')
+    t.expect('truth').toContain('ruth')
     done()
   }, 500)
-})
+}}`
 
-test('done.pass', (ctx, done) => setTimeout(done.pass, 400))
+test`done.pass ${(t, done) => setTimeout(done.pass, 400)}`

@@ -57,9 +57,8 @@ with their **default** values:
       'tests/**/*tests.js',
       'tests/**/*pptr.js'
     ],
-    // Specifies bff's logging level.
-    // Possible values include: 'debug', 'info', 'warn', 'error', 'fatal'
-    logLevel: 'info',
+    // Specifies bff's logging (@ianwalter/print) configuration.
+    log: { level: 'info' },
     // Specifies whether to exit when a test fails instead of continuing to run
     // tests.
     // Value should be a boolean.
@@ -105,54 +104,77 @@ with their **default** values:
 
 ## Writing tests
 
-Declare a test by calling the test function with a name and a function:
+Declare a test by using the `test` tagged template literal with a description
+of the test and a test function as an interpolated value:
 
 ```js
 const { test } = require('@ianwalter/bff')
 const someFunctionality = require('./someFunctionality')
 
-test('some functionality', ({ expect }) => {
-  expect(someFunctionality()).toBeTruthy()
-})
+test`Some functionality ${t => t.expect(someFunctionality()).toBeTruthy()}`
 ```
 
-If the test name/description is really long, you can also pass the test function
-in a second call:
+Your test description can contain as many newlines as you'd like and it will
+still be formatted as a single line:
 
 ```js
-test(`
-  some functionality when some environment variable is set, the user has some
-  localStorage value, and some query parameter has a certain value
-`)(({ expect }) => {
-  expect(scenario).toMatchSnapshot()
-})
+test`
+
+Some functionality when some environment variable is set, the user has some
+localStorage value, and some query parameter has a certain value
+
+${t => {
+  t.expect(scenario).toMatchSnapshot()
+}}
+`
 ```
+
+### Modifiers
 
 You can skip individual tests by adding the `.skip` modifier:
 
 ```js
-test.skip('something', ({ expect }) => {
-  expect(something).toBe(somethingElse)
-})
+test.skip`Something ${t => t.expect(something).toBe(somethingElse)}`
 ```
 
 You can also have only designated tests in a test file run with the `.only`
 modifier:
 
 ```js
-test.only('focus', ({ expect }) => {
-  expect({}).toEqual({})
-})
+test.only`Focus ${t => t.expect({}).toEqual({})}`
 ```
 
 If you have flaky tests and you don't necessarily want them to fail a test run
 but would like to be warned when they fail, you can use the `.warn` modifier:
 
 ```js
-test.warn('Payfail checkout', asnyc ({ expect }) => {
-  expect(await payfailCheckout()).toEqual({ success: true })
-})
+test.warn`Payfail checkout ${async t => {
+  t.expect(await payfailCheckout()).toEqual({ success: true })
+}}`
 ```
+
+### Test Suites
+
+You can compose test suites of tests using tags:
+
+```js
+const { test, tag } = require('@ianwalter/bff')
+
+test`
+
+Every product displayed is active
+
+${tag`production`} ${testEnvironmentTags}
+
+${t => {
+  // Some test logic here.
+}}
+`
+
+// TODO: add CLI example below
+```
+
+
 
 ## Related
 

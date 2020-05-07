@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "./cli.js",
-    "test:ci": "./cli.js tests/bff.js",
+    "test:ci": "./cli.js tests/bff.js -V",
     "test:out": "./cli.js tests/stdout.js | wc -c",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
@@ -46,8 +46,9 @@
     "@ianwalter/cloneable": "^2.0.0",
     "@ianwalter/print": "^6.0.0",
     "@ianwalter/subpub": "^3.0.0",
-    "@ianwalter/timer": "^1.1.0",
+    "@ianwalter/timer": "^2.0.2",
     "array-shuffle": "^1.0.1",
+    "benchmark": "^2.1.4",
     "callsites": "^3.1.0",
     "camaro": "^5.0.3",
     "common-tags": "^1.8.0",
