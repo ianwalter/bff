@@ -56,7 +56,7 @@
     "jest-snapshot": "^26.0.1",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
-    "workerpool": "^5.0.4"
+    "workerpool": "^6.0.0"
   },
   "devDependencies": {
     "@ianwalter/eslint-config": "^5.0.0",
