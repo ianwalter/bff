@@ -53,7 +53,7 @@
     "camaro": "^5.0.3",
     "common-tags": "^1.8.0",
     "expect": "^26.0.1",
-    "globby": "^11.0.0",
+    "globby": "^11.0.1",
     "jest-snapshot": "^26.0.1",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
