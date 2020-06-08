@@ -3,6 +3,7 @@
 exports[`bff 1`] = `
 Array [
   "A test with a multiline name",
+  "asleep",
   "beforeEach",
   "done",
   "done.pass",
@@ -49,78 +50,4 @@ Array [
   "skip with no test function",
   "skip with test specified after name",
 ]
-`;
-
-exports[`junit 1`] = `
-"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<testsuites>
-  <testsuite name=\\"tests/warn.tests.js\\" tests=\\"2\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"1\\">
-    <testcase name=\\"warn pass\\"/>
-    <testcase name=\\"warn fail\\">
-      <skipped/>
-    </testcase>
-  </testsuite>
-  <testsuite name=\\"tests/only.tests.js\\" tests=\\"3\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"only\\"/>
-    <testcase name=\\"only with test specified after name\\"/>
-    <testcase name=\\"skip via only\\"/>
-  </testsuite>
-  <testsuite name=\\"tests/pass.tests.js\\" tests=\\"12\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"tags second call\\"/>
-    <testcase name=\\"beforeEach\\"/>
-    <testcase name=\\"second snapshot pass\\"/>
-    <testcase name=\\"registration\\"/>
-    <testcase name=\\"manual pass\\"/>
-    <testcase name=\\"strict equality\\"/>
-    <testcase name=\\"snapshot pass\\"/>
-    <testcase name=\\"A test with a multiline name\\"/>
-    <testcase name=\\"done.pass\\"/>
-    <testcase name=\\"done\\"/>
-    <testcase name=\\"parseInt after a 1 second timeout\\"/>
-    <testcase name=\\"sleep\\"/>
-  </testsuite>
-  <testsuite name=\\"tests/fail.tests.js\\" tests=\\"10\\" failures=\\"10\\" errors=\\"0\\" skipped=\\"0\\">
-    <testcase name=\\"no assertions\\">
-      <failure message=\\"no assertions made\\"/>
-    </testcase>
-    <testcase name=\\"parseInt with the wrong base\\">
-      <failure message=\\"expect(received).toBe(expected) // Object.is equality&#xA;&#xA;Expected: 2&#xA;Received: NaN\\"/>
-    </testcase>
-    <testcase name=\\"manual fail\\">
-      <failure message=\\"manual failure\\"/>
-    </testcase>
-    <testcase name=\\"manual fail with reason\\">
-      <failure message=\\"because reasons\\"/>
-    </testcase>
-    <testcase name=\\"afterEach\\">
-      <failure message=\\"manual failure\\"/>
-    </testcase>
-    <testcase name=\\"snapshot fail\\">
-      <failure message=\\"expect(received).toMatchSnapshot()&#xA;&#xA;Snapshot name: \`snapshot fail 1\`&#xA;&#xA;- Snapshot  - 1&#xA;+ Received  + 1&#xA;&#xA;@@ -1,8 +1,8 @@&#xA;  &lt;html>&#xA;    &lt;head>&#xA;-     &lt;title>Demo&lt;/title>&#xA;+     &lt;title>Dema&lt;/title>&#xA;    &lt;/head>&#xA;    &lt;body>&#xA;      &lt;main>&#xA;        &lt;h1>Demo&lt;/h1>&#xA;      &lt;/main>\\"/>
-    </testcase>
-    <testcase name=\\"tags\\">
-      <failure message=\\"expect(received).toContain(expected) // indexOf&#xA;&#xA;Expected value: 3&#xA;Received array: [1, 2]\\"/>
-    </testcase>
-    <testcase name=\\"manual fail inside of try-catch\\">
-      <failure message=\\"manual failure\\"/>
-    </testcase>
-    <testcase name=\\"done.fail\\">
-      <failure message=\\"Error: DONE\\"/>
-    </testcase>
-    <testcase name=\\"timeout\\">
-      <failure message=\\"test reached timeout of 5000 milliseconds\\"/>
-    </testcase>
-  </testsuite>
-  <testsuite name=\\"tests/skip.tests.js\\" tests=\\"3\\" failures=\\"0\\" errors=\\"0\\" skipped=\\"3\\">
-    <testcase name=\\"skip no assertions\\">
-      <skipped/>
-    </testcase>
-    <testcase name=\\"skip with test specified after name\\">
-      <skipped/>
-    </testcase>
-    <testcase name=\\"skip with no test function\\">
-      <skipped/>
-    </testcase>
-  </testsuite>
-</testsuites>"
 `;

@@ -1,5 +1,6 @@
 const { test } = require('..')
 const { html } = require('common-tags')
+const createTimer = require('@ianwalter/timer')
 
 test(`
   A
@@ -66,12 +67,20 @@ test(
   expect(['one', 'two', 'three']).toContain('two')
 })
 
-test('sleep', async ({ sleep, expect }) => {
-  const before = new Date().getTime()
-  await sleep(1000)
-  const elapsed = new Date().getTime() - before
-  expect(elapsed).toBeGreaterThanOrEqual(1000)
-  expect(elapsed).toBeLessThan(2000)
+test('sleep', t => {
+  const timer = createTimer()
+  t.sleep(1000)
+  const ms = timer.stop()
+  t.expect(ms).toBeGreaterThan(999)
+  t.expect(ms).toBeLessThan(2000)
+})
+
+test('asleep', async t => {
+  const timer = createTimer()
+  await t.asleep(1000)
+  const ms = timer.stop()
+  t.expect(ms).toBeGreaterThan(999)
+  t.expect(ms).toBeLessThan(2000)
 })
 
 test('done', ({ expect }, done) => {

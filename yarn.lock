@@ -1025,6 +1025,11 @@
   resolved "https://registry.yarnpkg.com/@ianwalter/renovate-config/-/renovate-config-1.3.0.tgz#821419333c7673dae837b7bbfb5574a520a4e9db"
   integrity sha512-J6xH9Lnm9TxqtZIO/cWFT1ziykPN3HlcMeJmUyiOHB0ol4DYJJPM/6/LSbEydU7iUGK5DxobWLAHoKC4j7RcLg==
 
+"@ianwalter/sleep@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@ianwalter/sleep/-/sleep-0.0.1.tgz#e730222afcb253fd34d2450af89a7874369252d7"
+  integrity sha512-8L+ATaiOSBawXIhMD9Y9CHMFdcqy9YaV/R+fvLJSkge1kgdXigs0Rz+FLQlBdTw1ovpT+ygINlfUvbGJLB2zrQ==
+
 "@ianwalter/subpub@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@ianwalter/subpub/-/subpub-3.0.0.tgz#2abc07c37abb02b7153419dc57e8d7a8fee4d528"

@@ -17,9 +17,9 @@ const execaOpts = { reject: false }
 test('bff', async ({ expect }) => {
   const result = await run(config)
   expect(result.filesRegistered).toBe(5)
-  expect(result.testsRegistered).toBe(31)
-  expect(result.testsRun).toBe(31)
-  expect(result.passed.length).toBe(16)
+  expect(result.testsRegistered).toBe(32)
+  expect(result.testsRun).toBe(32)
+  expect(result.passed.length).toBe(17)
   expect(result.passed.map(toName).sort()).toMatchSnapshot()
   expect(result.failed.length).toBe(10)
   expect(result.failed.map(toName).sort()).toMatchSnapshot()
