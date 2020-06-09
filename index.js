@@ -2,12 +2,12 @@ const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
 const { Print, chalk } = require('@ianwalter/print')
-const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
 const merge = require('@ianwalter/merge')
-const callsites = require('callsites')
 const shuffle = require('array-shuffle')
+const { oneLine } = require('common-tags')
+const buildTest = require('./lib/buildTest')
 
 const defaultFiles = [
   '*tests.js',
@@ -248,41 +248,28 @@ async function run (config) {
   return context
 }
 
-function handleTestArgs (name, tags, test = {}) {
+function handleTestArgs (name, test, tags) {
   // Prevent caching of this module so module.parent is always accurate. Thanks
   // sindresorhus/meow.
   delete require.cache[__filename]
 
-  // Add the test line number to the object so it can be shown in verbose mode.
-  test.lineNumber = callsites()[2].getLineNumber()
-
-  const testFn = tags.pop()
-  Object.assign(test, { fn: testFn, tags })
-  module.parent.exports[oneLine(name)] = test
-  if (testFn && typeof testFn === 'function') {
-    return test
-  } else {
-    return fn => {
-      Object.assign(test, { fn, tags: testFn ? [...tags, testFn] : [] })
-      return test
-    }
-  }
+  module.parent.exports[oneLine(name)] = buildTest(name, test, tags, 3)
 }
 
 function test (name, ...tags) {
-  return handleTestArgs(name, tags)
+  return handleTestArgs(name, {}, tags)
 }
 
 test.skip = function skip (name, ...tags) {
-  return handleTestArgs(name, tags, { skip: true })
+  return handleTestArgs(name, { skip: true }, tags)
 }
 
 test.only = function only (name, ...tags) {
-  return handleTestArgs(name, tags, { only: true })
+  return handleTestArgs(name, { only: true }, tags)
 }
 
 test.warn = function warn (name, ...tags) {
-  return handleTestArgs(name, tags, { warn: true })
+  return handleTestArgs(name, { warn: true }, tags)
 }
 
 module.exports = { run, test, FailFastError }
