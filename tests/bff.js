@@ -78,14 +78,20 @@ test('bff --runs 2', async t => {
   t.expect(stdout.split('10 failed').length).toBe(3)
 })
 
-test.only('bff --failed', async t => {
-  let args = ['-fjT', config.timeout, 'tests/fail.tests.js']
-  let response = await execa('./cli.js', args, execaOpts)
-  t.expect(response.exitCode).toBe(1)
+test('bff --failed', async t => {
+  let response1, response2
+  try {
+    let args = ['-fjT', config.timeout, 'tests/fail.tests.js']
+    response1 = await execa('./cli.js', args, execaOpts)
+    t.expect(response1.exitCode).toBe(1)
 
-  args = ['--failed', '-T', config.timeout]
-  response = await execa('./cli.js', args, execaOpts)
-  t.expect(response.exitCode).toBe(1)
-  t.expect(response.stdout).toContain('Running failed tests in junit.xml')
-  t.expect(response.stdout).toContain('1 failed')
+    args = ['--failed', '-T', config.timeout]
+    response2 = await execa('./cli.js', args, execaOpts)
+    t.expect(response2.exitCode).toBe(1)
+    t.expect(response2.stdout).toContain('Running failed tests in junit.xml')
+    t.expect(response2.stdout).toContain('1 failed')
+  } catch (err) {
+    t.print.error(err, response1, response2)
+    throw err
+  }
 })
