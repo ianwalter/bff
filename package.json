@@ -50,7 +50,7 @@
     "@ianwalter/timer": "^2.0.2",
     "array-shuffle": "^1.0.1",
     "callsites": "^3.1.0",
-    "camaro": "^5.0.3",
+    "camaro": "^6.0.2",
     "common-tags": "^1.8.0",
     "expect": "^26.0.1",
     "globby": "^11.0.1",
