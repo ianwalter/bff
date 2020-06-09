@@ -83,11 +83,11 @@ test('bff --failed', async t => {
   try {
     let args = ['-fjT', config.timeout, 'tests/fail.tests.js']
     response1 = await execa('./cli.js', args, execaOpts)
-    t.expect(response1.exitCode).toBe(1)
+    t.expect(response1.failed).toBe(true)
 
     args = ['--failed', '-T', config.timeout]
     response2 = await execa('./cli.js', args, execaOpts)
-    t.expect(response2.exitCode).toBe(1)
+    t.expect(response2.failed).toBe(true)
     t.expect(response2.stdout).toContain('Running failed tests in junit.xml')
     t.expect(response2.stdout).toContain('1 failed')
   } catch (err) {
