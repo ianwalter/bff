@@ -1,7 +1,7 @@
 const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
-const { Print, chalk } = require('@ianwalter/print')
+const { createPrint, chalk } = require('@ianwalter/print')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
@@ -57,7 +57,7 @@ async function run (config) {
   merge(context, restOfConfig)
 
   // Create the print instance with the given log level.
-  const print = new Print(context.log)
+  const print = createPrint(context.log)
 
   // Add the absolute paths of the test files to the run context.
   context.files = shuffle(await globby(context.tests, { absolute: true }))
