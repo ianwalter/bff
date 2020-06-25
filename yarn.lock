@@ -948,11 +948,6 @@
   resolved "https://registry.yarnpkg.com/@ianwalter/merge/-/merge-5.0.0.tgz#972b3cd668ab87416fba1af99186cd83d34d687f"
   integrity sha512-Z+Xn8dT0ApkjGizdwMQaCgsAyHO+zKhCC2OYO7lEYLs1IdCzXtRUYah3vkIWT8/Ad94ni0rxtR39VTRWJE1/Qw==
 
-"@ianwalter/merge@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/merge/-/merge-7.0.0.tgz#2fc97113eea21c1fd25132c8ddb93d3f20a83d04"
-  integrity sha512-PuJJiUQZSNRu6zrC6xrJx9/gX0NX9rilQ646+VBSj+X7RRBUWOogqxEUHojOJcwYTt2JzWVV9DIvvsZMkfZP5Q==
-
 "@ianwalter/merge@^9.0.1":
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/@ianwalter/merge/-/merge-9.0.1.tgz#bbbf15e1daec5fef7e28633d9e8060a62018a72d"
@@ -1005,20 +1000,20 @@
     marked-terminal "^4.0.0"
     strip-ansi "^6.0.0"
 
-"@ianwalter/print@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-6.0.0.tgz#1dd066e936adf2ed553216aa5952fa2a95588d6e"
-  integrity sha512-Gde6yLSVtYdNQ1Lm7fLvNYb+apIzYyr4uiXaXfvn08NYQf6pRgCfiCmV+uQOczzsfnU7yWleE0dYIP2ZkDXzag==
+"@ianwalter/print@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-7.0.0.tgz#fc19edec666817ebb67a5fd1d4500c076c3746c0"
+  integrity sha512-AXE7sZgEISpP0cGJY8DN/rI3G+wcDz1EL4KLEVFv2wvZwPaUQaH9qGGoacer1N9xVOGp1D8VSRJc3tJdHTu1MQ==
   dependencies:
     "@ianwalter/chromafi" "^1.0.1"
     "@ianwalter/clone" "^6.0.1"
     "@ianwalter/log" "^4.0.0"
-    "@ianwalter/merge" "^7.0.0"
-    chalk "^3.0.0"
+    "@ianwalter/merge" "^9.0.1"
+    chalk "^4.1.0"
     has-ansi "^4.0.0"
     has-emoji "^1.1.0"
-    marked "^0.8.2"
-    marked-terminal "^4.0.0"
+    marked "^1.1.0"
+    marked-terminal "^4.1.0"
     strip-ansi "^6.0.0"
 
 "@ianwalter/print@^8.0.1":
@@ -1038,15 +1033,15 @@
     marked-terminal "^4.1.0"
     strip-ansi "^6.0.0"
 
-"@ianwalter/release@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@ianwalter/release/-/release-5.0.1.tgz#23117632679afe6ba30f7aa0fdc2900d76e979d3"
-  integrity sha512-9/UMH1Nykb01rMib8ABH6bV1LdvrLS5Xtj+iULhCGaWqnQvSo7GlfUxn2VBmW633gxIfFnwCKioaM5lKqnsMQw==
+"@ianwalter/release@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@ianwalter/release/-/release-5.0.2.tgz#122502cdc652fd6cadb83d2812a3a2828dd56fc7"
+  integrity sha512-KummxGkI57AiSRdU1frjRZSzoCKFB+RyI1XlKiVvPd38XRr6lk0IfO/VQNtu6a7H/aooAGhRfb4Sm3soOaIUBQ==
   dependencies:
     "@ianwalter/base-error" "^6.1.0"
     "@ianwalter/cli" "^4.1.0"
     "@ianwalter/commits" "^1.0.1"
-    "@ianwalter/print" "^6.0.0"
+    "@ianwalter/print" "^7.0.0"
     "@ianwalter/update-package" "^0.0.2"
     common-tags "^1.8.0"
     execa "^4.0.2"
@@ -6258,11 +6253,6 @@ marked@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.8.0.tgz#ec5c0c9b93878dc52dd54be8d0e524097bd81a99"
   integrity sha512-MyUe+T/Pw4TZufHkzAfDj6HarCBWia2y27/bhuYkTaiUnfDYFnCP3KUN+9oM7Wi6JA2rymtVYbQu3spE0GCmxQ==
-
-marked@^0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.8.2.tgz#4faad28d26ede351a7a1aaa5fec67915c869e355"
-  integrity sha512-EGwzEeCcLniFX51DhTpmTom+dSA/MG/OBUDjnWtHbEnjAH180VzUeAw+oE4+Zv+CoYBWyRlYOTR0N8SO9R1PVw==
 
 marked@^1.1.0:
   version "1.1.0"
