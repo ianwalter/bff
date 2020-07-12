@@ -8,14 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: node:14.4
+      image: ianwalter/pnpm:v1.0.0
     timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: yarn
+        run: pnpm i
       - name: Lint
-        run: yarn lint
+        run: pnpm run lint
       - name: Test
-        run: yarn test:ci
+        run: pnpm run test:ci
