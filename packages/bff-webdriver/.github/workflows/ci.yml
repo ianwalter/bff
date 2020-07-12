@@ -8,9 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/pnpm:v1.0.0
+      image: node:14.4
       options: --network-alias testHost
-    timeout-minutes: 10
     env:
       NODE_ENV: test
       SELENIUM_HUB_HOST: hub
@@ -25,12 +24,10 @@ jobs:
           HUB_PORT: 4444
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1.2.0
       - name: Install
-        run: pnpm i
+        run: yarn
       - name: Lint
-        run: pnpm lint
-      - name: Test bff
-        run: pnpm test:bff
-      - name: Test bff-puppeteer
-        run: pnpm test:webdriver
+        run: yarn lint
+      - name: Test
+        run: yarn test
