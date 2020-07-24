@@ -38,6 +38,9 @@
     "url": "https://github.com/ianwalter/bff/issues"
   },
   "homepage": "https://github.com/ianwalter/bff#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@ianwalter/cli": "^4.1.0",
     "@ianwalter/clone": "^6.0.1",

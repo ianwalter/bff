@@ -41,6 +41,9 @@
     "cli.js",
     "integrations"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@ianwalter/bsl": "^3.0.0",
     "@ianwalter/cli": "^4.1.0",
