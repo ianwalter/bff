@@ -16,7 +16,7 @@ test('test server', async t => {
       </html>
     `
   })
-  const { server } = await app.start()
+  const server = await app.serve()
 
   const url = createUrl(server.url)
   if (process.env.TEST_HOST) {
