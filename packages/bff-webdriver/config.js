@@ -11,13 +11,6 @@ module.exports = {
       context.webdriver.appium = true
     } else if (hostname) {
       context.webdriver.hostname = hostname
-    } else {
-      context.webdriver.browserstack = true
-      context.webdriver.capabilities['bstack:options'] = {
-        local: true,
-        projectName: 'bff-webdriver',
-        timezone: 'New_York'
-      }
     }
   }
 }

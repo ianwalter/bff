@@ -4,10 +4,6 @@ let print
 let seleniumStandalone
 
 const webdriverVersion = '3.141.59'
-const hasBsl = cap => cap['bstack:options'] && cap['bstack:options'].local
-const shouldUseBsl = ({ browserstackLocal, capabilities: cap }) =>
-  browserstackLocal !== false &&
-  (Array.isArray(cap) ? cap.some(hasBsl) : hasBsl(cap))
 
 module.exports = {
   webdriverVersion,
@@ -42,12 +38,6 @@ module.exports = {
             }
           })
         })
-      } else if (shouldUseBsl(context.webdriver)) {
-        print.debug('Starting BrowserStack Local')
-        const { start } = require('@ianwalter/bsl')
-
-        // Start the BrowserStack Local tunnel.
-        await start(context.webdriver.browserstackLocal)
       }
     } catch (err) {
       print.error(err)
@@ -93,14 +83,12 @@ module.exports = {
 
     try {
       print.debug('Adding WebDriver integrations')
-      const BrowserStackIntegration = require('./integrations/browserstack')
       const ZaleniumIntegration = require('./integrations/zalenium')
       const AppiumIntegration = require('./integrations/appium')
 
       // Add enabled integrations to the integrations array so they can be used
       // later.
       context.webdriver.integrations = context.webdriver.integrations || []
-      BrowserStackIntegration.integrate(context)
       ZaleniumIntegration.integrate(context)
       AppiumIntegration.integrate(context)
 
@@ -172,12 +160,6 @@ module.exports = {
           const cleanup = require('./cleanup')
           await cleanup()
         }
-      } else if (shouldUseBsl(context.webdriver)) {
-        // Stop the BrowserStack Local tunnel.
-        print.write('\n')
-        print.log('👉', 'bff-webdriver: Stopping BrowserStack Local')
-        const { stop } = require('@ianwalter/bsl')
-        await stop()
       }
     } catch (err) {
       print.error(err)
