@@ -17,7 +17,7 @@ jobs:
       - name: Test
         uses: ianwalter/bsl@v2.0.1
         with:
-          args: pnpm test:webdriver
+          args: npm run test:webdriver
         env:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
