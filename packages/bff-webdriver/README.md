@@ -17,14 +17,14 @@ yarn add @ianwalter/bff-webdriver --dev
 
 ## License
 
-Apache 2.0 with Commons Clause - See [LICENSE][licenseUrl]
+Hippocratic License - See [LICENSE][licenseUrl]
 
 &nbsp;
 
-Created by [Ian Walter](https://iankwalter.com)
+Created by [Ian Walter](https://ianwalter.dev)
 
 [bffUrl]: https://github.com/ianwalter/bff
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/bff-webdriver.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/bff-webdriver
 [bslUrl]: https://github.com/ianwalter/bsl
-[licenseUrl]: https://github.com/ianwalter/bff-webdriver/blob/master/LICENSE
+[licenseUrl]: https://github.com/ianwalter/bff/blob/master/packages/bff-webdriver/LICENSE

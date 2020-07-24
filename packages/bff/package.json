@@ -1,15 +1,13 @@
 {
   "name": "@ianwalter/bff",
-  "description": "Your friendly test runner/framework",
+  "description": "Your friendly test framework",
   "version": "9.10.0",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
     "test": "./cli.js",
     "test:ci": "./cli.js -V tests/bff.js",
-    "test:out": "./cli.js tests/stdout.js | wc -c",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "test:out": "./cli.js tests/stdout.js | wc -c"
   },
   "bin": {
     "bff": "cli.js"

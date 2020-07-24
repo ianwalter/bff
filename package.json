@@ -5,7 +5,11 @@
   "scripts": {
     "lint": "eslint .",
     "test:bff": "pnpm test:ci --filter '@ianwalter/bff'",
-    "test:webdriver": "pnpm test --filter '@ianwalter/bff-webdriver'"
+    "test:webdriver": "pnpm t --filter '@ianwalter/bff-webdriver'",
+    "test:puppeteer": "pnpm t --filter '@ianwalter/bff-puppeteer'",
+    "test:playwright": "pnpm t --filter '@ianwalter/bff-playwright'",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.9.2",

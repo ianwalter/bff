@@ -27,10 +27,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: pnpm i
+        run: pnpm i -r
       - name: Lint
         run: pnpm lint
       - name: Test bff
         run: pnpm test:bff
-      - name: Test bff-puppeteer
+      - name: Test bff-webdriver
         run: pnpm test:webdriver

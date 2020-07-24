@@ -6,21 +6,18 @@ on:
 jobs:
   browserstack:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v1.2.0
       - name: Install
-        uses: ianwalter/bsl@v2.0.1
+        uses: ianwalter/pnpm-container@v1.0.0
         with:
-          args: yarn
-      - name: Lint
-        uses: ianwalter/bsl@v2.0.1
-        with:
-          args: yarn lint
+          args: pnpm i -r
       - name: Test
         uses: ianwalter/bsl@v2.0.1
         with:
-          args: yarn test
+          args: pnpm test:webdriver
         env:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}

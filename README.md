@@ -1,5 +1,5 @@
 # @ianwalter/bff
-> Your friendly test runner/framework
+> Your friendly test framework
 
 [![npm page][npmImage]][npmUrl]
 [![CI][ciImage]][ciUrl]
@@ -163,7 +163,7 @@ test.warn('Payfail checkout', asnyc ({ expect }) => {
 
 ## License
 
-Apache 2.0 with Commons Clause - See [LICENSE][licenseUrl]
+Hippocratic License - See [LICENSE][licenseUrl]
 
 &nbsp;
 
@@ -175,4 +175,4 @@ Created by [Ian Walter](https://iankwalter.com)
 [ciUrl]: https://github.com/ianwalter/bff/actions
 [bffWebdriverUrl]: https://github.com/ianwalter/bff-webdriver
 [bffPuppeteerUrl]: https://github.com/ianwalter/bff-puppeteer
-[licenseUrl]: https://github.com/ianwalter/bff/blob/master/LICENSE
+[licenseUrl]: https://github.com/ianwalter/bff/blob/master/packages/bff/LICENSE
