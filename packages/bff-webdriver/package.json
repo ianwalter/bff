@@ -1,0 +1,77 @@
+{
+  "name": "@ianwalter/bff-webdriver",
+  "description": "A bff plugin to enable WebDriver-based testing",
+  "version": "6.0.3",
+  "author": {
+    "name": "Ian Walter",
+    "url": "https://ianwalter.dev"
+  },
+  "homepage": "https://github.com/ianwalter/bff/blob/master/packages/bff-webdriver#readme",
+  "license": "SEE LICENSE IN LICENSE",
+  "bin": {
+    "bff-webdriver": "cli.js"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "bff",
+    "bff-webdriver": "./cli.js",
+    "postinstall": "./cli.js setup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianwalter/bff.git",
+    "directory": "packages/bff-webdriver"
+  },
+  "bugs": {
+    "url": "https://github.com/ianwalter/bff/issues"
+  },
+  "keywords": [
+    "bff",
+    "webdriver",
+    "selenium",
+    "test",
+    "testing",
+    "automated",
+    "standalone",
+    "browserstack"
+  ],
+  "files": [
+    "index.js",
+    "cleanup.js",
+    "cli.js",
+    "integrations"
+  ],
+  "dependencies": {
+    "@ianwalter/bsl": "^3.0.0",
+    "@ianwalter/cli": "^4.1.0",
+    "@ianwalter/print": "^6.0.0",
+    "dotenv": "^8.2.0",
+    "execa": "^4.0.3",
+    "got": "^10.6.0",
+    "p-settle": "^4.1.1",
+    "selenium-standalone": "^6.17.0",
+    "webdriverio": "^6.1.25"
+  },
+  "devDependencies": {
+    "@ianwalter/bff": "^9.9.1",
+    "@ianwalter/nrg": "^0.0.87",
+    "@ianwalter/url": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@ianwalter/bff": "^9.9.1"
+  },
+  "bff": {
+    "log": {
+      "level": "debug"
+    },
+    "plugins": [
+      "config",
+      "index"
+    ],
+    "webdriver": {
+      "capabilities": {
+        "browserName": "firefox"
+      }
+    }
+  }
+}

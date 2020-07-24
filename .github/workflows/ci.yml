@@ -8,14 +8,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: node:14.4
+      image: ianwalter/pnpm:v1.0.0
+      options: --network-alias testHost
     timeout-minutes: 10
+    env:
+      NODE_ENV: test
+      SELENIUM_HUB_HOST: hub
+      TEST_HOST: testHost
+    services:
+      hub:
+        image: selenium/hub:3.141.59-gold
+      firefox:
+        image: selenium/node-firefox:3.141.59-gold
+        env:
+          HUB_HOST: hub
+          HUB_PORT: 4444
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: yarn
+        run: pnpm i -r
       - name: Lint
-        run: yarn lint
-      - name: Test
-        run: yarn test:ci
+        run: pnpm lint
+      - name: Test bff
+        run: pnpm test:bff
+      - name: Test bff-webdriver
+        run: pnpm test:webdriver
