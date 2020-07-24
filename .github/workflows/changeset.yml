@@ -29,5 +29,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Install
+        uses: ianwalter/pnpm-container@v1.0.0
+        with:
+          args: pnpm i -r
       - name: Changeset
         uses: ianwalter/add-changeset@v1.0.7
