@@ -2,24 +2,6 @@ name: Changeset
 on:
   pull_request:
     types: [labeled]
-  workflow_dispatch:
-    inputs:
-      type:
-        description: |
-          The SemVer type <major|minor|patch> to use when running manually and so
-          the "changeset:<type>" pull request label can't be used.
-        required: false
-      package:
-        description: |
-          The package name to use when running manually. If not specified, it will
-          be determined by looking at the closest package.json to the first changed
-          file.
-        required: false
-      summary:
-        description: |
-          The changeset summary to use when running manually. If not specified, the
-          pull request title will be used.
-        required: false
 jobs:
   changeset:
     runs-on: ubuntu-latest
@@ -29,9 +11,5 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Install
-        uses: ianwalter/pnpm-container@v1.0.0
-        with:
-          args: pnpm i -r
       - name: Changeset
-        uses: ianwalter/add-changeset@v1.0.7
+        uses: ianwalter/add-changeset@v1.0.8
