@@ -1,0 +1,57 @@
+{
+  "name": "@ianwalter/bff-playwright",
+  "description": "A bff plugin for Playwright, the browser automation library",
+  "version": "0.0.0",
+  "author": {
+    "name": "Ian Walter",
+    "url": "https://ianwalter.dev"
+  },
+  "homepage": "https://github.com/ianwalter/bff/blob/master/packages/bff-playwright#readme",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "index.js",
+  "scripts": {
+    "test": "bff"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianwalter/bff.git",
+    "directory": "packages/bff-playwright"
+  },
+  "bugs": {
+    "url": "https://github.com/ianwalter/bff/issues"
+  },
+  "keywords": [
+    "bff",
+    "playwright",
+    "test",
+    "testing",
+    "automated"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "playwright": "^1.2.1"
+  },
+  "devDependencies": {
+    "@ianwalter/bff": "^9.10.0"
+  },
+  "peerDependencies": {
+    "@ianwalter/bff": "^9.10.0"
+  },
+  "bff": {
+    "plugins": [
+      "index.js"
+    ],
+    "playwright": {
+      "browsers": [
+        "chromium",
+        "firefox",
+        "webkit"
+      ]
+    }
+  }
+}

@@ -52,6 +52,14 @@ importers:
       junit-report-builder: ^2.0.0
       p-series: ^2.1.0
       workerpool: ^6.0.0
+  packages/bff-playwright:
+    dependencies:
+      playwright: 1.2.1
+    devDependencies:
+      '@ianwalter/bff': 'link:../bff'
+    specifiers:
+      '@ianwalter/bff': ^9.10.0
+      playwright: ^1.2.1
   packages/bff-webdriver:
     dependencies:
       '@ianwalter/cli': 4.1.0
@@ -67,7 +75,7 @@ importers:
       '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
       '@ianwalter/url': 2.0.0
     specifiers:
-      '@ianwalter/bff': ^9.9.1
+      '@ianwalter/bff': ^9.10.0
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/nrg': ^0.3.1
       '@ianwalter/print': ^6.0.0
@@ -1697,6 +1705,11 @@ packages:
   /@types/node/14.0.22:
     resolution:
       integrity: sha512-emeGcJvdiZ4Z3ohbmw93E/64jRzUHAItSHt8nF7M4TGgQTiWqFVGB8KNpLGFmUHmHLvjvBgFwVlqNcq+VuGv9g==
+  /@types/node/14.0.26:
+    dev: false
+    optional: true
+    resolution:
+      integrity: sha512-W+fpe5s91FBGE0pEa0lnqGLL4USgpLgs4nokw16SrBBco/gQxuua7KnArSEOd5iaMqbbSHV10vUDkJYJJqpXKA==
   /@types/normalize-package-data/2.4.0:
     resolution:
       integrity: sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
@@ -1734,7 +1747,7 @@ packages:
       integrity: sha512-Dk/IDOPtOgubt/IaevIUbTgV7doaKkoorvOyYM2CMwuDyP89bekI7H4xLIwunNYiK9jhCkmc6pUrJk3cj2AB9w==
   /@types/yauzl/2.9.1:
     dependencies:
-      '@types/node': 14.0.22
+      '@types/node': 14.0.26
     dev: false
     optional: true
     resolution:
@@ -2208,6 +2221,14 @@ packages:
       node: '>= 6.0.0'
     resolution:
       integrity: sha512-TMeqbNl2fMW0nMjTEPOwe3J/PRFP4vqeoNuQMG0HlMrtm5QxKqdvAkZ1pRBQ/ulIyDD5Yq0nJ7YbdD8ey0TO3g==
+  /agent-base/6.0.1:
+    dependencies:
+      debug: 4.1.1
+    dev: false
+    engines:
+      node: '>= 6.0.0'
+    resolution:
+      integrity: sha512-01q25QQDwLSsyfhrKbn8yuur+JNw0H+0Y4JiGIKd3z9aYk/w/2kxD/Upc+t2ZBBSUNff50VjPsSW2YxM8QYKVg==
   /agentkeepalive/2.2.0:
     dev: true
     engines:
@@ -2589,7 +2610,6 @@ packages:
     resolution:
       integrity: sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
   /async-limiter/1.0.1:
-    dev: true
     resolution:
       integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
   /async/0.9.2:
@@ -3539,7 +3559,6 @@ packages:
     resolution:
       integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
   /commander/5.1.0:
-    dev: true
     engines:
       node: '>= 6'
     resolution:
@@ -6229,6 +6248,15 @@ packages:
       node: '>= 6.0.0'
     resolution:
       integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==
+  /https-proxy-agent/5.0.0:
+    dependencies:
+      agent-base: 6.0.1
+      debug: 4.1.1
+    dev: false
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
   /human-id/1.0.2:
     dev: true
     resolution:
@@ -7025,6 +7053,10 @@ packages:
       node: '>= 10.14.2'
     resolution:
       integrity: sha512-Z9P5pZ6UC+kakMbNJn+tA2RdVdNX5WH1x+5UCBZ9MxIK24pjYtFt96fK+UwBTrjLYm232g1xz0L3eTh51OW+yQ==
+  /jpeg-js/0.3.7:
+    dev: false
+    resolution:
+      integrity: sha512-9IXdWudL61npZjvLuVe/ktHiA41iE8qFyLB+4VDTblEsWBzeg8WQTlktdUK4CdncUqtUgUg0bbOmTE2bKBKaBQ==
   /js-tokens/4.0.0:
     resolution:
       integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
@@ -9189,6 +9221,31 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
+  /playwright/1.2.1:
+    dependencies:
+      commander: 5.1.0
+      debug: 4.1.1
+      extract-zip: 2.0.1
+      https-proxy-agent: 5.0.0
+      jpeg-js: 0.3.7
+      mime: 2.4.6
+      pngjs: 5.0.0
+      progress: 2.0.3
+      proxy-from-env: 1.1.0
+      rimraf: 3.0.2
+      ws: 6.2.1
+    dev: false
+    engines:
+      node: '>=10.15.0'
+    requiresBuild: true
+    resolution:
+      integrity: sha512-wD5WZ3rNvmXq+W4qhwykrm8J7VGYsjMjdC2WjZb4B4r7j/IFzq6EhliD+ZBIl+HOymFNsTwPZYhXy7IqeC2+YQ==
+  /pngjs/5.0.0:
+    dev: false
+    engines:
+      node: '>=10.13.0'
+    resolution:
+      integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==
   /portfinder/1.0.26:
     dependencies:
       async: 2.6.3
@@ -12422,7 +12479,6 @@ packages:
   /ws/6.2.1:
     dependencies:
       async-limiter: 1.0.1
-    dev: true
     resolution:
       integrity: sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   /ws/7.3.1:
