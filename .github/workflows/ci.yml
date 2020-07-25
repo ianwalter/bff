@@ -34,3 +34,15 @@ jobs:
         run: pnpm test:bff
       - name: Test bff-webdriver
         run: pnpm test:webdriver
+  playwright:
+    runs-on: ubuntu-latest
+    container:
+      image: ianwalter/playwright:v1.1.1
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install
+        run: pnpm i -r
+      - name: Test bff
+        run: pnpm test:playwright

@@ -6,12 +6,12 @@
 ## Installation
 
 ```console
-yarn add @ianwalter/bff-webdriver --dev
+pnpm add @ianwalter/bff-webdriver --save-dev
 ```
 
 ## Related
 
-* [`@ianwalter/bff`][bffUrl] - Your friendly test runner/framework
+* [`@ianwalter/bff`][bffUrl] - Your friendly test framework
 
 ## License
 
