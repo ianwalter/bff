@@ -5,13 +5,13 @@ importers:
       '@ianwalter/eslint-config': 5.4.0
       '@ianwalter/renovate-config': 1.4.0
       '@ianwalter/vuepress-theme-brooks': 1.2.0
-      vuepress: 1.6.0
+      vuepress: 1.7.0
     specifiers:
       '@changesets/cli': ^2.11.0
       '@ianwalter/eslint-config': ^5.4.0
       '@ianwalter/renovate-config': ^1.4.0
       '@ianwalter/vuepress-theme-brooks': ^1.2.0
-      vuepress: ^1.6.0
+      vuepress: ^1.7.0
   packages/bff:
     dependencies:
       '@ianwalter/cli': 4.1.0
@@ -1882,15 +1882,15 @@ packages:
       prettier: 1.19.1
     resolution:
       integrity: sha512-QLq9z8m79mCinpaEeSURhnNCN6djxpHw0lpP/bodMlt5kALfONpryMthvnrQOlTcIKoF+VoPi+lPHUYeDFPXug==
-  /@vuepress/core/1.6.0:
+  /@vuepress/core/1.7.0:
     dependencies:
       '@babel/core': 7.10.4
       '@vue/babel-preset-app': 4.4.6
-      '@vuepress/markdown': 1.6.0
-      '@vuepress/markdown-loader': 1.6.0
-      '@vuepress/plugin-last-updated': 1.6.0
-      '@vuepress/plugin-register-components': 1.6.0
-      '@vuepress/shared-utils': 1.6.0
+      '@vuepress/markdown': 1.7.0
+      '@vuepress/markdown-loader': 1.7.0
+      '@vuepress/plugin-last-updated': 1.7.0
+      '@vuepress/plugin-register-components': 1.7.0
+      '@vuepress/shared-utils': 1.7.0
       autoprefixer: 9.8.5
       babel-loader: 8.1.0_0cfd9791b7d0e032fda143e7498c778b
       cache-loader: 3.0.1_webpack@4.43.0
@@ -1912,7 +1912,7 @@ packages:
       url-loader: 1.1.2_webpack@4.43.0
       vue: 2.6.11
       vue-loader: 15.9.3_75446719ff5a84d7ce8f53f07a4ee2b6
-      vue-router: 3.3.4
+      vue-router: 3.4.6
       vue-server-renderer: 2.6.11
       vue-template-compiler: 2.6.11
       vuepress-html-webpack-plugin: 3.2.0_webpack@4.43.0
@@ -1926,18 +1926,18 @@ packages:
     engines:
       node: '>=8.6'
     resolution:
-      integrity: sha512-zce6xMB77pk4g44CHYE75cBuJpa3lmLPujknymH0sD1LKkSrlkgH04x+LGhu98bVU/hiS0xjV3jDs3X37Texbw==
-  /@vuepress/markdown-loader/1.6.0:
+      integrity: sha512-zep2JXrM/+mJhqpiWl/1mN5JPgxWJ2RCICMTvrb9ICQnxWM34eAqKFZz+Hv15ziBcJjfROZRszgTEJFSWlUmyA==
+  /@vuepress/markdown-loader/1.7.0:
     dependencies:
-      '@vuepress/markdown': 1.6.0
+      '@vuepress/markdown': 1.7.0
       loader-utils: 1.4.0
       lru-cache: 5.1.1
     dev: true
     resolution:
-      integrity: sha512-7cYD9+td89u0EePoHw+nVwxCoafYvpP10r6RfdN3Ongvd2apyn37Mjjv+85U1jnSTRvjZHV4v7KFs4H8+Y0xiw==
-  /@vuepress/markdown/1.6.0:
+      integrity: sha512-C/uuk8QrMKVN+0uBV2T7CYFtFdFHQ7qLJFr/ALofeplxlVY9QGAk5hRmXsx1Xx6VDeF3EAvlKsD52qKcgXdw/A==
+  /@vuepress/markdown/1.7.0:
     dependencies:
-      '@vuepress/shared-utils': 1.6.0
+      '@vuepress/shared-utils': 1.7.0
       markdown-it: 8.4.2
       markdown-it-anchor: 5.3.0_markdown-it@8.4.2
       markdown-it-chain: 1.3.0_markdown-it@8.4.2
@@ -1946,52 +1946,52 @@ packages:
       prismjs: 1.20.0
     dev: true
     resolution:
-      integrity: sha512-niFP+mKbEPu82OkkYf+dZMd8cWYfKEeIFq2jrQCJcVnCuSGVmJbKJbQF+cP/iu+94RHFVUtKwsh4X3Ef/1PLXw==
+      integrity: sha512-7XRzkLVp4n9rD41Woih0SzKXBbX7k3ArrQ7b+83M8YShY8zDNOjcoUimip/SdzP2UsgCWzdwbEWehhEmsiJYWw==
   /@vuepress/plugin-active-header-links/1.5.2:
     dependencies:
       lodash.debounce: 4.0.8
     dev: true
     resolution:
       integrity: sha512-bZP/0jpouVSvMypixx2/I7kxWFUV4HfwLNx7UxbtuDrykQzXnA2cz6yTra8Y1ZoXACbRp6TIqGlWpCUafBzyww==
-  /@vuepress/plugin-active-header-links/1.6.0:
+  /@vuepress/plugin-active-header-links/1.7.0:
     dependencies:
       lodash.debounce: 4.0.8
     dev: true
     resolution:
-      integrity: sha512-AsbUptcwtBJtlvrcDyiW2HZAHz/tLoYXrGopJVPtWUZ9LzNIcXuSFVIRzKd1Jc+86VPUYLeDhLBIWe0rfsphAQ==
-  /@vuepress/plugin-last-updated/1.6.0:
+      integrity: sha512-IHoAHw+PasLOv2OqZUY4UzFH4dQoQKyv8hFWZtjWeOXYDm1sV5F0nTYHQBU/7luwgFTTxyQV1jk554SAaOFOlg==
+  /@vuepress/plugin-last-updated/1.7.0:
     dependencies:
       cross-spawn: 6.0.5
     dev: true
     resolution:
-      integrity: sha512-/gnk9HGaZw3ow/i9ODjZxK40TbriTWuMY3YYIzqvP7CT3mrM92nMKYDygYbffbu6xkWdUZppN8JadtJ7we4z9A==
+      integrity: sha512-GJ7z8Z6PXMQF4kJv17a6WcdcyGJ6TEl/F855FO3076LmlxSlWJcovgRrUKu3dh+TFAYIqZ/mUs/VpZeBOF0QgA==
   /@vuepress/plugin-nprogress/1.5.2:
     dependencies:
       nprogress: 0.2.0
     dev: true
     resolution:
       integrity: sha512-PtiV5u9hHZJNPmyKs7s++f4GCJTuvPP25aIASi06vKACr/+Ier5XC7PvOwUvS1LbG6HAGRbQpokmeP1aVbrI6w==
-  /@vuepress/plugin-nprogress/1.6.0:
+  /@vuepress/plugin-nprogress/1.7.0:
     dependencies:
       nprogress: 0.2.0
     dev: true
     resolution:
-      integrity: sha512-dhIho2z33aGjPavcdVYRlqR3+ZC5Vd3FPd+HkRP8MdIIFxhVR1HLFxVgaSUcASOCGAwuG58OB2RStvgMQLtTEA==
-  /@vuepress/plugin-register-components/1.6.0:
+      integrity: sha512-xHuAA4MF4slNkXdHgjYbZ460rSVwTTuNKz1chbpV2ECDyRIUd/vXOwhGRjM+mKCcF7iNALmpoxNFwaHXY6pCsw==
+  /@vuepress/plugin-register-components/1.7.0:
     dependencies:
-      '@vuepress/shared-utils': 1.6.0
+      '@vuepress/shared-utils': 1.7.0
     dev: true
     resolution:
-      integrity: sha512-w9Lafh1G3514rulpjSoIfZXt94wZ5oMkpXyVzXyC2wRHqSu/4fKpcxhwxf6HeT57jIBdPifT+eUrL+XIZWnXLQ==
+      integrity: sha512-TRcxD0LWxkG0gZWBg2dgGVQ/AR9n/Hq5T5MtYyRYV80LNunyneSMeudh6WKqh3g2MDjfQ6QnMmOtAtk8RgYaOQ==
   /@vuepress/plugin-search/1.5.2:
     dev: true
     resolution:
       integrity: sha512-/n0W7lQhBCj7vrIhU6VL8ZlUnWBru83W4w0gGNxzXDzZ1AMRJRnQDamBjKAWNd+WMYz8LA2LbJy1rCCds1Mu2Q==
-  /@vuepress/plugin-search/1.6.0:
+  /@vuepress/plugin-search/1.7.0:
     dev: true
     resolution:
-      integrity: sha512-Js7zRmM6/b6dYfnJsSP2MQN0lzjUfSX8l3z9y/QHxK8BaXIx7LdTcQY6FGK4pxuwlWcg02CIUS5BMc1gZKn6Nw==
-  /@vuepress/shared-utils/1.6.0:
+      integrity: sha512-BayDFigG4rR5/5bO8d4iST4ffaLv4uy+KsmNd3NVGwjMMhfqx8kc+N1VrtsKrNzKAOfH6Vr8OEDa60Xk+UlHrg==
+  /@vuepress/shared-utils/1.7.0:
     dependencies:
       chalk: 2.4.2
       escape-html: 1.0.3
@@ -2004,12 +2004,12 @@ packages:
       upath: 1.2.0
     dev: true
     resolution:
-      integrity: sha512-+TMHgW7gmVY2lRX5qpPbsLkbxTBbzRo+Ar05tvEI0bAG0c6v2gWyQr3BchdbLyRJxrAVk530PABAjM8roDJ9bw==
-  /@vuepress/theme-default/1.6.0:
+      integrity: sha512-fhMh6lWc1LhNj9X5dpRJFyUITklcV0r+bSX+iY8Q8ZpnDuqaxAmy50rHJZJ/nK1Cc7HvynBBv+YjMKvDhSrygQ==
+  /@vuepress/theme-default/1.7.0:
     dependencies:
-      '@vuepress/plugin-active-header-links': 1.6.0
-      '@vuepress/plugin-nprogress': 1.6.0
-      '@vuepress/plugin-search': 1.6.0
+      '@vuepress/plugin-active-header-links': 1.7.0
+      '@vuepress/plugin-nprogress': 1.7.0
+      '@vuepress/plugin-search': 1.7.0
       docsearch.js: 2.6.3
       lodash: 4.17.19
       stylus: 0.54.8
@@ -2018,7 +2018,7 @@ packages:
       vuepress-plugin-smooth-scroll: 0.0.3
     dev: true
     resolution:
-      integrity: sha512-dV6awQzV+gQqxYK8oHY5A9Hwj34H23bA2khPjqqLDpgLMnw4tvxMfriwK5tuaAjgnHT+MZB1VmgsNdUA9T9HIQ==
+      integrity: sha512-G/cBNBlt10oNigyGEulP+V4WBUnCQKmWUkPL4gjJe/tSHuMAwd6F7IfDxWNGol/sM9t8awfatQlai9UTh1KyDw==
   /@wdio/config/6.1.14:
     dependencies:
       '@wdio/logger': 6.0.16
@@ -2268,9 +2268,9 @@ packages:
       node: '>= 0.10.0'
     resolution:
       integrity: sha1-xdG9SxKQCPEWPyNvhuX66iAm4u8=
-  /ajv-errors/1.0.1_ajv@6.12.3:
+  /ajv-errors/1.0.1_ajv@6.12.5:
     dependencies:
-      ajv: 6.12.3
+      ajv: 6.12.5
     dev: true
     peerDependencies:
       ajv: '>=5.0.0'
@@ -2279,6 +2279,14 @@ packages:
   /ajv-keywords/3.5.1_ajv@6.12.3:
     dependencies:
       ajv: 6.12.3
+    dev: true
+    peerDependencies:
+      ajv: ^6.9.1
+    resolution:
+      integrity: sha512-KWcq3xN8fDjSB+IMoh2VaXVhRI0BBGxoYp3rx7Pkb6z0cFjYR9Q9l4yZqqals0/zsioCmocC5H6UvsGD4MoIBA==
+  /ajv-keywords/3.5.1_ajv@6.12.5:
+    dependencies:
+      ajv: 6.12.5
     dev: true
     peerDependencies:
       ajv: ^6.9.1
@@ -10553,9 +10561,9 @@ packages:
       integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
   /schema-utils/1.0.0:
     dependencies:
-      ajv: 6.12.3
-      ajv-errors: 1.0.1_ajv@6.12.3
-      ajv-keywords: 3.5.1_ajv@6.12.3
+      ajv: 6.12.5
+      ajv-errors: 1.0.1_ajv@6.12.5
+      ajv-keywords: 3.5.1_ajv@6.12.5
     dev: true
     engines:
       node: '>= 4'
@@ -10564,8 +10572,8 @@ packages:
   /schema-utils/2.7.0:
     dependencies:
       '@types/json-schema': 7.0.5
-      ajv: 6.12.3
-      ajv-keywords: 3.5.1_ajv@6.12.3
+      ajv: 6.12.5
+      ajv-keywords: 3.5.1_ajv@6.12.5
     dev: true
     engines:
       node: '>= 8.9.0'
@@ -12083,10 +12091,10 @@ packages:
         optional: true
     resolution:
       integrity: sha512-Y67VnGGgVLH5Voostx8JBZgPQTlDQeOVBLOEsjc2cXbCYBKexSKEpOA56x0YZofoDOTszrLnIShyOX1p9uCEHA==
-  /vue-router/3.3.4:
+  /vue-router/3.4.6:
     dev: true
     resolution:
-      integrity: sha512-SdKRBeoXUjaZ9R/8AyxsdTqkOfMcI5tWxPZOUX5Ie1BTL5rPSZ0O++pbiZCeYeythiZIdLEfkDiQPKIaWk5hDg==
+      integrity: sha512-kaXnB3pfFxhAJl/Mp+XG1HJMyFqrL/xPqV7oXlpXn4AwMmm6VNgf0nllW8ksflmZANfI4kdo0bVn/FYSsAolPQ==
   /vue-server-renderer/2.6.11:
     dependencies:
       chalk: 1.1.3
@@ -12157,10 +12165,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-UXX+HLZO1NKVwyiOJlj0smh8F9dKnwybjEi7w/Mj9EYLhKrNYr5uXs+N+OTt8VwKCn3f0vZ1XAwFIjsPlD7GJA==
-  /vuepress/1.6.0:
+  /vuepress/1.7.0:
     dependencies:
-      '@vuepress/core': 1.6.0
-      '@vuepress/theme-default': 1.6.0
+      '@vuepress/core': 1.7.0
+      '@vuepress/theme-default': 1.7.0
       cac: 6.5.12
       envinfo: 7.5.1
       opencollective-postinstall: 2.0.3
@@ -12171,7 +12179,7 @@ packages:
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha512-5hxhkgMROjo6ja59oyrHeiOv6xpq1sy86ejaWgevMWiMbBIZU+9grwrd+PSL6q4rwfsi/a8NqYzcBXV/ZSXWZA==
+      integrity: sha512-/snyS+Jd2O92+7b6maXRj2V7hzAoepTrBpQFiE6wz82/wkwIxIU+L56wC/c38oD00HLJ7hZgjmAFMhc9Gx+vIA==
   /walker/1.0.7:
     dependencies:
       makeerror: 1.0.11
