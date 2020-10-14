@@ -5,6 +5,8 @@ on:
 jobs:
   changeset:
     runs-on: ubuntu-latest
+    container:
+      image: ianwalter/pnpm:v1.1.0
     timeout-minutes: 5
     steps:
       - name: Checkout
