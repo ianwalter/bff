@@ -34,7 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "playwright": "^1.2.1"
+    "playwright": "^1.5.0"
   },
   "devDependencies": {
     "@ianwalter/bff": "^9.10.0"

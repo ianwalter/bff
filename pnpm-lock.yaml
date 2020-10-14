@@ -54,12 +54,12 @@ importers:
       workerpool: ^6.0.0
   packages/bff-playwright:
     dependencies:
-      playwright: 1.2.1
+      playwright: 1.5.0
     devDependencies:
       '@ianwalter/bff': 'link:../bff'
     specifiers:
       '@ianwalter/bff': ^9.10.0
-      playwright: ^1.2.1
+      playwright: ^1.5.0
   packages/bff-webdriver:
     dependencies:
       '@ianwalter/cli': 4.1.0
@@ -2660,6 +2660,7 @@ packages:
     resolution:
       integrity: sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
   /async-limiter/1.0.1:
+    dev: true
     resolution:
       integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
   /async/0.9.2:
@@ -3613,6 +3614,7 @@ packages:
     resolution:
       integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
   /commander/5.1.0:
+    dev: true
     engines:
       node: '>= 6'
     resolution:
@@ -7128,10 +7130,10 @@ packages:
       node: '>= 10.14.2'
     resolution:
       integrity: sha512-Z9P5pZ6UC+kakMbNJn+tA2RdVdNX5WH1x+5UCBZ9MxIK24pjYtFt96fK+UwBTrjLYm232g1xz0L3eTh51OW+yQ==
-  /jpeg-js/0.3.7:
+  /jpeg-js/0.4.2:
     dev: false
     resolution:
-      integrity: sha512-9IXdWudL61npZjvLuVe/ktHiA41iE8qFyLB+4VDTblEsWBzeg8WQTlktdUK4CdncUqtUgUg0bbOmTE2bKBKaBQ==
+      integrity: sha512-+az2gi/hvex7eLTMTlbRLOhH6P6WFdk2ITI8HJsaH2VqYO0I594zXSYEP+tf4FW+8Cy68ScDXoAsQdyQanv3sw==
   /js-tokens/4.0.0:
     resolution:
       integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
@@ -9296,25 +9298,25 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
-  /playwright/1.2.1:
+  /playwright/1.5.0:
     dependencies:
-      commander: 5.1.0
       debug: 4.1.1
       extract-zip: 2.0.1
       https-proxy-agent: 5.0.0
-      jpeg-js: 0.3.7
+      jpeg-js: 0.4.2
       mime: 2.4.6
       pngjs: 5.0.0
       progress: 2.0.3
+      proper-lockfile: 4.1.1
       proxy-from-env: 1.1.0
       rimraf: 3.0.2
-      ws: 6.2.1
+      ws: 7.3.1
     dev: false
     engines:
-      node: '>=10.15.0'
+      node: '>=10.17.0'
     requiresBuild: true
     resolution:
-      integrity: sha512-wD5WZ3rNvmXq+W4qhwykrm8J7VGYsjMjdC2WjZb4B4r7j/IFzq6EhliD+ZBIl+HOymFNsTwPZYhXy7IqeC2+YQ==
+      integrity: sha512-szV0YksBqKQ8XTaDhhvwoA+0nBICj2GOe8ptesSpmUq8xXjjSYSJqwH2J7haYwY35GD9zzH2+HGqeObI2i8tJw==
   /pngjs/5.0.0:
     dev: false
     engines:
@@ -9816,6 +9818,14 @@ packages:
     dev: true
     resolution:
       integrity: sha1-mEcocL8igTL8vdhoEputEsPAKeM=
+  /proper-lockfile/4.1.1:
+    dependencies:
+      graceful-fs: 4.2.4
+      retry: 0.12.0
+      signal-exit: 3.0.3
+    dev: false
+    resolution:
+      integrity: sha512-1w6rxXodisVpn7QYvLk706mzprPTAPCYAqxMvctmPN3ekuRk/kuGkGc82pangZiAt4R3lwSuUzheTTn0/Yb7Zg==
   /proxy-addr/2.0.6:
     dependencies:
       forwarded: 0.1.2
@@ -10454,7 +10464,6 @@ packages:
     resolution:
       integrity: sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
   /retry/0.12.0:
-    dev: true
     engines:
       node: '>= 4'
     resolution:
@@ -12593,6 +12602,7 @@ packages:
   /ws/6.2.1:
     dependencies:
       async-limiter: 1.0.1
+    dev: true
     resolution:
       integrity: sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   /ws/7.3.1:
