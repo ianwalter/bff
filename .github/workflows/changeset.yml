@@ -16,4 +16,4 @@ jobs:
       - name: Changeset
         uses: ianwalter/add-changeset@v1.1.0
         with:
-          before_commit: pnpm i -r
+          before_commit: pnpm i -r --frozen-lockfile=false
