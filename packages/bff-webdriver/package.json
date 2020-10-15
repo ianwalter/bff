@@ -50,7 +50,7 @@
     "execa": "^4.0.3",
     "got": "^10.6.0",
     "p-settle": "^4.1.1",
-    "selenium-standalone": "^6.17.0",
+    "selenium-standalone": "^6.20.1",
     "webdriverio": "^6.6.4"
   },
   "devDependencies": {
