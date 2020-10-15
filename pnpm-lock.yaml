@@ -54,12 +54,12 @@ importers:
       workerpool: ^6.0.0
   packages/bff-playwright:
     dependencies:
-      playwright: 1.5.0
+      playwright: 1.5.1
     devDependencies:
       '@ianwalter/bff': 'link:../bff'
     specifiers:
       '@ianwalter/bff': ^9.10.0
-      playwright: ^1.5.0
+      playwright: ^1.5.1
   packages/bff-webdriver:
     dependencies:
       '@ianwalter/cli': 4.1.0
@@ -9298,7 +9298,7 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
-  /playwright/1.5.0:
+  /playwright/1.5.1:
     dependencies:
       debug: 4.1.1
       extract-zip: 2.0.1
@@ -9316,7 +9316,7 @@ packages:
       node: '>=10.17.0'
     requiresBuild: true
     resolution:
-      integrity: sha512-szV0YksBqKQ8XTaDhhvwoA+0nBICj2GOe8ptesSpmUq8xXjjSYSJqwH2J7haYwY35GD9zzH2+HGqeObI2i8tJw==
+      integrity: sha512-FYxrQ2TAmvp5ZnBnc6EJHc1Vt3DmXx8xVDq6rxVVG4YVoNKHYMarHI92zGyDlueN2kKCavrhk4Et9w6jJ5XWaA==
   /pngjs/5.0.0:
     dev: false
     engines:
