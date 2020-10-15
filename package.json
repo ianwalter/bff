@@ -12,7 +12,7 @@
     "docs:build": "vuepress build docs"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.11.0",
+    "@changesets/cli": "^2.11.1",
     "@ianwalter/eslint-config": "^5.4.0",
     "@ianwalter/renovate-config": "^1.4.0",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
