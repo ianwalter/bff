@@ -14,6 +14,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: Changeset
-        uses: ianwalter/add-changeset@v1.1.0
+        uses: ianwalter/add-changeset@v1.1.1
         with:
           before_commit: pnpm i -r --frozen-lockfile=false
