@@ -53,7 +53,7 @@
     "callsites": "^3.1.0",
     "camaro": "^6.0.2",
     "common-tags": "^1.8.0",
-    "expect": "^26.1.0",
+    "expect": "^26.5.3",
     "globby": "^11.0.1",
     "jest-snapshot": "^26.5.3",
     "junit-report-builder": "^2.0.0",
