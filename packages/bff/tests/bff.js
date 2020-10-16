@@ -91,7 +91,7 @@ test('bff --failed', async t => {
     t.expect(response2.stdout).toContain('Running failed tests in junit.xml')
     t.expect(response2.stdout).toContain('1 failed')
   } catch (err) {
-    t.print.error(err, response1, response2)
+    t.logger.error(err, response1, response2)
     throw err
   }
 })

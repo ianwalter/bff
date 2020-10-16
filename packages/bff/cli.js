@@ -3,14 +3,14 @@
 const { promises: fs } = require('fs')
 const path = require('path')
 const cli = require('@ianwalter/cli')
-const { print, chalk } = require('@ianwalter/print')
+const { createLogger, chalk } = require('@generates/logger')
 const bff = require('.')
 
 // Set stdout to blocking so that the program doesn't exit with log statements
 // still waiting to be printed to the console.
-if (process.stdout._handle) {
-  process.stdout._handle.setBlocking(true)
-}
+if (process.stdout._handle) process.stdout._handle.setBlocking(true)
+
+const logger = createLogger({ namespace: 'bff.cli', level: 'info' })
 
 async function run () {
   const config = cli({
@@ -30,7 +30,7 @@ async function run () {
       log: {
         alias: 'l',
         description: "Specifies bff's print (logging) configuration",
-        default: { level: 'info' }
+        default: { namespace: 'bff.main', level: 'info' }
       },
       tag: {
         alias: 't',
@@ -98,9 +98,7 @@ async function run () {
     }
   })
 
-  if (config.help) {
-    return print.info(config.helpText)
-  }
+  if (config.help) return logger.info(config.helpText)
 
   // Only run tests marked as failed in a JUnit file.
   if (config.failed) {
@@ -109,9 +107,9 @@ async function run () {
     const xml = await fs.readFile(path.resolve(file), 'utf8')
     const template = { failed: ['//testcase[failure]', '@name'] }
     const { failed } = await camaro.transform(xml, template)
-    print.write('\n')
-    print.info(`Running failed tests in ${file}:`, '\n', failed.join('\n'))
-    print.write('\n')
+    logger.write('\n')
+    logger.info(`Running failed tests in ${file}:`, '\n', failed.join('\n'))
+    logger.write('\n')
     config.failed = failed
   }
 
@@ -132,21 +130,21 @@ async function run () {
 
     // Add a blank line between the test output and result summary so it's
     // easier to spot.
-    print.write('\n')
+    logger.write('\n')
 
     // If there was an error thrown outside of the test functions (e.g.
     // requiring a module that wasn't found) then output a fatal error.
     if (result.err) {
-      print.fatal(result.err)
+      logger.fatal(result.err)
       if (result.err instanceof bff.FailFastError) {
-        print.write('\n')
+        logger.write('\n')
       } else {
         process.exit(1)
       }
     }
 
     // Log the results of running the tests.
-    print.info(
+    logger.info(
       chalk.green.bold(`${result.passed.length} passed.`),
       chalk.red.bold(`${result.failed.length} failed.`),
       chalk.yellow.bold(`${result.warnings.length} warnings.`),
@@ -160,7 +158,7 @@ async function run () {
     skipped.push(...result.skipped)
 
     // Add blank line after the result summary so it's easier to spot.
-    print.write('\n')
+    logger.write('\n')
   }
 
   // If configured, generate a junit XML report file based on the test results.
@@ -205,7 +203,7 @@ async function run () {
 }
 
 run().catch(err => {
-  print.write('\n')
-  print.fatal(err)
+  logger.write('\n')
+  logger.fatal(err)
   process.exit(1)
 })

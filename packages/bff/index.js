@@ -1,7 +1,7 @@
 const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
-const { createPrint, chalk } = require('@ianwalter/print')
+const { createLogger, chalk } = require('@generates/logger')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
@@ -56,12 +56,12 @@ async function run (config) {
   context.tags = Array.isArray(tag) ? tag : [tag]
   merge(context, restOfConfig)
 
-  // Create the print instance with the given log level.
-  const print = createPrint(context.log)
+  // Create the logger instance with the given log level.
+  const logger = createLogger(context.log)
 
   // Add the absolute paths of the test files to the run context.
   context.files = shuffle(await globby(context.tests, { absolute: true }))
-  print.debug('Run context', context)
+  logger.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
   if (context.files.length === 0) {
@@ -122,9 +122,9 @@ async function run (config) {
       // registered.
       if (context.filesRegistered === context.files.length) {
         const numberOfTests = context.testsRegistered + file.tests.length
-        print.debug('Number of tests:', numberOfTests)
+        logger.debug('Number of tests:', numberOfTests)
         registrationPool.terminate()
-          .then(() => print.debug('Registration pool terminated'))
+          .then(() => logger.debug('Registration pool terminated'))
       }
 
       // Add the number of tests returned by test registration to the running
@@ -160,7 +160,7 @@ async function run (config) {
             // Output the test name and increment the skip count to remind
             // the user that some tests are being explicitly skipped.
             const msg = `${context.testsRun + 1}. ${test.name}`
-            print.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
+            logger.log('🛌', msg, skipViaOnly ? chalk.dim('(via only)') : '')
             context.skipped.push({ ...test, file: relativePath })
           } else if (!failed || failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
@@ -178,7 +178,7 @@ async function run (config) {
 
             // Output the test name and increment the pass count since the
             // test didn't throw an error indicating a failure.
-            print.success(`${context.testsRun + 1}. ${test.name}`)
+            logger.success(`${context.testsRun + 1}. ${test.name}`)
             context.passed.push({ ...test, file: relativePath })
           }
         } catch (err) {
@@ -189,13 +189,13 @@ async function run (config) {
             // when a run is cancelled.
             return
           } if (test.warn) {
-            print.warn(`${context.testsRun + 1}. ${test.name}:`, err)
+            logger.warn(`${context.testsRun + 1}. ${test.name}:`, err)
             return context.warnings.push({ ...test, err: err.message, file })
           } else if (err.name === 'TimeoutError') {
             const msg = `${context.testsRun + 1}. ${test.name}: timeout`
-            print.error(msg, chalk.dim(file))
+            logger.error(msg, chalk.dim(file))
           } else {
-            print.error(`${context.testsRun + 1}. ${test.name}:`, err)
+            logger.error(`${context.testsRun + 1}. ${test.name}:`, err)
           }
 
           // Increment the failure count since the test threw an error
@@ -208,9 +208,9 @@ async function run (config) {
           // Log the relative file path and test duration if in verbose mode.
           if (context.verbose) {
             const pad = ''.padEnd((context.testsRun * 100).toString().length)
-            print.log(`${pad}${file.relativePath}:${test.lineNumber}`)
+            logger.log(`${pad}${file.relativePath}:${test.lineNumber}`)
             if (result && result.duration) {
-              print.log(chalk.dim(`${pad}in`, result.duration))
+              logger.log(chalk.dim(`${pad}in`, result.duration))
             }
           }
         }
@@ -243,7 +243,7 @@ async function run (config) {
   }
 
   // Terminate the run pool now that all tests have been run.
-  runPool.terminate().then(() => print.debug('Run pool terminated'))
+  runPool.terminate().then(() => logger.debug('Run pool terminated'))
 
   return context
 }
