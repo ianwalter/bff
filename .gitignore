@@ -4,3 +4,4 @@ docs/.vuepress/dist
 .DS_Store
 .env
 junit.xml
+package-lock.json
