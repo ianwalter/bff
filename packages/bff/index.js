@@ -1,3 +1,4 @@
+const readline = require('readline')
 const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
@@ -83,11 +84,36 @@ async function run (config) {
   // For actually running the tests:
   const runPool = workerpool.pool(workerPath, poolOptions)
 
-  // Terminate the worker pools when a user presses CTRL+C.
-  process.on('SIGINT', async () => {
+  // Create readline instance so bff can listen for multiple SIGINT events.
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+
+  // Handle <ctrl>c / SIGINT events.
+  rl.on('SIGINT', function onSigint () {
+    // Inform the user that the event has been received.
+    logger.write('\n')
+    if (context.receivedSigint) {
+      // Terminate the workers immediately.
+      logger.warn('Second SIGINT received. Forcing worker termination.')
+      return runPool.terminate(true)
+    } else {
+      logger.warn('SIGINT received. Forwarding to workers.')
+    }
+    logger.write('\n')
+
+    // Keep track of the fact that bff has received a SIGINT.
+    context.receivedSigint = true
+
+    // Mark the run as having failed in the context.
     context.err = new Error('RUN CANCELLED!')
+
+    // Terminate the registration workers immediately.
     registrationPool.terminate(true)
-    runPool.terminate(true)
+
+    // Forward the SIGINT to the test workers via the seppuku task.
+    for (const worker of runPool.workers) worker.exec('seppuku')
   })
 
   // Sequentially run any before hooks specified by plugins.
@@ -143,10 +169,6 @@ async function run (config) {
 
       // Iterate through all tests in the test file.
       await Promise.all(shuffle(file.tests).map(async test => {
-        if (context.hasSignalInterruption) {
-          throw new Error('Stopping test run due to signal interruption')
-        }
-
         let result
         try {
           // Mark all tests as having been checked for snapshot changes so
@@ -206,7 +228,7 @@ async function run (config) {
           context.testsRun++
 
           // Log the relative file path and test duration if in verbose mode.
-          if (context.verbose) {
+          if (context.verbose && !context.receivedSigint) {
             const pad = ''.padEnd((context.testsRun * 100).toString().length)
             logger.log(`${pad}${file.relativePath}:${test.lineNumber}`)
             if (result && result.duration) {
