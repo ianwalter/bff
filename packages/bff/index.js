@@ -106,13 +106,13 @@ async function run (config) {
     // Keep track of the fact that bff has received a SIGINT.
     context.receivedSigint = true
 
-    // Mark the run has having failed in the context.
+    // Mark the run as having failed in the context.
     context.err = new Error('RUN CANCELLED!')
 
     // Terminate the registration workers immediately.
     registrationPool.terminate(true)
 
-    // Forward the SIGINT to the workers via the seppuku task.
+    // Forward the SIGINT to the test workers via the seppuku task.
     for (const worker of runPool.workers) worker.exec('seppuku')
   })
 
