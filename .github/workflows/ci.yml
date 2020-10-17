@@ -1,9 +1,6 @@
 name: CI
 on:
   push:
-    branches:
-      - master
-  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,7 +34,7 @@ jobs:
   playwright:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/playwright:v1.1.1
+      image: ianwalter/playwright:v1.2.0
     timeout-minutes: 5
     steps:
       - name: Checkout

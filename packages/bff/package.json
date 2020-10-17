@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff",
   "description": "Your friendly test framework",
-  "version": "9.10.0",
+  "version": "9.11.0",
   "license": "SEE LICENSE IN LICENSE",
   "main": "index.js",
   "scripts": {
@@ -54,12 +54,12 @@
     "callsites": "^3.1.0",
     "camaro": "^6.0.2",
     "common-tags": "^1.8.0",
-    "expect": "^26.1.0",
+    "expect": "^26.5.3",
     "globby": "^11.0.1",
-    "jest-snapshot": "^26.1.0",
+    "jest-snapshot": "^26.5.3",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
-    "workerpool": "^6.0.0"
+    "workerpool": "^6.0.2"
   },
   "devDependencies": {
     "execa": "^4.0.3"
