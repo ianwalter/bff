@@ -57,7 +57,7 @@
     "expect": "^26.5.3",
     "globby": "^11.0.1",
     "jest-snapshot": "^26.5.3",
-    "junit-report-builder": "^2.0.0",
+    "junit-report-builder": "^2.1.0",
     "p-series": "^2.1.0",
     "workerpool": "^6.0.2"
   },
