@@ -1,6 +1,13 @@
 # @ianwalter/bff
 
+## 9.12.0
+
+### Minor Changes
+
+- 5d86cd2: Updating logger
+
 ## 9.11.0
+
 ### Minor Changes
 
 - 389ec6e: Update dependency expect to ^26.5.3
