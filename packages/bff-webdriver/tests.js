@@ -22,7 +22,7 @@ test('test server', async t => {
   if (process.env.TEST_HOST) {
     url.host = process.env.TEST_HOST
   }
-  t.print.info('Server URL', url.href)
+  t.logger.info('Server URL', url.href)
 
   try {
     await t.browser.url(url.href)
