@@ -1,6 +1,14 @@
 # @ianwalter/bff-webdriver
 
+## 8.0.0
+
+### Patch Changes
+
+- Updated dependencies [5d86cd2]
+  - @ianwalter/bff@9.12.0
+
 ## 7.0.0
+
 ### Minor Changes
 
 - dc0289c: Update dependency selenium-standalone to ^6.20.1
