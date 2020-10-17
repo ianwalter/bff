@@ -12,6 +12,7 @@ try {
 
 worker({
   seppuku () {
+    // Emit a SIGINT to itself so that processes terminate gracefully.
     process.kill(process.pid, 'SIGINT')
   },
   async register (file, context) {
