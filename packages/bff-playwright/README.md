@@ -25,4 +25,4 @@ Created by [Ian Walter](https://ianwalter.dev)
 [pwUrl]: https://github.com/Microsoft/playwright
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/bff-playwright.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/bff-playwright
-[licenseUrl]: https://github.com/ianwalter/bff/blob/master/packages/bff-playwright/LICENSE
+[licenseUrl]: https://github.com/ianwalter/bff/blob/main/packages/bff-playwright/LICENSE

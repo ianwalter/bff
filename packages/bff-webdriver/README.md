@@ -24,4 +24,4 @@ Created by [Ian Walter](https://ianwalter.dev)
 [bffUrl]: https://github.com/ianwalter/bff
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/bff-webdriver.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/bff-webdriver
-[licenseUrl]: https://github.com/ianwalter/bff/blob/master/packages/bff-webdriver/LICENSE
+[licenseUrl]: https://github.com/ianwalter/bff/blob/main/packages/bff-webdriver/LICENSE

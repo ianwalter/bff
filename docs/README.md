@@ -11,7 +11,7 @@ features:
   - title: Easy
     details:
   - title: Scalable
-    details: 
+    details:
 footer: Hippocratic License | Copyright © 2020-present Ian Walter
 ---
 
@@ -33,4 +33,4 @@ footer: Hippocratic License | Copyright © 2020-present Ian Walter
 [webpackUrl]: https://webpack.js.org/
 [amqpUrl]: https://github.com/squaremo/amqp.node
 [rabbitmqUrl]: https://www.rabbitmq.com/
-[licenseUrl]: https://github.com/ianwalter/nrg/blob/master/LICENSE
+[licenseUrl]: https://github.com/ianwalter/nrg/blob/main/LICENSE

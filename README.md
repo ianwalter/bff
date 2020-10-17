@@ -4,7 +4,7 @@
 [![npm page][npmImage]][npmUrl]
 [![CI][ciImage]][ciUrl]
 
-[<img src="./screenshot.png">](https://raw.githubusercontent.com/ianwalter/bff/master/screenshot.png)
+[<img src="./screenshot.png">](https://raw.githubusercontent.com/ianwalter/bff/main/screenshot.png)
 
 ## Installation
 
@@ -175,4 +175,4 @@ Created by [Ian Walter](https://iankwalter.com)
 [ciUrl]: https://github.com/ianwalter/bff/actions
 [bffWebdriverUrl]: https://github.com/ianwalter/bff-webdriver
 [bffPuppeteerUrl]: https://github.com/ianwalter/bff-puppeteer
-[licenseUrl]: https://github.com/ianwalter/bff/blob/master/packages/bff/LICENSE
+[licenseUrl]: https://github.com/ianwalter/bff/blob/main/packages/bff/LICENSE

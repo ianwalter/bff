@@ -6,7 +6,7 @@
     "name": "Ian Walter",
     "url": "https://ianwalter.dev"
   },
-  "homepage": "https://github.com/ianwalter/bff/blob/master/packages/bff-webdriver#readme",
+  "homepage": "https://github.com/ianwalter/bff/blob/main/packages/bff-webdriver#readme",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "bff-webdriver": "cli.js"
