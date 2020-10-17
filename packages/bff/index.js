@@ -1,3 +1,4 @@
+const readline = require('readline')
 const path = require('path')
 const workerpool = require('workerpool')
 const globby = require('globby')
@@ -83,11 +84,22 @@ async function run (config) {
   // For actually running the tests:
   const runPool = workerpool.pool(workerPath, poolOptions)
 
-  // Terminate the worker pools when a user presses CTRL+C.
-  process.on('SIGINT', async () => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+
+  rl.on('SIGINT', function onSigint () {
+    if (context.receivedSigint) {
+      logger.warn('Second SIGINT received. Forcing termination.')
+      return runPool.terminate(true)
+    } else {
+      logger.warn('SIGINT received. Running cleanup.')
+    }
+    context.receivedSigint = true
     context.err = new Error('RUN CANCELLED!')
     registrationPool.terminate(true)
-    runPool.terminate(true)
+    runPool.terminate()
   })
 
   // Sequentially run any before hooks specified by plugins.
@@ -143,10 +155,6 @@ async function run (config) {
 
       // Iterate through all tests in the test file.
       await Promise.all(shuffle(file.tests).map(async test => {
-        if (context.hasSignalInterruption) {
-          throw new Error('Stopping test run due to signal interruption')
-        }
-
         let result
         try {
           // Mark all tests as having been checked for snapshot changes so
