@@ -11,6 +11,9 @@ try {
 }
 
 worker({
+  seppuku () {
+    process.kill(process.pid, 'SIGINT')
+  },
   async register (file, context) {
     // Create the Print instance based on the log level set in the context
     // received from the main thread.

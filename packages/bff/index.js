@@ -90,16 +90,18 @@ async function run (config) {
   })
 
   rl.on('SIGINT', function onSigint () {
+    logger.write('\n')
     if (context.receivedSigint) {
-      logger.warn('Second SIGINT received. Forcing termination.')
+      logger.warn('Second SIGINT received. Forcing worker termination.')
       return runPool.terminate(true)
     } else {
-      logger.warn('SIGINT received. Running cleanup.')
+      logger.warn('SIGINT received. Forwarding to workers.')
     }
+    logger.write('\n')
     context.receivedSigint = true
     context.err = new Error('RUN CANCELLED!')
     registrationPool.terminate(true)
-    runPool.terminate()
+    for (const worker of runPool.workers) worker.exec('seppuku')
   })
 
   // Sequentially run any before hooks specified by plugins.
@@ -214,7 +216,7 @@ async function run (config) {
           context.testsRun++
 
           // Log the relative file path and test duration if in verbose mode.
-          if (context.verbose) {
+          if (context.verbose && !context.receivedSigint) {
             const pad = ''.padEnd((context.testsRun * 100).toString().length)
             logger.log(`${pad}${file.relativePath}:${test.lineNumber}`)
             if (result && result.duration) {
