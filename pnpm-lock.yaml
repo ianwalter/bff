@@ -60,7 +60,7 @@ importers:
     devDependencies:
       '@ianwalter/bff': 'link:../bff'
     specifiers:
-      '@ianwalter/bff': ^9.11.0
+      '@ianwalter/bff': ^9.12.0
       playwright: ^1.5.0
   packages/bff-webdriver:
     dependencies:
@@ -77,7 +77,7 @@ importers:
       '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
       '@ianwalter/url': 2.0.0
     specifiers:
-      '@ianwalter/bff': ^9.11.0
+      '@ianwalter/bff': ^9.12.0
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/nrg': ^0.3.1
       '@ianwalter/print': ^6.0.0
