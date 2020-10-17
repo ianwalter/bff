@@ -121,7 +121,7 @@ module.exports = {
       print.error(err)
     }
   },
-  async afterEach (file, context) {
+  async afterEach (_, context) {
     try {
       // Go through each enabled integration and report results to it, etc.
       print.debug('Running WebDriver integration reporting')

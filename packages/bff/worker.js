@@ -1,6 +1,6 @@
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
-const { createPrint, chalk } = require('@ianwalter/print')
+const { createLogger, chalk } = require('@generates/logger')
 
 let threadId = process.pid
 try {
@@ -14,12 +14,13 @@ worker({
   async register (file, context) {
     // Create the Print instance based on the log level set in the context
     // received from the main thread.
-    const print = createPrint(context.log)
+    const namespace = `bff.worker.${threadId}.register`
+    const logger = createLogger({ ...context.log, namespace })
 
     // Print a debug statement for this registration action with the relative
     // path of the test file that's having it's tests registered.
     const relativePath = chalk.dim(file.relativePath)
-    print.debug(`Registration worker ${threadId}`, relativePath)
+    logger.debug(`Registration worker ${threadId}`, relativePath)
 
     // Sequentially run any registration hooks specified by plugins.
     const toHookRun = require('./lib/toHookRun')
@@ -68,12 +69,13 @@ worker({
 
     // Create the Print instance based on the log level set in the context
     // received from the main thread.
-    const print = createPrint(context.log)
+    const namespace = `bff.worker.${threadId}.test`
+    const logger = createLogger({ ...context.log, namespace })
 
     // Print a debug statement for this test action with the test name and
     // relative path of the test file it belongs to.
     const relativePath = chalk.dim(file.relativePath)
-    print.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
+    logger.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
 
     // Add the file and test data to the testContext.
     merge(context.testContext, file, test)
@@ -104,7 +106,7 @@ worker({
         // utilities.
         const enhanceTestContext = require('./lib/enhanceTestContext')
         enhanceTestContext(context.testContext)
-        context.testContext.print = print
+        context.testContext.logger = logger
 
         // Load the test file and extract the relevant test function.
         const { fn } = require(file.path)[test.key]
@@ -119,7 +121,7 @@ worker({
       // timer's duration, and add it to the test result.
       if (context.timer) {
         const duration = context.timer.duration()
-        print.debug('Test duration', duration)
+        logger.debug('Test duration', duration)
         context.testContext.result.duration = duration
       }
     } finally {

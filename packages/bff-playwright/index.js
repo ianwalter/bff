@@ -35,7 +35,7 @@ module.exports = {
       }
     }
   },
-  async afterEach (file, context) {
+  async afterEach (_, context) {
     for (const name of availableBrowsers) {
       const browser = context.testContext[name]
       if (browser.instance) {
