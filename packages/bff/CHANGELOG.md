@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 9.12.1
+
+### Patch Changes
+
+- e643d40: Fixing / improving SIGINT logic
+
 ## 9.12.0
 
 ### Minor Changes
