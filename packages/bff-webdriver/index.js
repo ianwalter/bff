@@ -24,11 +24,10 @@ module.exports = {
           // Start the Selenium Standalone server.
           standalone.start({ spawnOptions, version, drivers }, (err, child) => {
             if (err) {
-              if (child) {
-                // If there was an error but a child process was still created,
-                // kill the child process.
-                child.kill()
-              }
+              // If there was an error but a child process was still created,
+              // kill the child process.
+              if (child) child.kill()
+
               reject(err)
             } else {
               // Assign the child process to the seleniumStandalone variable so
@@ -43,7 +42,7 @@ module.exports = {
       print.error(err)
     }
   },
-  registration (file, context) {
+  registration (_, context) {
     print = new Print(context.log)
     try {
       // Extract the WebDriver capabilities from the test configuration.
@@ -78,7 +77,7 @@ module.exports = {
       print.error(err)
     }
   },
-  async beforeEach (file, context) {
+  async beforeEach (_, context) {
     print = new Print(context.log)
 
     try {
@@ -126,9 +125,7 @@ module.exports = {
       // Go through each enabled integration and report results to it, etc.
       print.debug('Running WebDriver integration reporting')
       const toReport = async integration => {
-        if (integration.report) {
-          integration.report(context)
-        }
+        if (integration.report) integration.report(context)
       }
       await Promise.all(context.webdriver.integrations.map(toReport))
     } catch (err) {

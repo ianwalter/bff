@@ -48,7 +48,8 @@ async function run (config) {
     // Initialize a count for the total number of tests that have been run so
     // that the run can figure out when all tests have completed and the worker
     // pool can be terminated.
-    testsRun: 0
+    testsRun: 0,
+    plugins: []
   }
 
   // Destructure passed configuration and add it to testContext and context.
@@ -112,15 +113,13 @@ async function run (config) {
     // Terminate the registration workers immediately.
     registrationPool.terminate(true)
 
-    // Forward the SIGINT to the test workers via the seppuku task.
-    for (const worker of runPool.workers) worker.exec('seppuku')
+    // Forward the SIGINT to the test workers via the cleanup task.
+    for (const worker of runPool.workers) worker.exec('cleanup', [context])
   })
 
   // Sequentially run any before hooks specified by plugins.
   const toHookRun = require('./lib/toHookRun')
-  if (context.plugins && context.plugins.length) {
-    await pSeries(context.plugins.map(toHookRun('before', context)))
-  }
+  await pSeries(context.plugins.map(toHookRun('before', context)))
 
   try {
     // For each test file found, pass the filename to a registration pool
@@ -260,9 +259,7 @@ async function run (config) {
   }
 
   // Sequentially run any after hooks specified by plugins.
-  if (context.plugins && context.plugins.length) {
-    await pSeries(context.plugins.map(toHookRun('after', context)))
-  }
+  await pSeries(context.plugins.map(toHookRun('after', context)))
 
   // Terminate the run pool now that all tests have been run.
   runPool.terminate().then(() => logger.debug('Run pool terminated'))
