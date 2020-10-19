@@ -6,7 +6,7 @@ jobs:
   changeset:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/pnpm:v1.1.0
+      image: ianwalter/pnpm:v1.2.0
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -14,8 +14,11 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Changeset
-        uses: ianwalter/add-changeset@v1.2.2
+      - name: Add Changeset
+        uses: generates/changeset-action@v2.0.1
+      - name: Install Dependencies
+        run: pnpm i -r --frozen-lockfile=false
+      - name: Commit Changes
+        uses: generates/commit-action@v1.0.1
         with:
-          github_token: ${{ secrets.GH_PAT }}
-          before_commit: pnpm i -r --frozen-lockfile=false
+          token: ${{ secrets.GH_PAT }}
