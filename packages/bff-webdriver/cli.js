@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 const cli = require('@ianwalter/cli')
-const { Print } = require('@ianwalter/print')
+const { createLogger } = require('@generates/logger')
 const { webdriverVersion } = require('.')
+
+const logger = createLogger({ level: 'info', namespace: 'bff-webdriver' })
 
 async function run () {
   const config = cli({
@@ -15,7 +17,6 @@ async function run () {
       }
     }
   })
-  const print = new Print(config.log)
   const { _: [command] } = config
 
   try {
@@ -23,7 +24,7 @@ async function run () {
       const selenium = require('selenium-standalone')
       const { version = webdriverVersion, drivers } = config.webdriver || {}
       await new Promise((resolve, reject) => {
-        selenium.install({ logger: print.log, version, drivers }, err => {
+        selenium.install({ logger: logger.log, version, drivers }, err => {
           if (err) {
             reject(err)
           } else {
@@ -35,11 +36,11 @@ async function run () {
       const cleanup = require('./cleanup')
       await cleanup()
     } else {
-      print.error('Unknown command:', command)
+      logger.error('Unknown command:', command)
       process.exit(1)
     }
   } catch (err) {
-    print.error(err)
+    logger.error(err)
   }
 }
 
