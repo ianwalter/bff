@@ -17,7 +17,7 @@ jobs:
       - name: Add Changeset
         uses: generates/changeset-action@v2.0.1
       - name: Install Dependencies
-        uses: pnpm i -r
+        run: pnpm i -r
       - name: Commit Changes
         uses: generates/commit-action@v1.0.1
         with:
