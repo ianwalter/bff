@@ -70,7 +70,7 @@ importers:
       execa: 4.0.3
       p-settle: 4.1.1
       selenium-standalone: 6.20.1
-      webdriverio: 6.6.6
+      webdriverio: 6.6.7
     devDependencies:
       '@ianwalter/bff': 'link:../bff'
       '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
@@ -85,7 +85,7 @@ importers:
       execa: ^4.0.3
       p-settle: ^4.1.1
       selenium-standalone: ^6.20.1
-      webdriverio: ^6.6.4
+      webdriverio: ^6.6.7
 lockfileVersion: 5.1
 packages:
   /@babel/code-frame/7.10.4:
@@ -12294,7 +12294,7 @@ packages:
       node: '>=10.0.0'
     resolution:
       integrity: sha512-0qiwYIiWjHLmi6E1U7C+fW5pBNy7oBhMyVLYt/v1HDL2K6znQ/RiTJxU8lG5U22xx6LCEY9eRnIfV25QVqzfTQ==
-  /webdriverio/6.6.6:
+  /webdriverio/6.6.7:
     dependencies:
       '@types/puppeteer': 3.0.2
       '@wdio/config': 6.6.3
@@ -12322,7 +12322,7 @@ packages:
     engines:
       node: '>=10.0.0'
     resolution:
-      integrity: sha512-DzNSh9rx8iYFVr8gfs5q+/EwqXLEAWJSpog8cQZMABSxmooQKKpClRQ/j0dg2Lj2x7cDji69qvWDq0BtgUNzGw==
+      integrity: sha512-Vpp+J4jiQ9zAu3U448Ry2qitUKP95+/I/NM6wvssCN7NPutEZoAbW9+4LF9Df5KEV9EIbENpOO0511dM1vwcOQ==
   /webpack-chain/4.12.1:
     dependencies:
       deepmerge: 1.5.2
