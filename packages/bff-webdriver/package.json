@@ -47,7 +47,7 @@
     "@ianwalter/cli": "^4.1.0",
     "@ianwalter/print": "^6.0.0",
     "dotenv": "^8.2.0",
-    "execa": "^4.0.3",
+    "execa": "^4.1.0",
     "p-settle": "^4.1.1",
     "selenium-standalone": "^6.20.1",
     "webdriverio": "^6.6.7"

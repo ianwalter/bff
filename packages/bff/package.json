@@ -62,6 +62,6 @@
     "workerpool": "^6.0.3"
   },
   "devDependencies": {
-    "execa": "^4.0.3"
+    "execa": "^4.1.0"
   }
 }
