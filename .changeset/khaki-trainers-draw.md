@@ -1,5 +1,5 @@
 ---
-"bff": patch
+"@ianwalter/bff": patch
 ---
 
 Update dependency execa to v5
