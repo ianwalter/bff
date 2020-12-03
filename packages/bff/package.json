@@ -54,7 +54,7 @@
     "callsites": "^3.1.0",
     "camaro": "^6.0.2",
     "common-tags": "^1.8.0",
-    "expect": "^26.6.0",
+    "expect": "^26.6.2",
     "globby": "^11.0.1",
     "jest-snapshot": "^26.6.0",
     "junit-report-builder": "^2.0.0",
