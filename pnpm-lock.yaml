@@ -22,7 +22,7 @@ importers:
       '@ianwalter/sleep': 0.0.1
       '@ianwalter/subpub': 3.0.0
       '@ianwalter/timer': 2.0.2
-      array-shuffle: 1.0.1
+      array-shuffle: 2.0.0
       callsites: 3.1.0
       camaro: 6.0.3
       common-tags: 1.8.0
@@ -43,7 +43,7 @@ importers:
       '@ianwalter/sleep': ^0.0.1
       '@ianwalter/subpub': ^3.0.0
       '@ianwalter/timer': ^2.0.2
-      array-shuffle: ^1.0.1
+      array-shuffle: ^2.0.0
       callsites: ^3.1.0
       camaro: ^6.0.2
       common-tags: ^1.8.0
@@ -2674,12 +2674,12 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-c2VXaCHl7zPsvpkFsw4nxvFie4fh1ur9bpcgsVkIjqn0H/Xwdg+7fv3n2r/isyS8EBj5b06M9kHyZuIr4El6WQ==
-  /array-shuffle/1.0.1:
+  /array-shuffle/2.0.0:
     dev: false
     engines:
-      node: '>=0.10.0'
+      node: '>=10'
     resolution:
-      integrity: sha1-fqSIKjVrS8pfVF4LblLq9tlxVXo=
+      integrity: sha512-rJTchCppiO6QsQnN51KDH1cgMYm13B+ybxFS5GgdBdTTHpZcrq3M7SOBgzp+L9fqqnjkFDiwdEVcX1wINgl9DQ==
   /array-slice/1.1.0:
     dev: true
     engines:
