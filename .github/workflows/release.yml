@@ -7,7 +7,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/pnpm:v1.1.0
+      image: ianwalter/pnpm:v1.3.0
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -17,18 +17,11 @@ jobs:
           # generate changelogs with the correct commits.
           fetch-depth: 0
       - name: Install
-        run: pnpm i -r
+        run: pnpm i -r --frozen-lockfile=false
       - name: Changesets
         uses: changesets/action@bfeb9e077e6cf393e4c4ef17e2bbc75b308b4364
         with:
           publish: pnpx changeset publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Update lock file
-        run: pnpm i -r
-      - name: Commit changes
-        uses: generates/commit-action@v1.0.1
-        with:
-          token: ${{ secrets.GH_PAT }}
-          message: Updated lock file
