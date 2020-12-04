@@ -6,7 +6,7 @@ test('My personal site', async t => {
   t.expect(await page.innerText('body')).toContain('Ian Walter, Dev')
 })
 
-test('My GitHub profile', async t => {
+test.skip('My GitHub profile', async t => {
   for (const browser of t.browsers) {
     const { page } = await t[browser]({ args: ['--no-sandbox'] })
     await page.goto('https://github.com/ianwalter')
