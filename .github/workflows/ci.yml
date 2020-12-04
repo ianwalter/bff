@@ -2,10 +2,10 @@ name: CI
 on:
   push:
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/pnpm:v1.1.0
+      image: ianwalter/pnpm:v1.4.0
       options: --network-alias testHost
     timeout-minutes: 10
     env:
@@ -34,7 +34,7 @@ jobs:
   playwright:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/playwright:v1.2.0
+      image: ianwalter/playwright:v1.3.0
     timeout-minutes: 5
     steps:
       - name: Checkout
