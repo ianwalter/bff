@@ -73,10 +73,10 @@ importers:
       webdriverio: 6.10.5
     devDependencies:
       '@ianwalter/bff': 'link:../bff'
-      '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
+      '@ianwalter/nrg': 0.3.1
       '@ianwalter/url': 2.0.0
     specifiers:
-      '@ianwalter/bff': ^9.12.0
+      '@ianwalter/bff': ^9.12.2
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/nrg': ^0.3.1
       '@ianwalter/print': ^6.0.0
@@ -86,7 +86,7 @@ importers:
       p-settle: ^4.1.1
       selenium-standalone: ^6.23.0
       webdriverio: ^6.10.5
-lockfileVersion: 5.1
+lockfileVersion: 5.2
 packages:
   /@babel/code-frame/7.10.4:
     dependencies:
@@ -1421,7 +1421,7 @@ packages:
   /@ianwalter/nrg-mq/1.0.0_@ianwalter+nrg@0.3.1:
     dependencies:
       '@ianwalter/clone': 5.0.0
-      '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
+      '@ianwalter/nrg': 0.3.1
       '@ianwalter/print': 8.0.5
       amqp-connection-manager: 3.2.0_amqplib@0.5.6
       amqplib: 0.5.6
@@ -1433,7 +1433,7 @@ packages:
   /@ianwalter/nrg-print/1.0.0_@ianwalter+nrg@0.3.1:
     dependencies:
       '@ianwalter/cloneable': 2.0.0
-      '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
+      '@ianwalter/nrg': 0.3.1
       '@ianwalter/print': 8.0.5
       '@ianwalter/timer': 2.0.2
     dev: true
@@ -1443,7 +1443,7 @@ packages:
       integrity: sha512-MowNz1/6QnlY7bCg5K0ljp+4mKhX3hdOe41hcSZoitpCe15z1n7zLZwgEZtXVjAMy0a+IwdEGU6nG5nLnPmOWA==
   /@ianwalter/nrg-router/1.0.0_@ianwalter+nrg@0.3.1:
     dependencies:
-      '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
+      '@ianwalter/nrg': 0.3.1
       '@ianwalter/router': 3.3.0
     dev: true
     peerDependencies:
@@ -1452,7 +1452,7 @@ packages:
       integrity: sha512-frLEWVOb+3GAS3Yee+6A4QPm5sQ1TzSBPqMOI3xGYpiJ6n3Hhb4a5K01fzOoq3QWGy2eo74kh4SojgzzTeZYIg==
   /@ianwalter/nrg-session/7.0.0_@ianwalter+nrg@0.3.1:
     dependencies:
-      '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
+      '@ianwalter/nrg': 0.3.1
       copy-to: 2.0.1
       crc: 3.8.0
       debug: 4.1.1
@@ -1465,14 +1465,14 @@ packages:
       integrity: sha512-yhiloDqTnwJnEyHwA5UthAOVplOW6ILj8+pUGyCl7TWUXNasl/kFr7Kw7s2ZQGlQaLnz8R5MwNBp3ucn9AvsfA==
   /@ianwalter/nrg-test/1.0.0_@ianwalter+nrg@0.3.1:
     dependencies:
-      '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
+      '@ianwalter/nrg': 0.3.1
       '@ianwalter/requester': 2.4.1
     dev: true
     peerDependencies:
       '@ianwalter/nrg': ^0.3.0
     resolution:
       integrity: sha512-iENLDEKx681RT+NvOTPMicVzdtimqvUx0RREOOnfvrSZs0Lek3QtWljZN/PNFsYpaKqF+qYW95z2hlVtkAPEPw==
-  /@ianwalter/nrg/0.3.1_@ianwalter+nrg@0.3.1:
+  /@ianwalter/nrg/0.3.1:
     dependencies:
       '@ianwalter/cli': 4.1.0
       '@ianwalter/cloneable': 2.0.0
@@ -1507,16 +1507,14 @@ packages:
       nanoid: 3.1.10
       nodemailer: 6.4.10
       objection: 2.2.1_knex@0.21.2
-      pg: 8.3.0_pg@8.3.0
+      pg: 8.3.0
       pkg-dir: 4.2.0
       read-pkg-up: 7.0.1
       replace-string: 3.1.0
       require-from-string: 2.0.2
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     hasBin: true
-    peerDependencies:
-      '@ianwalter/nrg': '*'
     resolution:
       integrity: sha512-wntnZqIxKKz2kQuHKegwYGnA/nJ3Emo/LGtaAmHUa+bw3EulXfd4qh1uoevAx8d+pbnI9BQS64aoXOIjAVfNyA==
   /@ianwalter/print/5.3.0:
@@ -2062,7 +2060,7 @@ packages:
       vue-template-compiler: 2.6.11
       vuepress-html-webpack-plugin: 3.2.0_webpack@4.43.0
       vuepress-plugin-container: 2.1.4
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-chain: 6.5.0
       webpack-dev-server: 3.11.0_webpack@4.43.0
       webpack-merge: 4.2.2
@@ -2341,7 +2339,7 @@ packages:
       chalk: 2.4.2
       strip-ansi: 4.0.0
       text-table: 0.2.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-log: 1.2.0
     dev: true
     engines:
@@ -2875,7 +2873,7 @@ packages:
       mkdirp: 0.5.5
       pify: 4.0.1
       schema-utils: 2.7.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     engines:
       node: '>= 6.9'
@@ -3285,7 +3283,7 @@ packages:
       mkdirp: 0.5.5
       neo-async: 2.6.2
       schema-utils: 1.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     engines:
       node: '>= 6.9.0'
@@ -3950,7 +3948,7 @@ packages:
       p-limit: 2.3.0
       schema-utils: 1.0.0
       serialize-javascript: 2.1.2
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-log: 2.0.0
     dev: true
     engines:
@@ -4117,7 +4115,7 @@ packages:
       postcss-modules-values: 2.0.0
       postcss-value-parser: 3.3.1
       schema-utils: 1.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     engines:
       node: '>= 6.9.0'
@@ -5628,7 +5626,7 @@ packages:
     dependencies:
       loader-utils: 1.4.0
       schema-utils: 1.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     engines:
       node: '>= 6.9.0'
@@ -7276,7 +7274,7 @@ packages:
       integrity: sha512-rGiLePzQ3AzwUshu2+Rn+UMFk0pHN58sOG+IaJbk5Jxuqo3NYO1U2/MIR4S1sKgsoYSXSzdtSa0TgrmtUwEbmA==
   /jest-pnp-resolver/1.2.2_jest-resolve@26.6.2:
     dependencies:
-      jest-resolve: 26.6.2_jest-resolve@26.6.2
+      jest-resolve: 26.6.2
     dev: false
     engines:
       node: '>=6'
@@ -7293,7 +7291,7 @@ packages:
       node: '>= 10.14.2'
     resolution:
       integrity: sha512-Gv3ZIs/nA48/Zvjrl34bf+oD76JHiGDUxNOVgUjh3j890sblXryjY4rss71fPtD/njchl6PSE2hIhvyWa1eT0A==
-  /jest-resolve/26.6.2_jest-resolve@26.6.2:
+  /jest-resolve/26.6.2:
     dependencies:
       '@jest/types': 26.6.2
       chalk: 4.1.0
@@ -7306,8 +7304,6 @@ packages:
     dev: false
     engines:
       node: '>= 10.14.2'
-    peerDependencies:
-      jest-resolve: '*'
     resolution:
       integrity: sha512-sOxsZOq25mT1wRsfHcbtkInS+Ek7Q8jCHUB0ZUTP0tc/c41QHriU/NunqMfCUWsL4H3MHpvQD4QR9kSYhS7UvQ==
   /jest-serializer/26.6.2:
@@ -7333,7 +7329,7 @@ packages:
       jest-haste-map: 26.6.2
       jest-matcher-utils: 26.6.2
       jest-message-util: 26.6.2
-      jest-resolve: 26.6.2_jest-resolve@26.6.2
+      jest-resolve: 26.6.2
       natural-compare: 1.4.0
       pretty-format: 26.6.2
       semver: 7.3.2
@@ -7559,7 +7555,7 @@ packages:
       liftoff: 3.1.0
       lodash: 4.17.19
       mkdirp: 1.0.4
-      pg: 8.3.0_pg@8.3.0
+      pg: 8.3.0
       pg-connection-string: 2.3.0
       tarn: 3.0.0
       tildify: 2.0.0
@@ -7675,7 +7671,7 @@ packages:
       chalk: 2.4.2
       loud-rejection: 2.2.0
       merge-options: 1.0.1
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-dev-middleware: 3.7.2_webpack@4.43.0
       webpack-hot-client: 4.1.2_webpack@4.43.0
     dev: true
@@ -8438,7 +8434,7 @@ packages:
       loader-utils: 1.4.0
       normalize-url: 2.0.1
       schema-utils: 1.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-sources: 1.4.3
     dev: true
     engines:
@@ -9015,7 +9011,7 @@ packages:
     dependencies:
       cssnano: 4.1.10
       last-call-webpack-plugin: 3.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     peerDependencies:
       webpack: ^4.0.0
@@ -9415,7 +9411,7 @@ packages:
       integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==
   /pg-pool/3.2.1_pg@8.3.0:
     dependencies:
-      pg: 8.3.0_pg@8.3.0
+      pg: 8.3.0
     dev: true
     peerDependencies:
       pg: '>=8.0'
@@ -9437,7 +9433,7 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==
-  /pg/8.3.0_pg@8.3.0:
+  /pg/8.3.0:
     dependencies:
       buffer-writer: 2.0.0
       packet-reader: 1.0.0
@@ -9450,8 +9446,6 @@ packages:
     dev: true
     engines:
       node: '>= 8.0.0'
-    peerDependencies:
-      pg: '*'
     resolution:
       integrity: sha512-jQPKWHWxbI09s/Z9aUvoTbvGgoj98AU7FDCcQ7kdejupn/TcNpx56v2gaOTzXkzOajmOEJEdi9eTh9cA2RVAjQ==
   /pgpass/1.0.2:
@@ -11681,7 +11675,7 @@ packages:
       serialize-javascript: 3.1.0
       source-map: 0.6.1
       terser: 4.8.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-sources: 1.4.3
       worker-farm: 1.7.0
     dev: true
@@ -12116,7 +12110,7 @@ packages:
       loader-utils: 1.4.0
       mime: 2.4.6
       schema-utils: 1.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     engines:
       node: '>= 6.9.0'
@@ -12269,7 +12263,7 @@ packages:
       vue-hot-reload-api: 2.3.4
       vue-style-loader: 4.1.2
       vue-template-compiler: 2.6.11
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     peerDependencies:
       cache-loader: '*'
@@ -12331,7 +12325,7 @@ packages:
       tapable: 1.1.3
       toposort: 1.0.7
       util.promisify: 1.0.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
     dev: true
     engines:
       node: '>=6.9'
@@ -12496,7 +12490,7 @@ packages:
       mime: 2.4.6
       mkdirp: 0.5.5
       range-parser: 1.2.1
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-log: 2.0.0
     dev: true
     engines:
@@ -12536,7 +12530,7 @@ packages:
       strip-ansi: 3.0.1
       supports-color: 6.1.0
       url: 0.11.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-dev-middleware: 3.7.2_webpack@4.43.0
       webpack-log: 2.0.0
       ws: 6.2.1
@@ -12561,7 +12555,7 @@ packages:
       merge-options: 1.0.1
       strip-ansi: 4.0.0
       uuid: 3.4.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       webpack-log: 1.2.0
       ws: 4.1.0
     dev: true
@@ -12604,7 +12598,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ==
-  /webpack/4.43.0_webpack@4.43.0:
+  /webpack/4.43.0:
     dependencies:
       '@webassemblyjs/ast': 1.9.0
       '@webassemblyjs/helper-module-context': 1.9.0
@@ -12633,8 +12627,6 @@ packages:
     engines:
       node: '>=6.11.5'
     hasBin: true
-    peerDependencies:
-      webpack: '*'
     resolution:
       integrity: sha512-GW1LjnPipFW2Y78OOab8NJlCflB7EFskMih2AHdvjbpKMeDJqEgSx24cXXXiPS65+WSwVyxtDsJH6jGX2czy+g==
   /webpackbar/3.2.0_webpack@4.43.0:
@@ -12646,7 +12638,7 @@ packages:
       pretty-time: 1.1.0
       std-env: 2.2.1
       text-table: 0.2.0
-      webpack: 4.43.0_webpack@4.43.0
+      webpack: 4.43.0
       wrap-ansi: 5.1.0
     dev: true
     engines:
