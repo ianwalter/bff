@@ -28,7 +28,7 @@ module.exports = {
       print.debug('Adding browser', name)
       context.testContext[name] = async options => {
         print.debug('Launching browser', name)
-        this.instance = await playwright.chromium.launch(options)
+        this.instance = await playwright[name].launch(options)
         const browserContext = await this.instance.newContext()
         const page = await browserContext.newPage()
         return { browser: this.instance, browserContext, page }
