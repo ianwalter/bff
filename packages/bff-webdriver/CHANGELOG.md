@@ -1,5 +1,17 @@
 # @ianwalter/bff-webdriver
 
+## 9.0.0
+
+### Major Changes
+
+- 330baa7: Cleaning up logger changes and bff-webdriver integration API
+- 931ad74: Updating logger, removing expect from browser
+
+### Patch Changes
+
+- Updated dependencies [330baa7]
+  - @ianwalter/bff@9.12.3
+
 ## 8.1.0
 
 ### Minor Changes

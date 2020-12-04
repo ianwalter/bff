@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 9.12.3
+
+### Patch Changes
+
+- 330baa7: Cleaning up logger changes and bff-webdriver integration API
+
 ## 9.12.2
 
 ### Patch Changes
