@@ -1,5 +1,16 @@
 # @ianwalter/bff-playwright
 
+## 3.1.0
+
+### Minor Changes
+
+- 0462a79: Enable other browsers, update logger
+
+### Patch Changes
+
+- Updated dependencies [330baa7]
+  - @ianwalter/bff@9.12.3
+
 ## 3.0.0
 
 ### Patch Changes
