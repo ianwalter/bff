@@ -67,7 +67,7 @@ worker({
     return file
   },
   async test (file, test, context) {
-    const merge = require('@ianwalter/merge')
+    const { merge } = require('@generates/merger')
     const createTimer = require('@ianwalter/timer')
     const toHookRun = require('./lib/toHookRun')
 

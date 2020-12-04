@@ -6,7 +6,7 @@ const { createLogger, chalk } = require('@generates/logger')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
 const { SnapshotState } = require('jest-snapshot')
-const merge = require('@ianwalter/merge')
+const { merge } = require('@generates/merger')
 const callsites = require('callsites')
 const shuffle = require('array-shuffle')
 
@@ -59,6 +59,7 @@ async function run (config) {
 
   // Create the logger instance with the given log level.
   const logger = createLogger(context.log)
+  // logger.log('context', { context, restOfConfig })
 
   // Add the absolute paths of the test files to the run context.
   context.files = shuffle(await globby(context.tests, { absolute: true }))

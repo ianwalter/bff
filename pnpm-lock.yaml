@@ -15,6 +15,7 @@ importers:
   packages/bff:
     dependencies:
       '@generates/logger': 0.0.8
+      '@generates/merger': 0.1.1
       '@ianwalter/cli': 4.1.0
       '@ianwalter/clone': 6.0.1
       '@ianwalter/cloneable': 2.0.0
@@ -35,6 +36,7 @@ importers:
       execa: 5.0.0
     specifiers:
       '@generates/logger': ^0.0.8
+      '@generates/merger': ^0.1.1
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/clone': ^6.0.1
       '@ianwalter/cloneable': ^2.0.0
@@ -1291,6 +1293,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-A0zgTrlKJcroOOxx7GOY+OmVvGYVusG0UlhJLC/q8OvpQzF5xHE/jwW7mfPt5anJwHaRgWcWwjfQAFtk3HtYRA==
+  /@generates/merger/0.1.1:
+    dev: false
+    resolution:
+      integrity: sha512-jlO57SAsyw3sI7fpgHLzx7CdpklW4hciHoILR0lylj0WlMBD1PpRfULeqfiWjUV5NxGuhrxQqZ4vrPteKEZKNg==
   /@hapi/address/2.1.4:
     deprecated: This version has been deprecated and is no longer supported or maintained
     dev: true
