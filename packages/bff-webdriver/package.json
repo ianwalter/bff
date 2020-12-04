@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@ianwalter/bff": "^9.12.3",
-    "@ianwalter/nrg": "^0.3.1",
+    "@ianwalter/nrg": "^0.15.3",
     "@ianwalter/url": "^2.0.0"
   },
   "peerDependencies": {
