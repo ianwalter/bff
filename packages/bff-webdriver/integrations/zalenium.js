@@ -1,41 +1,35 @@
-const { Print } = require('@ianwalter/print')
+const { createLogger } = require('@generates/logger')
 
-module.exports = class ZaleniumIntegration {
-  constructor (context) {
-    // Set up a print instance on the integration instance so it can be reused.
-    this.print = new Print(context.log)
-    this.print.debug('Zalenium integration enabled')
-  }
+const logger = createLogger({
+  level: 'info',
+  namespace: 'bff.webdriver.zalenium'
+})
 
-  static integrate (context) {
-    if (context.webdriver.zalenium) {
-      context.webdriver.integrations.push(new ZaleniumIntegration(context))
-    }
-  }
+module.exports = function zalenium (context) {
+  logger.debug('Zalenium integration enabled')
 
-  enhanceCapability (testContext) {
-    const options = {
+  context.webdriver.integrations.push({
+    enhanceCapability (testContext) {
       // Tell Zalenium the name of the test.
-      'zal:name': testContext.key
-    }
-    testContext.capability = Object.assign(options, testContext.capability)
-  }
-
-  async report ({ webdriver, testContext }) {
-    try {
-      if (testContext.result.failed && webdriver.zalenium.dashboardUrl) {
-        // If the test failed, print the Zalenium Dashboard URL for this
-        // session to make it easier for the user to debug.
-        const { oneLine } = require('common-tags')
-        const query = oneLine`
-          ${testContext.capability['zal:name']}
-          ${testContext.capability['zal:build']}
-        `
-        const url = `${webdriver.zalenium.dashboardUrl}?q=${encodeURI(query)}`
-        this.print.info('Zalenium session:', url)
+      const options = { 'zal:name': testContext.key }
+      testContext.capability = Object.assign(options, testContext.capability)
+    },
+    async report ({ webdriver, testContext }) {
+      try {
+        if (testContext.result.failed && webdriver.zalenium.dashboardUrl) {
+          // If the test failed, log the Zalenium Dashboard URL for this
+          // session to make it easier for the user to debug.
+          const { oneLine } = require('common-tags')
+          const query = oneLine`
+            ${testContext.capability['zal:name']}
+            ${testContext.capability['zal:build']}
+          `
+          const url = `${webdriver.zalenium.dashboardUrl}?q=${encodeURI(query)}`
+          logger.info('Zalenium session:', url)
+        }
+      } catch (err) {
+        logger.error(err)
       }
-    } catch (err) {
-      this.print.error(err)
     }
-  }
+  })
 }

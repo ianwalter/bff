@@ -18,7 +18,6 @@ importers:
       '@ianwalter/cli': 4.1.0
       '@ianwalter/clone': 6.0.1
       '@ianwalter/cloneable': 2.0.0
-      '@ianwalter/print': 8.0.4
       '@ianwalter/sleep': 0.0.1
       '@ianwalter/subpub': 3.0.0
       '@ianwalter/timer': 2.0.2
@@ -39,7 +38,6 @@ importers:
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/clone': ^6.0.1
       '@ianwalter/cloneable': ^2.0.0
-      '@ianwalter/print': ^8.0.3
       '@ianwalter/sleep': ^0.0.1
       '@ianwalter/subpub': ^3.0.0
       '@ianwalter/timer': ^2.0.2
@@ -1380,6 +1378,7 @@ packages:
     resolution:
       integrity: sha512-enkw8vymGsGDIIVlJQsG7hmN9HQJwwhgnY+Z2ysQBuUhsLCcD4JROZdVGE+oHa2RLPMKMN8phBZJrshUCiauLw==
   /@ianwalter/dot/1.0.4:
+    dev: true
     resolution:
       integrity: sha512-bq6q4ZXWzQfBbE29i6trTwAtmmRzSWU0D/fSPhA/tDNbxhSlXDYUxfITtq1cctqi+s4BV4PgYIjxNkLeePK1mQ==
   /@ianwalter/dot/1.0.5:
@@ -1529,23 +1528,6 @@ packages:
       strip-ansi: 6.0.0
     resolution:
       integrity: sha512-YkkUv/Bnwzu0qNqj3BCo1ZP19wk2kkYXYhFvgKGZqVpELRHEwOzo5pD4KszwhjvMUNiBOLYqOZO8C3OCx5+cXA==
-  /@ianwalter/print/8.0.4:
-    dependencies:
-      '@ianwalter/chromafi': 1.0.1
-      '@ianwalter/cli': 4.1.0
-      '@ianwalter/clone': 6.0.1
-      '@ianwalter/dot': 1.0.4
-      '@ianwalter/merge': 9.0.1
-      chalk: 4.1.0
-      has-ansi: 4.0.0
-      has-emoji: 1.1.0
-      marked: 1.1.0
-      marked-terminal: 4.1.0_marked@1.1.0
-      strip-ansi: 6.0.0
-    dev: false
-    hasBin: true
-    resolution:
-      integrity: sha512-XizAXpyo7kyhGZ/PdeGF2oNqlnWmhGuI+2e5ofNOZlwn6+yuAX4Ph1Wor0dxyNi41N0ERBZcJG5slV+nNaeETw==
   /@ianwalter/print/8.0.5:
     dependencies:
       '@ianwalter/chromafi': 1.0.1
@@ -8198,6 +8180,7 @@ packages:
       marked: 1.1.0
       node-emoji: 1.10.0
       supports-hyperlinks: 2.1.0
+    dev: true
     peerDependencies:
       marked: '>=0.4.0 <2.0.0'
     resolution:
@@ -8223,6 +8206,7 @@ packages:
     resolution:
       integrity: sha512-EGwzEeCcLniFX51DhTpmTom+dSA/MG/OBUDjnWtHbEnjAH180VzUeAw+oE4+Zv+CoYBWyRlYOTR0N8SO9R1PVw==
   /marked/1.1.0:
+    dev: true
     engines:
       node: '>= 8.16.2'
     hasBin: true

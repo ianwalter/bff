@@ -37,7 +37,7 @@ convenience:
   it's marked as failed for timing out.
 * `--junit, -j [file]` Specifies whether or not to write the results to a junit
   report file.
-* `--verbose, -V` Prints more information for each test: test tags, relative
+* `--verbose, -V` Logs more information for each test: test tags, relative
   file path, and timing information.
 
 ## Configuration

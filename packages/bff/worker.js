@@ -16,12 +16,12 @@ worker({
     process.kill(process.pid, 'SIGINT')
   },
   async register (file, context) {
-    // Create the Print instance based on the log level set in the context
+    // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.register`
     const logger = createLogger({ ...context.log, namespace })
 
-    // Print a debug statement for this registration action with the relative
+    // Log a debug statement for this registration action with the relative
     // path of the test file that's having it's tests registered.
     const relativePath = chalk.dim(file.relativePath)
     logger.debug(`Registration worker ${threadId}`, relativePath)
@@ -71,12 +71,12 @@ worker({
     const createTimer = require('@ianwalter/timer')
     const toHookRun = require('./lib/toHookRun')
 
-    // Create the Print instance based on the log level set in the context
+    // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.test`
     const logger = createLogger({ ...context.log, namespace })
 
-    // Print a debug statement for this test action with the test name and
+    // Log a debug statement for this test action with the test name and
     // relative path of the test file it belongs to.
     const relativePath = chalk.dim(file.relativePath)
     logger.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)

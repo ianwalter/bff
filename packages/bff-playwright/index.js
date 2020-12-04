@@ -20,7 +20,7 @@ module.exports = {
     //   if (context.testContext.playwright.browsers.includes(browser.name)) {
     //     const { name, ...options } = browser
     //   } else {
-    //     print.warn('Browser not available in Playwright:', browser.name)
+    //     logger.warn('Browser not available in Playwright:', browser.name)
     //   }
     // }
 

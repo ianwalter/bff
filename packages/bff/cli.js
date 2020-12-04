@@ -7,7 +7,7 @@ const { createLogger, chalk } = require('@generates/logger')
 const bff = require('.')
 
 // Set stdout to blocking so that the program doesn't exit with log statements
-// still waiting to be printed to the console.
+// still waiting to be logged to the console.
 if (process.stdout._handle) process.stdout._handle.setBlocking(true)
 
 const logger = createLogger({ namespace: 'bff.cli', level: 'info' })
@@ -29,7 +29,7 @@ async function run () {
       },
       log: {
         alias: 'l',
-        description: "Specifies bff's print (logging) configuration",
+        description: 'Specifies logging configuration',
         default: { namespace: 'bff.main', level: 'info' }
       },
       tag: {
@@ -77,7 +77,7 @@ async function run () {
       verbose: {
         alias: 'V',
         description: `
-          Prints more information for each test: test tags, relative file path,
+          Logs more information for each test: test tags, relative file path,
           and timing information
         `,
         default: false

@@ -78,14 +78,14 @@ module.exports = {
   async beforeEach (_, context) {
     try {
       logger.debug('Adding WebDriver integrations')
-      const ZaleniumIntegration = require('./integrations/zalenium')
-      const AppiumIntegration = require('./integrations/appium')
+      const zalenium = require('./integrations/zalenium')
+      const appium = require('./integrations/appium')
 
       // Add enabled integrations to the integrations array so they can be used
       // later.
       context.webdriver.integrations = context.webdriver.integrations || []
-      ZaleniumIntegration.integrate(context)
-      AppiumIntegration.integrate(context)
+      if (context.webdriver.zalenium) zalenium(context)
+      if (context.webdriver.appium) appium(context)
 
       // Go through each enabled integration and allow it to enahance the
       // webdriver capability.
