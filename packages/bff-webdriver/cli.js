@@ -15,13 +15,16 @@ async function run () {
       const selenium = require('selenium-standalone')
       const { version = webdriverVersion, drivers } = config.webdriver || {}
       await new Promise((resolve, reject) => {
-        selenium.install({ logger: logger.log, version, drivers }, err => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve()
+        selenium.install(
+          { logger: logger.log.bind(logger), version, drivers },
+          err => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve()
+            }
           }
-        })
+        )
       })
     } else if (command === 'cleanup') {
       const cleanup = require('./cleanup')
