@@ -1,12 +1,12 @@
 const playwright = require('playwright')
-const { createPrint } = require('@ianwalter/print')
+const { createLogger } = require('@generates/logger')
 
-const print = createPrint({ level: 'info', namespace: 'bff.playwright' })
+const logger = createLogger({ level: 'info', namespace: 'bff.playwright' })
 const availableBrowsers = ['chromium', 'firefox', 'webkit']
 
 module.exports = {
   async beforeEach (file, context) {
-    print.debug(file.relativePath, '•', context.testContext.name)
+    logger.debug(file.relativePath, '•', context.testContext.name)
     context.testContext.playwright = playwright
     context.testContext.browsers = availableBrowsers
 
@@ -25,9 +25,9 @@ module.exports = {
     // }
 
     for (const name of availableBrowsers) {
-      print.debug('Adding browser', name)
+      logger.debug('Adding browser', name)
       context.testContext[name] = async options => {
-        print.debug('Launching browser', name)
+        logger.debug('Launching browser', name)
         this.instance = await playwright[name].launch(options)
         const browserContext = await this.instance.newContext()
         const page = await browserContext.newPage()
@@ -39,7 +39,7 @@ module.exports = {
     for (const name of availableBrowsers) {
       const browser = context.testContext[name]
       if (browser.instance) {
-        print.debug('Closing browser', name)
+        logger.debug('Closing browser', name)
         await browser.instance.close()
       }
     }
