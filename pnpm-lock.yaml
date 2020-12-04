@@ -66,8 +66,8 @@ importers:
       playwright: ^1.6.2
   packages/bff-webdriver:
     dependencies:
+      '@generates/logger': 0.0.8
       '@ianwalter/cli': 4.1.0
-      '@ianwalter/print': 6.0.0
       dotenv: 8.2.0
       execa: 5.0.0
       p-settle: 4.1.1
@@ -78,10 +78,10 @@ importers:
       '@ianwalter/nrg': 0.3.1
       '@ianwalter/url': 2.0.0
     specifiers:
+      '@generates/logger': ^0.0.8
       '@ianwalter/bff': ^9.12.2
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/nrg': ^0.3.1
-      '@ianwalter/print': ^6.0.0
       '@ianwalter/url': ^2.0.0
       dotenv: ^8.2.0
       execa: ^5.0.0
@@ -1413,10 +1413,6 @@ packages:
   /@ianwalter/merge/6.0.0:
     resolution:
       integrity: sha512-Ohskh/vqQFgW2Abaxd3kPYz/uNqoUmCSjU8kB8SoRieQqIOyXit1pFKYW4HmcoRcDFbktpWmS1QpIBoF74DGBg==
-  /@ianwalter/merge/7.0.0:
-    dev: false
-    resolution:
-      integrity: sha512-PuJJiUQZSNRu6zrC6xrJx9/gX0NX9rilQ646+VBSj+X7RRBUWOogqxEUHojOJcwYTt2JzWVV9DIvvsZMkfZP5Q==
   /@ianwalter/merge/9.0.1:
     resolution:
       integrity: sha512-Wu7eAZEsfuW0FJsVsdsNaWAtlY/6Viy74HQpZ8A81KutjhNO5cyPRkiBGletuX9kDUTOdSwWJokPnu/o4yE3KA==
@@ -1533,21 +1529,6 @@ packages:
       strip-ansi: 6.0.0
     resolution:
       integrity: sha512-YkkUv/Bnwzu0qNqj3BCo1ZP19wk2kkYXYhFvgKGZqVpELRHEwOzo5pD4KszwhjvMUNiBOLYqOZO8C3OCx5+cXA==
-  /@ianwalter/print/6.0.0:
-    dependencies:
-      '@ianwalter/chromafi': 1.0.1
-      '@ianwalter/clone': 6.0.1
-      '@ianwalter/log': 4.0.0
-      '@ianwalter/merge': 7.0.0
-      chalk: 3.0.0
-      has-ansi: 4.0.0
-      has-emoji: 1.1.0
-      marked: 0.8.2
-      marked-terminal: 4.1.0_marked@0.8.2
-      strip-ansi: 6.0.0
-    dev: false
-    resolution:
-      integrity: sha512-Gde6yLSVtYdNQ1Lm7fLvNYb+apIzYyr4uiXaXfvn08NYQf6pRgCfiCmV+uQOczzsfnU7yWleE0dYIP2ZkDXzag==
   /@ianwalter/print/8.0.4:
     dependencies:
       '@ianwalter/chromafi': 1.0.1
