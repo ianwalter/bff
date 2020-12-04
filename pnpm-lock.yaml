@@ -18,7 +18,6 @@ importers:
       '@ianwalter/cli': 4.1.0
       '@ianwalter/clone': 6.0.1
       '@ianwalter/cloneable': 2.0.0
-      '@ianwalter/print': 8.0.4
       '@ianwalter/sleep': 0.0.1
       '@ianwalter/subpub': 3.0.0
       '@ianwalter/timer': 2.0.2
@@ -39,7 +38,6 @@ importers:
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/clone': ^6.0.1
       '@ianwalter/cloneable': ^2.0.0
-      '@ianwalter/print': ^8.0.3
       '@ianwalter/sleep': ^0.0.1
       '@ianwalter/subpub': ^3.0.0
       '@ianwalter/timer': ^2.0.2
@@ -56,16 +54,18 @@ importers:
       workerpool: ^6.0.3
   packages/bff-playwright:
     dependencies:
+      '@generates/logger': 0.0.8
       playwright: 1.5.1
     devDependencies:
       '@ianwalter/bff': 'link:../bff'
     specifiers:
+      '@generates/logger': ^0.0.8
       '@ianwalter/bff': ^9.12.0
       playwright: ^1.5.0
   packages/bff-webdriver:
     dependencies:
+      '@generates/logger': 0.0.8
       '@ianwalter/cli': 4.1.0
-      '@ianwalter/print': 6.0.0
       dotenv: 8.2.0
       execa: 5.0.0
       p-settle: 4.1.1
@@ -76,10 +76,10 @@ importers:
       '@ianwalter/nrg': 0.3.1_@ianwalter+nrg@0.3.1
       '@ianwalter/url': 2.0.0
     specifiers:
+      '@generates/logger': ^0.0.8
       '@ianwalter/bff': ^9.12.0
       '@ianwalter/cli': ^4.1.0
       '@ianwalter/nrg': ^0.3.1
-      '@ianwalter/print': ^6.0.0
       '@ianwalter/url': ^2.0.0
       dotenv: ^8.2.0
       execa: ^5.0.0
@@ -1378,6 +1378,7 @@ packages:
     resolution:
       integrity: sha512-enkw8vymGsGDIIVlJQsG7hmN9HQJwwhgnY+Z2ysQBuUhsLCcD4JROZdVGE+oHa2RLPMKMN8phBZJrshUCiauLw==
   /@ianwalter/dot/1.0.4:
+    dev: true
     resolution:
       integrity: sha512-bq6q4ZXWzQfBbE29i6trTwAtmmRzSWU0D/fSPhA/tDNbxhSlXDYUxfITtq1cctqi+s4BV4PgYIjxNkLeePK1mQ==
   /@ianwalter/dot/1.0.5:
@@ -1411,10 +1412,6 @@ packages:
   /@ianwalter/merge/6.0.0:
     resolution:
       integrity: sha512-Ohskh/vqQFgW2Abaxd3kPYz/uNqoUmCSjU8kB8SoRieQqIOyXit1pFKYW4HmcoRcDFbktpWmS1QpIBoF74DGBg==
-  /@ianwalter/merge/7.0.0:
-    dev: false
-    resolution:
-      integrity: sha512-PuJJiUQZSNRu6zrC6xrJx9/gX0NX9rilQ646+VBSj+X7RRBUWOogqxEUHojOJcwYTt2JzWVV9DIvvsZMkfZP5Q==
   /@ianwalter/merge/9.0.1:
     resolution:
       integrity: sha512-Wu7eAZEsfuW0FJsVsdsNaWAtlY/6Viy74HQpZ8A81KutjhNO5cyPRkiBGletuX9kDUTOdSwWJokPnu/o4yE3KA==
@@ -1533,38 +1530,6 @@ packages:
       strip-ansi: 6.0.0
     resolution:
       integrity: sha512-YkkUv/Bnwzu0qNqj3BCo1ZP19wk2kkYXYhFvgKGZqVpELRHEwOzo5pD4KszwhjvMUNiBOLYqOZO8C3OCx5+cXA==
-  /@ianwalter/print/6.0.0:
-    dependencies:
-      '@ianwalter/chromafi': 1.0.1
-      '@ianwalter/clone': 6.0.1
-      '@ianwalter/log': 4.0.0
-      '@ianwalter/merge': 7.0.0
-      chalk: 3.0.0
-      has-ansi: 4.0.0
-      has-emoji: 1.1.0
-      marked: 0.8.2
-      marked-terminal: 4.1.0_marked@0.8.2
-      strip-ansi: 6.0.0
-    dev: false
-    resolution:
-      integrity: sha512-Gde6yLSVtYdNQ1Lm7fLvNYb+apIzYyr4uiXaXfvn08NYQf6pRgCfiCmV+uQOczzsfnU7yWleE0dYIP2ZkDXzag==
-  /@ianwalter/print/8.0.4:
-    dependencies:
-      '@ianwalter/chromafi': 1.0.1
-      '@ianwalter/cli': 4.1.0
-      '@ianwalter/clone': 6.0.1
-      '@ianwalter/dot': 1.0.4
-      '@ianwalter/merge': 9.0.1
-      chalk: 4.1.0
-      has-ansi: 4.0.0
-      has-emoji: 1.1.0
-      marked: 1.1.0
-      marked-terminal: 4.1.0_marked@1.1.0
-      strip-ansi: 6.0.0
-    dev: false
-    hasBin: true
-    resolution:
-      integrity: sha512-XizAXpyo7kyhGZ/PdeGF2oNqlnWmhGuI+2e5ofNOZlwn6+yuAX4Ph1Wor0dxyNi41N0ERBZcJG5slV+nNaeETw==
   /@ianwalter/print/8.0.5:
     dependencies:
       '@ianwalter/chromafi': 1.0.1
@@ -2595,6 +2560,13 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-9VGjrMsG1vePxcSweQsN20KY/c4zN0h9fLjqAbwbPfahM3t+NL+M9HC8xeXG2I8pX5NoamTGNuomEUFI7fcUjA==
+  /ansi-styles/4.3.0:
+    dependencies:
+      color-convert: 2.0.1
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==
   /ansicolors/0.3.2:
     resolution:
       integrity: sha1-ZlWX3oap/+Oqm/vmyuXG6kJrSXk=
@@ -3462,8 +3434,8 @@ packages:
       integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==
   /chalk/4.1.0:
     dependencies:
-      ansi-styles: 4.2.1
-      supports-color: 7.1.0
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
     engines:
       node: '>=10'
     resolution:
@@ -4740,6 +4712,7 @@ packages:
     dependencies:
       domelementtype: 2.0.1
       entities: 2.0.3
+    dev: true
     resolution:
       integrity: sha512-2/xPb3ORsQ42nHYiSunXkDjPLBaEj/xTwUO4B7XCZQTRk7EBtTOPaygh10YAAh2OI1Qrp6NWfpAhzswj0ydt9g==
   /dom-serializer/1.1.0:
@@ -4765,6 +4738,7 @@ packages:
     resolution:
       integrity: sha512-BSKB+TSpMpFI/HOxCNr1O8aMOTZ8hT3pM3GQ0w/mWRmkhEDSFJkkyzz4XQsBV44BChwGkrDfMyjVD0eA2aFV3w==
   /domelementtype/2.0.1:
+    dev: true
     resolution:
       integrity: sha512-5HOHUDsYZWV8FGWN0Njbr/Rn7f/eWSQi1v7+HsUVwXgn8nWWlL64zKDkS0n8ZmQ3mlWOMuXOnR+7Nx/5tMO5AQ==
   /domhandler/2.4.2:
@@ -4790,13 +4764,13 @@ packages:
       integrity: sha512-J1C5rIANUbuYK+FuFL98650rihynUOEzRLxW+90bKZRWB6A1X1Tf82GxR1qAWLyfNPRvjqfip3Q5tdYlmAa9lA==
   /domutils/1.5.1:
     dependencies:
-      dom-serializer: 0.2.2
+      dom-serializer: 0.1.1
       domelementtype: 1.3.1
     resolution:
       integrity: sha1-3NhIiib1Y9YQeeSMn3t+Mjc2gs8=
   /domutils/1.7.0:
     dependencies:
-      dom-serializer: 0.2.2
+      dom-serializer: 0.1.1
       domelementtype: 1.3.1
     resolution:
       integrity: sha512-Lgd2XcJ/NjEw+7tFvfKxOzCYKZsdct5lczQ2ZaQY8Djz7pfAD3Gbp8ySJWtreII/vDlMVmxwa6pHmdxIYgttDg==
@@ -4941,6 +4915,7 @@ packages:
     resolution:
       integrity: sha512-f2LZMYl1Fzu7YSBKg+RoROelpOaNrcGmE9AZubeDfrCEia483oW4MI4VyFd5VNHIgQ/7qm1I0wUHK1eJnn2y2w==
   /entities/2.0.3:
+    dev: true
     resolution:
       integrity: sha512-MyoZ0jgnLvB2X3Lg5HqpFmn1kybDiIfEQmKzTb5apr51Rb+T3KdmMiqa70T+bhGnyv7bQ6WMj2QMHpGMmlrUYQ==
   /envify/4.1.0:
@@ -7405,8 +7380,12 @@ packages:
     resolution:
       integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==
   /json-parse-better-errors/1.0.2:
+    dev: true
     resolution:
       integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
+  /json-parse-even-better-errors/2.3.1:
+    resolution:
+      integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==
   /json-schema-traverse/0.4.1:
     dev: true
     resolution:
@@ -8200,6 +8179,7 @@ packages:
       marked: 1.1.0
       node-emoji: 1.10.0
       supports-hyperlinks: 2.1.0
+    dev: true
     peerDependencies:
       marked: '>=0.4.0 <2.0.0'
     resolution:
@@ -8225,6 +8205,7 @@ packages:
     resolution:
       integrity: sha512-EGwzEeCcLniFX51DhTpmTom+dSA/MG/OBUDjnWtHbEnjAH180VzUeAw+oE4+Zv+CoYBWyRlYOTR0N8SO9R1PVw==
   /marked/1.1.0:
+    dev: true
     engines:
       node: '>= 8.16.2'
     hasBin: true
@@ -9263,16 +9244,16 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-vjX1Qlvh9/bHRxhPmKeIy5lHfuA=
-  /parse-json/5.0.0:
+  /parse-json/5.1.0:
     dependencies:
       '@babel/code-frame': 7.10.4
       error-ex: 1.3.2
-      json-parse-better-errors: 1.0.2
+      json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.1.6
     engines:
       node: '>=8'
     resolution:
-      integrity: sha512-OOY5b7PAEFV0E2Fir1KOkxchnZNCdowAJgQ5NuxjpBKTRP3pQhwkrkxqQjeoKJ+fO7bCpmIZaogI4eZGDMEGOw==
+      integrity: sha512-+mi/lmVVNKFNVyLXV31ERiy2CY5E1/F6QtJFEzoChPRwwngMNXRDQ9GJ5WdE2Z2P4AujsOi0/+2qHID68KwfIQ==
   /parse-passwd/1.0.0:
     dev: true
     engines:
@@ -10297,7 +10278,7 @@ packages:
     dependencies:
       '@types/normalize-package-data': 2.4.0
       normalize-package-data: 2.5.0
-      parse-json: 5.0.0
+      parse-json: 5.1.0
       type-fest: 0.6.0
     engines:
       node: '>=8'
@@ -11159,7 +11140,7 @@ packages:
   /spdx-correct/3.1.1:
     dependencies:
       spdx-expression-parse: 3.0.1
-      spdx-license-ids: 3.0.5
+      spdx-license-ids: 3.0.6
     resolution:
       integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==
   /spdx-exceptions/2.3.0:
@@ -11168,12 +11149,12 @@ packages:
   /spdx-expression-parse/3.0.1:
     dependencies:
       spdx-exceptions: 2.3.0
-      spdx-license-ids: 3.0.5
+      spdx-license-ids: 3.0.6
     resolution:
       integrity: sha512-cbqHunsQWnJNE6KhVSMsMeH5H/L9EpymbzqTQ3uLwNCLZ1Q481oWaofqH7nO6V07xlXwY6PhQdQ2IedWx/ZK4Q==
-  /spdx-license-ids/3.0.5:
+  /spdx-license-ids/3.0.6:
     resolution:
-      integrity: sha512-J+FWzZoynJEXGphVIS+XEh3kFSjZX/1i9gFBaWQcB+/tmpe2qUsSBABpcxqxnAxFdiUFEgAX1bjYGQvIZmoz9Q==
+      integrity: sha512-+orQK83kyMva3WyPf59k1+Y525csj5JejicWut55zeTWANuN17qSiSLUXWtzHeNWORSvT7GLDJ/E/XiIWoXBTw==
   /spdy-transport/3.0.0:
     dependencies:
       debug: 4.1.1
@@ -11567,10 +11548,17 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-oRSIpR8pxT1Wr2FquTNnGet79b3BWljqOuoW/h4oBhxJ/HUbX5nX6JSruTkvXDCFMwDPvsaTTbvMLKZWSy0R5g==
+  /supports-color/7.2.0:
+    dependencies:
+      has-flag: 4.0.0
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
   /supports-hyperlinks/2.1.0:
     dependencies:
       has-flag: 4.0.0
-      supports-color: 7.1.0
+      supports-color: 7.2.0
     engines:
       node: '>=8'
     resolution:

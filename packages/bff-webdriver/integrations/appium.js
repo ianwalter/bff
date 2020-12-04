@@ -1,12 +1,15 @@
 require('dotenv').config()
 
-const { Print } = require('@ianwalter/print')
+const { createLogger } = require('@generates/logger')
+
+const logger = createLogger({
+  level: 'info',
+  namespace: 'bff-webdriver.appium'
+})
 
 module.exports = class AppiumIntegration {
   constructor (context) {
-    // Set up a print instance on the integration instance so it can be reused.
-    this.print = new Print(context.log)
-    this.print.debug('Appium integration enabled')
+    logger.debug('Appium integration enabled')
 
     // Define the global capability options.
     context.webdriver.port = context.webdriver.port || 4723
@@ -19,10 +22,8 @@ module.exports = class AppiumIntegration {
   }
 
   enhanceCapability (testContext) {
-    const options = {
-      // Tell appium the name of the test.
-      sessionName: testContext.key
-    }
+    // Tell appium the name of the test.
+    const options = { sessionName: testContext.key }
     testContext.capability = Object.assign(options, testContext.capability)
   }
 }

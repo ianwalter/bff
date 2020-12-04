@@ -1,10 +1,13 @@
-const { Print } = require('@ianwalter/print')
+const { createLogger } = require('@generates/logger')
+
+const logger = createLogger({
+  level: 'info',
+  namespace: 'bff-webdriver.zalenium'
+})
 
 module.exports = class ZaleniumIntegration {
-  constructor (context) {
-    // Set up a print instance on the integration instance so it can be reused.
-    this.print = new Print(context.log)
-    this.print.debug('Zalenium integration enabled')
+  constructor () {
+    logger.debug('Zalenium integration enabled')
   }
 
   static integrate (context) {
@@ -14,10 +17,8 @@ module.exports = class ZaleniumIntegration {
   }
 
   enhanceCapability (testContext) {
-    const options = {
-      // Tell Zalenium the name of the test.
-      'zal:name': testContext.key
-    }
+    // Tell Zalenium the name of the test.
+    const options = { 'zal:name': testContext.key }
     testContext.capability = Object.assign(options, testContext.capability)
   }
 
@@ -32,10 +33,10 @@ module.exports = class ZaleniumIntegration {
           ${testContext.capability['zal:build']}
         `
         const url = `${webdriver.zalenium.dashboardUrl}?q=${encodeURI(query)}`
-        this.print.info('Zalenium session:', url)
+        logger.info('Zalenium session:', url)
       }
     } catch (err) {
-      this.print.error(err)
+      logger.error(err)
     }
   }
 }

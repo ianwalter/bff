@@ -8,4 +8,5 @@
 4. `beforeEach`
 5. `runTest`
 6. `afrerEach`
-7. `after`
+7. `cleanup`
+8. `after`

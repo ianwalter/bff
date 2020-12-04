@@ -1,6 +1,7 @@
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { createLogger, chalk } = require('@generates/logger')
+const toHookRun = require('./lib/toHookRun')
 
 let threadId = process.pid
 try {
@@ -10,13 +11,26 @@ try {
   // Ignore error.
 }
 
+//
+let lastTestContext
+
 worker({
-  seppuku () {
+  async cleanup (context) {
+    // Create the logger instance based on the log level set in the context
+    // received from the main thread.
+    const namespace = `bff.worker.${threadId}.cleanup`
+    const logger = createLogger({ ...context.log, namespace })
+    logger.debug('Beginning cleanup')
+
+    // Sequentially run any cleanup hooks specified by plugins.
+    context.testContext = lastTestContext
+    await pSeries(context.plugins.map(toHookRun('cleanup', context)))
+
     // Emit a SIGINT to itself so that processes terminate gracefully.
     process.kill(process.pid, 'SIGINT')
   },
   async register (file, context) {
-    // Create the Print instance based on the log level set in the context
+    // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.register`
     const logger = createLogger({ ...context.log, namespace })
@@ -24,15 +38,10 @@ worker({
     // Print a debug statement for this registration action with the relative
     // path of the test file that's having it's tests registered.
     const relativePath = chalk.dim(file.relativePath)
-    logger.debug(`Registration worker ${threadId}`, relativePath)
+    logger.debug('Beginning registration:', relativePath)
 
     // Sequentially run any registration hooks specified by plugins.
-    const toHookRun = require('./lib/toHookRun')
-    if (context.plugins && context.plugins.length) {
-      await pSeries(
-        context.plugins.map(toHookRun('registration', file, context))
-      )
-    }
+    await pSeries(context.plugins.map(toHookRun('registration', file, context)))
 
     // If the map of tests in the current test file hasn't been added to the
     // context, require the test file and use it's exports object as the test
@@ -69,7 +78,6 @@ worker({
   async test (file, test, context) {
     const merge = require('@ianwalter/merge')
     const createTimer = require('@ianwalter/timer')
-    const toHookRun = require('./lib/toHookRun')
 
     // Create the Print instance based on the log level set in the context
     // received from the main thread.
@@ -79,26 +87,22 @@ worker({
     // Print a debug statement for this test action with the test name and
     // relative path of the test file it belongs to.
     const relativePath = chalk.dim(file.relativePath)
-    logger.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
+    logger.debug('Beginning testing:', chalk.cyan(test.name), relativePath)
 
     // Add the file and test data to the testContext.
-    merge(context.testContext, file, test)
+    lastTestContext = merge(context.testContext, file, test)
 
     try {
-      if (context.plugins && context.plugins.length) {
-        // Sequentially run any beforeEach hooks specified by plugins.
-        await pSeries(
-          context.plugins.map(toHookRun('beforeEach', file, context))
-        )
+      // Sequentially run any beforeEach hooks specified by plugins.
+      await pSeries(context.plugins.map(toHookRun('beforeEach', file, context)))
 
-        // If the verbose option is set, start a timer for the test.
-        if (context.verbose) {
-          context.timer = createTimer()
-        }
-
-        // Sequentially run any runTest hooks specified by plugins.
-        await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
+      // If the verbose option is set, start a timer for the test.
+      if (context.verbose) {
+        context.timer = createTimer()
       }
+
+      // Sequentially run any runTest hooks specified by plugins.
+      await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
 
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
@@ -130,11 +134,13 @@ worker({
       }
     } finally {
       // Sequentially run any afterEach hooks specified by plugins.
-      if (context.plugins && context.plugins.length) {
-        await pSeries(
-          context.plugins.map(toHookRun('afterEach', file, context))
-        )
-      }
+      await pSeries(context.plugins.map(toHookRun('afterEach', file, context)))
+
+      // Sequentially run any cleanup hooks specified by plugins.
+      await pSeries(context.plugins.map(toHookRun('cleanup', context)))
+
+      //
+      context.testContext.hasCompleted = true
     }
 
     // Return the test result to the main thread.

@@ -1,21 +1,19 @@
-const { Print } = require('@ianwalter/print')
+const { createLogger } = require('@generates/logger')
 
-let print
-let seleniumStandalone
-
+const logger = createLogger({ level: 'info', namespace: 'bff-webdriver' })
 const webdriverVersion = '3.141.59'
 
+let seleniumStandalone
 module.exports = {
   webdriverVersion,
   async before (context) {
-    print = new Print(context.log)
     try {
       // Set the WebDriver version if not already configured.
       context.webdriver.version = context.webdriver.version || webdriverVersion
-      print.debug('Using WebDriver version', context.webdriver.version)
+      logger.debug('Using WebDriver version', context.webdriver.version)
 
       if (context.webdriver.standalone) {
-        print.debug('Starting Selenium Standalone')
+        logger.debug('Starting Selenium Standalone')
         return new Promise((resolve, reject) => {
           const standalone = require('selenium-standalone')
           const spawnOptions = { stdio: 'inherit' }
@@ -24,11 +22,10 @@ module.exports = {
           // Start the Selenium Standalone server.
           standalone.start({ spawnOptions, version, drivers }, (err, child) => {
             if (err) {
-              if (child) {
-                // If there was an error but a child process was still created,
-                // kill the child process.
-                child.kill()
-              }
+              // If there was an error but a child process was still created,
+              // kill the child process.
+              if (child) child.kill()
+
               reject(err)
             } else {
               // Assign the child process to the seleniumStandalone variable so
@@ -40,11 +37,10 @@ module.exports = {
         })
       }
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
   },
-  registration (file, context) {
-    print = new Print(context.log)
+  registration (_, context) {
     try {
       // Extract the WebDriver capabilities from the test configuration.
       const capabilities = Array.isArray(context.webdriver.capabilities)
@@ -75,14 +71,12 @@ module.exports = {
         []
       )
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
   },
-  async beforeEach (file, context) {
-    print = new Print(context.log)
-
+  async beforeEach (_, context) {
     try {
-      print.debug('Adding WebDriver integrations')
+      logger.debug('Adding WebDriver integrations')
       const ZaleniumIntegration = require('./integrations/zalenium')
       const AppiumIntegration = require('./integrations/appium')
 
@@ -97,11 +91,11 @@ module.exports = {
       const enhanceCapability = i => i.enhanceCapability(context.testContext)
       context.webdriver.integrations.forEach(enhanceCapability)
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
 
     try {
-      print.debug('Creating WebdriverIO browser instance')
+      logger.debug('Creating WebdriverIO browser instance')
 
       // Set up the browser instance and add it to the test context.
       const { remote } = require('webdriverio')
@@ -118,51 +112,49 @@ module.exports = {
         context.testContext.expect(...args)
       )
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
   },
   async afterEach (_, context) {
     try {
       // Go through each enabled integration and report results to it, etc.
-      print.debug('Running WebDriver integration reporting')
+      logger.debug('Running WebDriver integration reporting')
       const toReport = async integration => {
-        if (integration.report) {
-          integration.report(context)
-        }
+        if (integration.report) integration.report(context)
       }
       await Promise.all(context.webdriver.integrations.map(toReport))
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
 
     try {
       if (context.testContext.browser) {
         // Tell Selenium to delete the browser session once the test is over.
-        print.debug('Terminating WebdriverIO browser instance')
+        logger.debug('Terminating WebdriverIO browser instance')
         await context.testContext.browser.deleteSession()
       }
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
   },
   async after (context) {
     try {
       if (seleniumStandalone) {
         // Kill the Selenium Standalone child process.
-        print.write('\n')
-        print.log('👉', 'bff-webdriver: Stopping Selenium Standalone')
+        logger.write('\n')
+        logger.log('👉', 'bff-webdriver: Stopping Selenium Standalone')
         seleniumStandalone.kill()
 
         // Run cleanup in case there are any orphaned processes hanging around.
         if (context.err) {
-          print.write('\n')
-          print.log('👉', 'bff-webdriver: Running manual cleanup')
+          logger.write('\n')
+          logger.log('👉', 'bff-webdriver: Running manual cleanup')
           const cleanup = require('./cleanup')
           await cleanup()
         }
       }
     } catch (err) {
-      print.error(err)
+      logger.error(err)
     }
   }
 }
