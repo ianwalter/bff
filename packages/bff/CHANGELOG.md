@@ -1,5 +1,17 @@
 # @ianwalter/bff
 
+## 9.12.2
+
+### Patch Changes
+
+- 7c59efd: Update dependency workerpool to ^6.0.3
+- cb49d76: Update dependency expect to ^26.6.0
+- 9d61389: Update dependency execa to v5
+- 5b562e9: Update dependency array-shuffle to v2
+- 5aaf6e3: Update dependency jest-snapshot to ^26.6.2
+- 7c3a041: Update dependency jest-snapshot to ^26.6.0
+- 71a533a: Update dependency expect to ^26.6.2
+
 ## 9.12.1
 
 ### Patch Changes
