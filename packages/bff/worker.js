@@ -63,6 +63,7 @@ worker({
     // context, import the tests from the test file.
     logger.info('Registration importTests', global.bff)
     if (!context.testMap) context.testMap = await importTests(file)
+    logger.info('Test map', context.testMap)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
