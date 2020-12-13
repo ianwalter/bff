@@ -24,7 +24,9 @@ async function importTests (file) {
     }
   }
 
-  return global.bff.tests
+  const { tests } = global.bff
+  delete global.bff
+  return tests
 }
 
 worker({
