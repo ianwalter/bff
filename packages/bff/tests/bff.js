@@ -6,7 +6,7 @@ const { test, run, FailFastError } = require('..')
 const config = {
   timeout: 5000,
   plugins: ['tests/helpers/plugin.js'],
-  log: { stream: false, level: 'info' },
+  log: { stream: false, level: 'debug' },
   match: 'some'
 }
 const toName = ({ name }) => name
