@@ -10,7 +10,7 @@ const merge = require('@ianwalter/merge')
 const callsites = require('callsites')
 const shuffle = require('array-shuffle')
 
-const defaultFiles = ['**/*{.pptr,.play,tests}.?(m|c)js']
+const defaultFiles = ['**/*@(.pptr|.play|tests).?(m|c)js']
 
 class FailFastError extends Error {
   constructor () {
