@@ -271,15 +271,15 @@ async function run (config) {
 }
 
 function handleTestArgs (name, tags, test = {}) {
-  //
-  if (!global.tests) global.tests = {}
+  // Create the bff global if it does not exist.
+  if (!global.bff) global.bff = { tests: {} }
 
   // Add the test line number to the object so it can be shown in verbose mode.
   test.lineNumber = callsites()[2].getLineNumber()
 
   const testFn = tags.pop()
   Object.assign(test, { fn: testFn, tags })
-  global.tests[oneLine(name)] = test
+  global.bff.tests[oneLine(name)] = test
   if (testFn && typeof testFn === 'function') {
     return test
   } else {

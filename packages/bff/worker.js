@@ -1,4 +1,3 @@
-const path = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { createLogger, chalk } = require('@generates/logger')
@@ -9,6 +8,23 @@ try {
   threadId = workerThreads.threadId
 } catch (err) {
   // Ignore error.
+}
+
+async function importTests (file) {
+  try {
+    require(file.path)
+  } catch (err) {
+    if (err.code === 'ERR_REQUIRE_ESM') {
+      const dist = require('@ianwalter/dist')
+      const requireFromString = require('require-from-string')
+      const { cjs } = await dist({ input: file.path, cjs: true })
+      requireFromString(cjs[1], file.name)
+    } else {
+      throw err
+    }
+  }
+
+  return global.bff.tests
 }
 
 worker({
@@ -36,23 +52,8 @@ worker({
     }
 
     // If the map of tests in the current test file hasn't been added to the
-    // context, require the test file and use it's exports object as the test
-    // map.
-    if (!context.testMap) {
-      try {
-        context.testMap = require(file.path)
-      } catch (err) {
-        if (err.code === 'ERR_REQUIRE_ESM') {
-          const dist = require('@ianwalter/dist')
-          const requireFromString = require('require-from-string')
-          const { cjs } = await dist({ input: file.path, cjs: true })
-          requireFromString(cjs[1], file.name)
-          context.testMap = global.tests
-        } else {
-          throw err
-        }
-      }
-    }
+    // context, import the tests from the test file.
+    if (!context.testMap) context.testMap = await importTests(file)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
@@ -72,9 +73,7 @@ worker({
 
     // If an augmentTests method has been added to the context by a plugin, call
     // it with the list of tests so that the plugin can alter them if necessary.
-    if (context.augmentTests) {
-      file.tests = context.augmentTests(file.tests)
-    }
+    if (context.augmentTests) file.tests = context.augmentTests(file.tests)
 
     // Return the file context with the the list of registered tests.
     return file
@@ -105,9 +104,7 @@ worker({
         )
 
         // If the verbose option is set, start a timer for the test.
-        if (context.verbose) {
-          context.timer = createTimer()
-        }
+        if (context.verbose) context.timer = createTimer()
 
         // Sequentially run any runTest hooks specified by plugins.
         await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
@@ -115,9 +112,7 @@ worker({
 
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
-        if (context.verbose) {
-          context.timer = createTimer()
-        }
+        if (context.verbose) context.timer = createTimer()
 
         // Enhance the context passed to the test function with testing
         // utilities.
@@ -125,23 +120,12 @@ worker({
         enhanceTestContext(context.testContext)
         context.testContext.logger = logger
 
-        try {
-          // TODO: Load the test file and
-          require(file.path)
-        } catch (err) {
-          if (err.code === 'ERR_REQUIRE_ESM') {
-            const dist = require('@ianwalter/dist')
-            const requireFromString = require('require-from-string')
-            const { cjs } = await dist({ input: file.path, cjs: true })
-            requireFromString(cjs[1], file.name)
-          } else {
-            throw err
-          }
-        }
+        // Import the tests from the test file.
+        const tests = await importTests(file)
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, global.tests[test.key].fn)
+        await runTest(context.testContext, tests[test.key].fn)
         context.testContext.hasRun = true
       }
 
