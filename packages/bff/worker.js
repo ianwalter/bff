@@ -61,6 +61,7 @@ worker({
 
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
+    logger.info('Registration importTests', global.bff)
     if (!context.testMap) context.testMap = await importTests(file)
 
     // Add a list of tests from the test file that are intended to be run to
@@ -129,7 +130,9 @@ worker({
         context.testContext.logger = logger
 
         // Import the tests from the test file.
+        logger.info('Run importTests', global.bff)
         const { fn } = await importTests(file, test.key)
+        logger.info('FN', global.bff, fn)
 
         // Run the test!
         const runTest = require('./lib/runTest')
