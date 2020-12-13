@@ -262,9 +262,6 @@ async function run (config) {
 }
 
 function handleTestArgs (name, tags, test = {}) {
-  // Create the bff global if it does not exist.
-  if (!global.bff) global.bff = { tests: {} }
-
   // Add the test line number to the object so it can be shown in verbose mode.
   test.lineNumber = callsites()[2].getLineNumber()
 

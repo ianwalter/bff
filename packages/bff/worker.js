@@ -12,6 +12,7 @@ try {
 
 async function importTests (file) {
   try {
+    global.bff = { tests: {} }
     require(file.path)
   } catch (err) {
     if (err.code === 'ERR_REQUIRE_ESM') {
@@ -24,9 +25,7 @@ async function importTests (file) {
     }
   }
 
-  const { tests } = global.bff
-  delete global.bff
-  return tests
+  return global.bff.tests
 }
 
 worker({
@@ -56,7 +55,6 @@ worker({
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
     if (!context.testMap) context.testMap = await importTests(file)
-    logger.debug('Test map', context.testMap)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
@@ -125,7 +123,6 @@ worker({
 
         // Import the tests from the test file.
         const tests = await importTests(file)
-        logger.debug('Test', tests[test.key])
 
         // Run the test!
         const runTest = require('./lib/runTest')
