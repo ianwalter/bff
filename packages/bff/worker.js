@@ -10,7 +10,7 @@ try {
   // Ignore error.
 }
 
-async function importTests (file, testKey) {
+async function importTests (file, testKey = null) {
   try {
     const tests = testKey && global.bff?.tests
     const test = tests && tests[file.path] && tests[file.path][testKey]
