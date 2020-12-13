@@ -1,7 +1,7 @@
 const readline = require('readline')
 const path = require('path')
 const workerpool = require('workerpool')
-const globby = require('globby')
+const glob = require('tiny-glob')
 const { createLogger, chalk } = require('@generates/logger')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
@@ -11,12 +11,8 @@ const callsites = require('callsites')
 const shuffle = require('array-shuffle')
 
 const defaultFiles = [
-  '*tests.(c|m)?js',
-  '*.pptr.(c|m)?js',
-  '*.play.(c|m)?js',
-  'tests/**/*tests.(c|m)?js',
-  'tests/**/*.pptr.(c|m)?js',
-  'tests/**/*.play.(c|m)?js'
+  '*{.pptr,.play,tests}.{cj,mj,j}s',
+  'tests/**/*{.pptr,.play,tests}.{cj,mj,j}s'
 ]
 
 class FailFastError extends Error {
@@ -63,13 +59,13 @@ async function run (config) {
   const logger = createLogger(context.log)
 
   // Add the absolute paths of the test files to the run context.
-  context.files = shuffle(await globby(context.tests, { absolute: true }))
+  const globOptions = { absolute: true, filesOnly: true }
+  const files = await Promise.all(context.tests.map(t => glob(t, globOptions)))
+  context.files = shuffle(files.flat())
   logger.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
-  if (context.files.length === 0) {
-    throw new Error('No test files found.')
-  }
+  if (context.files.length === 0) throw new Error('No test files found.')
 
   // Set the worker pool options. For now, it only sets the maximum amount of
   // workers used if the concurrency setting is set.
@@ -242,16 +238,12 @@ async function run (config) {
         // If the failFast option is set, throw an error so that the test run is
         // immediately failed.
         const [err] = context.failed
-        if (err && context.failFast) {
-          throw new FailFastError()
-        }
+        if (err && context.failFast) throw new FailFastError()
       }))
 
       // The snapshot tests that weren't checked are obsolete and can be
       // removed from the snapshot file.
-      if (snapshotState.getUncheckedCount()) {
-        snapshotState.removeUncheckedKeys()
-      }
+      if (snapshotState.getUncheckedCount()) snapshotState.removeUncheckedKeys()
 
       // Save the snapshot changes.
       snapshotState.save()

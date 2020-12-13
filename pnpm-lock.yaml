@@ -33,6 +33,7 @@ importers:
       junit-report-builder: 2.0.0
       p-series: 2.1.0
       require-from-string: 2.0.2
+      tiny-glob: 0.2.8
       workerpool: 6.0.3
     devDependencies:
       execa: 5.0.0
@@ -57,6 +58,7 @@ importers:
       junit-report-builder: ^2.0.0
       p-series: ^2.1.0
       require-from-string: ^2.0.2
+      tiny-glob: ^0.2.8
       workerpool: ^6.0.3
   packages/bff-playwright:
     dependencies:
@@ -6314,6 +6316,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-BWICuzzDvDoH54NHKCseDanAhE3CeDorgDL5MT6LMXXj2WCnd9UC2szdk4AWLfjdgNBCXLUanXYcpBBKOSWGwg==
+  /globalyzer/0.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==
   /globby/11.0.1:
     dependencies:
       array-union: 2.1.0
@@ -6366,6 +6372,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-ollPHROa5mcxDEkwg6bPt3QbEf4pDQSNtd6JPL1YvOvAo/7/0VAm9TccUeoTmarjPw4pfUthSCqcyfNB1I3ZSg==
+  /globrex/0.1.2:
+    dev: false
+    resolution:
+      integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
   /good-listener/1.2.2:
     dependencies:
       delegate: 3.2.0
@@ -12121,6 +12131,13 @@ packages:
     optional: true
     resolution:
       integrity: sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
+  /tiny-glob/0.2.8:
+    dependencies:
+      globalyzer: 0.1.0
+      globrex: 0.1.2
+    dev: false
+    resolution:
+      integrity: sha512-vkQP7qOslq63XRX9kMswlby99kyO5OvKptw7AMwBVMjXEI7Tb61eoI5DydyEMOseyGS5anDN1VPoVxEvH01q8w==
   /tmp/0.0.33:
     dependencies:
       os-tmpdir: 1.0.2
