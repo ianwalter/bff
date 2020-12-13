@@ -58,6 +58,7 @@ async function run (config) {
   // Add the absolute paths of the test files to the run context.
   const globOptions = { absolute: true, filesOnly: true }
   const files = await Promise.all(context.tests.map(t => glob(t, globOptions)))
+  console.log('context', context.tests, files)
   context.files = shuffle(files.flat())
   logger.debug('Run context', context)
 
