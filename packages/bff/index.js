@@ -11,10 +11,12 @@ const callsites = require('callsites')
 const shuffle = require('array-shuffle')
 
 const defaultFiles = [
-  '*tests.js',
-  '*pptr.js',
-  'tests/**/*tests.js',
-  'tests/**/*pptr.js'
+  '*tests.(c|m)?js',
+  '*.pptr.(c|m)?js',
+  '*.play.(c|m)?js',
+  'tests/**/*tests.(c|m)?js',
+  'tests/**/*.pptr.(c|m)?js',
+  'tests/**/*.play.(c|m)?js'
 ]
 
 class FailFastError extends Error {
