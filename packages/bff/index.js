@@ -271,16 +271,15 @@ async function run (config) {
 }
 
 function handleTestArgs (name, tags, test = {}) {
-  // Prevent caching of this module so module.parent is always accurate. Thanks
-  // sindresorhus/meow.
-  delete require.cache[__filename]
+  //
+  if (!global.tests) global.tests = {}
 
   // Add the test line number to the object so it can be shown in verbose mode.
   test.lineNumber = callsites()[2].getLineNumber()
 
   const testFn = tags.pop()
   Object.assign(test, { fn: testFn, tags })
-  module.parent.exports[oneLine(name)] = test
+  global.tests[oneLine(name)] = test
   if (testFn && typeof testFn === 'function') {
     return test
   } else {

@@ -1,3 +1,4 @@
+const path = require('path')
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { createLogger, chalk } = require('@generates/logger')
@@ -38,7 +39,19 @@ worker({
     // context, require the test file and use it's exports object as the test
     // map.
     if (!context.testMap) {
-      context.testMap = require(file.path)
+      try {
+        context.testMap = require(file.path)
+      } catch (err) {
+        if (err.code === 'ERR_REQUIRE_ESM') {
+          const dist = require('@ianwalter/dist')
+          const requireFromString = require('require-from-string')
+          const { cjs } = await dist({ input: file.path, cjs: true })
+          requireFromString(cjs[1], file.name)
+          context.testMap = global.tests
+        } else {
+          throw err
+        }
+      }
     }
 
     // Add a list of tests from the test file that are intended to be run to
@@ -112,12 +125,23 @@ worker({
         enhanceTestContext(context.testContext)
         context.testContext.logger = logger
 
-        // Load the test file and extract the relevant test function.
-        const { fn } = require(file.path)[test.key]
+        try {
+          // TODO: Load the test file and
+          require(file.path)
+        } catch (err) {
+          if (err.code === 'ERR_REQUIRE_ESM') {
+            const dist = require('@ianwalter/dist')
+            const requireFromString = require('require-from-string')
+            const { cjs } = await dist({ input: file.path, cjs: true })
+            requireFromString(cjs[1], file.name)
+          } else {
+            throw err
+          }
+        }
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, fn)
+        await runTest(context.testContext, global.tests[test.key].fn)
         context.testContext.hasRun = true
       }
 
