@@ -10,9 +10,13 @@ try {
   // Ignore error.
 }
 
-async function importTests (file) {
+async function importTests (file, testKey) {
   try {
-    global.bff = { tests: {} }
+    const tests = testKey && global.bff?.tests
+    const test = tests && tests[file.path] && tests[file.path][testKey]
+    if (test) return test
+
+    global.bff = { file: file.path, tests: { [file.path]: {} }, testKey }
     require(file.path)
   } catch (err) {
     if (err.code === 'ERR_REQUIRE_ESM') {
@@ -25,7 +29,10 @@ async function importTests (file) {
     }
   }
 
-  return global.bff.tests
+  const test = testKey && global.bff.tests[file.path][testKey]
+  if (test) return test
+
+  return global.bff.tests[file.path]
 }
 
 worker({
@@ -122,11 +129,11 @@ worker({
         context.testContext.logger = logger
 
         // Import the tests from the test file.
-        const tests = await importTests(file)
+        const { fn } = await importTests(file, test.key)
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, tests[test.key].fn)
+        await runTest(context.testContext, fn)
         context.testContext.hasRun = true
       }
 
