@@ -132,12 +132,12 @@ worker({
 
         // Import the tests from the test file.
         logger.info('Run importTests', global.bff, test.key)
-        const { fn } = await importTests(file, test.key)
-        logger.info('FN', global.bff, fn)
+        const res = await importTests(file, test.key)
+        logger.info('FN', global.bff, res)
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, fn)
+        await runTest(context.testContext, res.fn)
         context.testContext.hasRun = true
       }
 
