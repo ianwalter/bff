@@ -11,12 +11,13 @@ try {
   // Ignore error.
 }
 
-async function importTests (file, testKey) {
+async function importTests (file, testKey = null) {
   try {
-    // const tests = testKey && global.bff?.tests
-    // const test = tests && tests[file.path] && tests[file.path][testKey]
-    // if (test) return test
-    const data = { file: file.path, tests: {}, testKey }
+    const tests = testKey && global.bff?.tests
+    const test = tests && tests[file.path] && tests[file.path][testKey]
+    if (test) return test
+
+    const data = { file: file.path, tests: {} }
     global.bff = global.bff ? merge(global.bff, data) : data
 
     require(file.path)
@@ -63,9 +64,7 @@ worker({
 
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
-    logger.info('Registration importTests', global.bff)
     if (!context.testMap) context.testMap = await importTests(file)
-    logger.info('Test map', context.testMap)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
@@ -133,9 +132,7 @@ worker({
         context.testContext.logger = logger
 
         // Import the tests from the test file.
-        logger.info('Run importTests', global.bff, test.key)
         const res = await importTests(file, test.key)
-        logger.info('FN', global.bff, res)
 
         // Run the test!
         const runTest = require('./lib/runTest')
