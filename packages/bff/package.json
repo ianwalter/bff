@@ -37,6 +37,10 @@
   "bugs": {
     "url": "https://github.com/ianwalter/bff/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ianwalter"
+  },
   "homepage": "https://github.com/ianwalter/bff#readme",
   "publishConfig": {
     "access": "public"

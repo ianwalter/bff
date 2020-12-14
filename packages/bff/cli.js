@@ -195,7 +195,7 @@ async function run () {
     })
 
     // Write the junit report file to the filesystem.
-    junitBuilder.writeTo(junit)
+    junitBuilder.writeTo(path.resolve(junit))
   }
 
   // If any tests failed, exit with a non-zero exit code.

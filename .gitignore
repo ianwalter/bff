@@ -1,7 +1,5 @@
-.pnpm-store
 node_modules
 docs/.vuepress/dist
 .DS_Store
 .env
 junit.xml
-package-lock.json

@@ -6,7 +6,7 @@
 ## Installation
 
 ```console
-pnpm add @ianwalter/bff-webdriver --save-dev
+npm install @ianwalter/bff-webdriver --save-dev
 ```
 
 ## Related

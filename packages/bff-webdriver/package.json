@@ -25,6 +25,10 @@
   "bugs": {
     "url": "https://github.com/ianwalter/bff/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ianwalter"
+  },
   "keywords": [
     "bff",
     "webdriver",
@@ -53,12 +57,8 @@
     "webdriverio": "^6.10.5"
   },
   "devDependencies": {
-    "@ianwalter/bff": "^9.12.3",
     "@ianwalter/nrg": "^0.3.1",
     "@ianwalter/url": "^2.0.0"
-  },
-  "peerDependencies": {
-    "@ianwalter/bff": "^9.12.3"
   },
   "bff": {
     "log": {
