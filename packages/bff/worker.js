@@ -10,11 +10,11 @@ try {
   // Ignore error.
 }
 
-async function importTests (file, testKey = null) {
+async function importTests (file, testKey) {
   try {
-    const tests = testKey && global.bff?.tests
-    const test = tests && tests[file.path] && tests[file.path][testKey]
-    if (test) return test
+    // const tests = testKey && global.bff?.tests
+    // const test = tests && tests[file.path] && tests[file.path][testKey]
+    // if (test) return test
 
     global.bff = { file: file.path, tests: { [file.path]: {} }, testKey }
     require(file.path)
