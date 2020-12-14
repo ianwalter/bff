@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 9.13.0
+
+### Minor Changes
+
+- 605e72f: Adding support for ESM
+
 ## 9.12.3
 
 ### Patch Changes
