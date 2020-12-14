@@ -1,6 +1,7 @@
 const { worker } = require('workerpool')
 const pSeries = require('p-series')
 const { createLogger, chalk } = require('@generates/logger')
+const { merge } = require('@generates/merger')
 
 let threadId = process.pid
 try {
@@ -15,8 +16,9 @@ async function importTests (file, testKey) {
     // const tests = testKey && global.bff?.tests
     // const test = tests && tests[file.path] && tests[file.path][testKey]
     // if (test) return test
+    const data = { file: file.path, tests: {}, testKey }
+    global.bff = global.bff ? merge(global.bff, data) : data
 
-    global.bff = { file: file.path, tests: { [file.path]: {} }, testKey }
     require(file.path)
   } catch (err) {
     if (err.code === 'ERR_REQUIRE_ESM') {
