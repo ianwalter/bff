@@ -6,7 +6,7 @@
 ## Installation
 
 ```console
-pnpm add @ianwalter/bff-playwright --save-dev
+npm install @ianwalter/bff-playwright --save-dev
 ```
 
 ## Related

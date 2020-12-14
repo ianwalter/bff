@@ -20,6 +20,10 @@
   "bugs": {
     "url": "https://github.com/ianwalter/bff/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ianwalter"
+  },
   "keywords": [
     "bff",
     "playwright",
@@ -36,12 +40,6 @@
   "dependencies": {
     "@generates/logger": "^0.0.9",
     "playwright": "^1.6.2"
-  },
-  "devDependencies": {
-    "@ianwalter/bff": "^9.12.3"
-  },
-  "peerDependencies": {
-    "@ianwalter/bff": "^9.12.3"
   },
   "bff": {
     "plugins": [

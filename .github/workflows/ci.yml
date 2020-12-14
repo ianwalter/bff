@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/pnpm:v1.4.0
+      image: node:15.4-buster
       options: --network-alias testHost
     timeout-minutes: 10
     env:
@@ -24,13 +24,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: pnpm i -r
+        run: npm ci
       - name: Lint
-        run: pnpm lint
+        run: npm run lint
       - name: Test bff
-        run: pnpm test:bff
+        run: npm run test:bff
       - name: Test bff-webdriver
-        run: pnpm test:webdriver
+        run: npm run test:webdriver
   playwright:
     runs-on: ubuntu-latest
     container:
@@ -40,6 +40,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: pnpm i -r
+        run: npm ci
       - name: Test bff
-        run: pnpm test:playwright
+        run: npm run test:playwright
