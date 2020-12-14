@@ -13,16 +13,20 @@ try {
 
 async function importTests (file, testKey = null) {
   try {
+    //
     const tests = testKey && global.bff?.tests
     const test = tests && tests[file.path] && tests[file.path][testKey]
     if (test) return test
 
+    //
     const data = { file: file.path, tests: {} }
     global.bff = global.bff ? merge(global.bff, data) : data
 
+    //
     require(file.path)
   } catch (err) {
     if (err.code === 'ERR_REQUIRE_ESM') {
+      //
       const dist = require('@ianwalter/dist')
       const requireFromString = require('require-from-string')
       const { cjs } = await dist({ input: file.path, cjs: true })
@@ -32,9 +36,11 @@ async function importTests (file, testKey = null) {
     }
   }
 
+  //
   const test = testKey && global.bff.tests[file.path][testKey]
   if (test) return test
 
+  //
   return global.bff.tests[file.path]
 }
 
@@ -132,11 +138,11 @@ worker({
         context.testContext.logger = logger
 
         // Import the tests from the test file.
-        const res = await importTests(file, test.key)
+        const { fn } = await importTests(file, test.key)
 
         // Run the test!
         const runTest = require('./lib/runTest')
-        await runTest(context.testContext, res.fn)
+        await runTest(context.testContext, fn)
         context.testContext.hasRun = true
       }
 
