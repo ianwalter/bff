@@ -29,8 +29,9 @@ jobs:
         run: npm run lint
       - name: Test bff
         run: cd packages/bff; npm run test:ci
-      - name: Test bff-webdriver
-        run: npm run test:webdriver
+      # TODO:
+      # - name: Test bff-webdriver
+      #   run: npm run test:webdriver
   playwright:
     runs-on: ubuntu-latest
     container:
