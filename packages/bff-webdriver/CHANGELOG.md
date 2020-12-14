@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 9.0.1
+
+### Patch Changes
+
+- cfa12ef: Fixing logger passed to selenium standalone
+
 ## 9.0.0
 
 ### Major Changes
