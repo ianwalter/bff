@@ -28,7 +28,7 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Test bff
-        run: npm run test:bff
+        run: cd packages/bff; npm run test:ci
       - name: Test bff-webdriver
         run: npm run test:webdriver
   playwright:
