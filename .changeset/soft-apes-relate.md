@@ -1,5 +1,5 @@
 ---
-"@ianwalter/bff": patch
+"@ianwalter/bff": minor
 ---
 
 Adding support for ESM
