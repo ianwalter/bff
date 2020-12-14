@@ -1,7 +1,7 @@
 const readline = require('readline')
 const path = require('path')
 const workerpool = require('workerpool')
-const globby = require('globby')
+const glob = require('tiny-glob')
 const { createLogger, chalk } = require('@generates/logger')
 const { oneLine } = require('common-tags')
 const pSeries = require('p-series')
@@ -10,12 +10,7 @@ const merge = require('@ianwalter/merge')
 const callsites = require('callsites')
 const shuffle = require('array-shuffle')
 
-const defaultFiles = [
-  '*tests.js',
-  '*pptr.js',
-  'tests/**/*tests.js',
-  'tests/**/*pptr.js'
-]
+const defaultFiles = ['**/*@(.pptr|.play|tests).?(m|c)js']
 
 class FailFastError extends Error {
   constructor () {
@@ -61,13 +56,13 @@ async function run (config) {
   const logger = createLogger(context.log)
 
   // Add the absolute paths of the test files to the run context.
-  context.files = shuffle(await globby(context.tests, { absolute: true }))
+  const globOptions = { absolute: true, filesOnly: true }
+  const files = await Promise.all(context.tests.map(t => glob(t, globOptions)))
+  context.files = shuffle(files.flat())
   logger.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
-  if (context.files.length === 0) {
-    throw new Error('No test files found.')
-  }
+  if (context.files.length === 0) throw new Error('No test files found.')
 
   // Set the worker pool options. For now, it only sets the maximum amount of
   // workers used if the concurrency setting is set.
@@ -240,16 +235,12 @@ async function run (config) {
         // If the failFast option is set, throw an error so that the test run is
         // immediately failed.
         const [err] = context.failed
-        if (err && context.failFast) {
-          throw new FailFastError()
-        }
+        if (err && context.failFast) throw new FailFastError()
       }))
 
       // The snapshot tests that weren't checked are obsolete and can be
       // removed from the snapshot file.
-      if (snapshotState.getUncheckedCount()) {
-        snapshotState.removeUncheckedKeys()
-      }
+      if (snapshotState.getUncheckedCount()) snapshotState.removeUncheckedKeys()
 
       // Save the snapshot changes.
       snapshotState.save()
@@ -271,16 +262,19 @@ async function run (config) {
 }
 
 function handleTestArgs (name, tags, test = {}) {
-  // Prevent caching of this module so module.parent is always accurate. Thanks
-  // sindresorhus/meow.
-  delete require.cache[__filename]
-
   // Add the test line number to the object so it can be shown in verbose mode.
   test.lineNumber = callsites()[2].getLineNumber()
 
+  // Extract the test function from the function arguments.
   const testFn = tags.pop()
   Object.assign(test, { fn: testFn, tags })
-  module.parent.exports[oneLine(name)] = test
+  const key = oneLine(name)
+
+  // Add the test to the global namespaced by the test filename.
+  const file = global.bff.file
+  if (!global.bff.tests[file]) global.bff.tests[file] = {}
+  global.bff.tests[file][key] = test
+
   if (testFn && typeof testFn === 'function') {
     return test
   } else {

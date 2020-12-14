@@ -3,6 +3,7 @@
 exports[`bff 1`] = `
 Array [
   "A test with a multiline name",
+  "ESM",
   "asleep",
   "beforeEach",
   "done",

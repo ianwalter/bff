@@ -43,9 +43,11 @@
   },
   "dependencies": {
     "@generates/logger": "^0.0.8",
+    "@generates/merger": "^0.1.1",
     "@ianwalter/cli": "^4.1.0",
     "@ianwalter/clone": "^6.0.1",
     "@ianwalter/cloneable": "^2.0.0",
+    "@ianwalter/dist": "^6.0.0",
     "@ianwalter/sleep": "^0.0.1",
     "@ianwalter/subpub": "^3.0.0",
     "@ianwalter/timer": "^2.0.2",
@@ -53,11 +55,13 @@
     "callsites": "^3.1.0",
     "camaro": "^6.0.2",
     "common-tags": "^1.8.0",
+    "esm-to-cjs": "^1.2.0",
     "expect": "^26.6.2",
-    "globby": "^11.0.1",
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
+    "require-from-string": "^2.0.2",
+    "tiny-glob": "^0.2.8",
     "workerpool": "^6.0.3"
   },
   "devDependencies": {

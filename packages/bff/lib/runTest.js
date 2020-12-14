@@ -18,7 +18,7 @@ module.exports = async function runTest (testContext, testFn) {
     // Run the test in parallel with a timeout promise that will throw an error
     // if the specified timeout is reached.
     await Promise.race([
-      new Promise((resolve, reject) => testContext.sp.sub('done', resolve)),
+      new Promise(resolve => testContext.sp.sub('done', resolve)),
       new Promise((resolve, reject) => {
         try {
           const result = testFn(testContext, done)

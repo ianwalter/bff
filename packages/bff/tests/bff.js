@@ -6,7 +6,7 @@ const { test, run, FailFastError } = require('..')
 const config = {
   timeout: 5000,
   plugins: ['tests/helpers/plugin.js'],
-  log: { stream: false, level: 'info' },
+  log: { stream: false, level: 'debug' },
   match: 'some'
 }
 const toName = ({ name }) => name
@@ -16,10 +16,10 @@ const execaOpts = { reject: false }
 // the results match their snapshots and the status counts are correct.
 test('bff', async t => {
   const result = await run(config)
-  t.expect(result.filesRegistered).toBe(5)
-  t.expect(result.testsRegistered).toBe(32)
-  t.expect(result.testsRun).toBe(32)
-  t.expect(result.passed.length).toBe(17)
+  t.expect(result.filesRegistered).toBe(6)
+  t.expect(result.testsRegistered).toBe(33)
+  t.expect(result.testsRun).toBe(33)
+  t.expect(result.passed.length).toBe(18)
   t.expect(result.passed.map(toName).sort()).toMatchSnapshot()
   t.expect(result.failed.length).toBe(10)
   t.expect(result.failed.map(toName).sort()).toMatchSnapshot()
