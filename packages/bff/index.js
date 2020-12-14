@@ -272,6 +272,7 @@ function handleTestArgs (name, tags, test = {}) {
 
   //
   const { file, testKey } = global.bff
+  console.log('KEY', { key, testKey })
   if (!testKey || testKey === key) global.bff.tests[file][key] = test
 
   if (testFn && typeof testFn === 'function') {
