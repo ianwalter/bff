@@ -131,7 +131,7 @@ worker({
         context.testContext.logger = logger
 
         // Import the tests from the test file.
-        logger.info('Run importTests', global.bff)
+        logger.info('Run importTests', global.bff, test.key)
         const { fn } = await importTests(file, test.key)
         logger.info('FN', global.bff, fn)
 
