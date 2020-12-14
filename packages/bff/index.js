@@ -265,12 +265,12 @@ function handleTestArgs (name, tags, test = {}) {
   // Add the test line number to the object so it can be shown in verbose mode.
   test.lineNumber = callsites()[2].getLineNumber()
 
-  //
+  // Extract the test function from the function arguments.
   const testFn = tags.pop()
   Object.assign(test, { fn: testFn, tags })
   const key = oneLine(name)
 
-  //
+  // Add the test to the global namespaced by the test filename.
   const file = global.bff.file
   if (!global.bff.tests[file]) global.bff.tests[file] = {}
   global.bff.tests[file][key] = test

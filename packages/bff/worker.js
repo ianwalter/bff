@@ -13,20 +13,22 @@ try {
 
 async function importTests (file, testKey = null) {
   try {
-    //
+    // Return a single test if it's been requested and already imported.
     const tests = testKey && global.bff?.tests
     const test = tests && tests[file.path] && tests[file.path][testKey]
     if (test) return test
 
-    //
+    // Add the file to global so that the tests get namespaced with the filename
+    // when the test file is imported/executed and added to global.
     const data = { file: file.path, tests: {} }
     global.bff = global.bff ? merge(global.bff, data) : data
 
-    //
+    // Import the tests from the test file.
     require(file.path)
   } catch (err) {
     if (err.code === 'ERR_REQUIRE_ESM') {
-      //
+      // If the test file is a ES Module, compile it to CommonJS before
+      // requiring/importing it.
       const dist = require('@ianwalter/dist')
       const requireFromString = require('require-from-string')
       const { cjs } = await dist({ input: file.path, cjs: true })
@@ -36,11 +38,11 @@ async function importTests (file, testKey = null) {
     }
   }
 
-  //
+  // Return a single test if only one is requested.
   const test = testKey && global.bff.tests[file.path][testKey]
   if (test) return test
 
-  //
+  // Otherwise, return a map of all tests in the test file.
   return global.bff.tests[file.path]
 }
 
