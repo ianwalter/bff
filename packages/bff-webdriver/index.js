@@ -5,7 +5,7 @@ import zalenium from './integrations/zalenium.js'
 import appium from './integrations/appium.js'
 import cleanup from './cleanup.js'
 
-const webdriverVersion = '3.141.59'
+export const webdriverVersion = '3.141.59'
 const logger = createLogger({ level: 'info', namespace: 'bff.webdriver' })
 
 let seleniumStandalone
