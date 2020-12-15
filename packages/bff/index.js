@@ -57,7 +57,6 @@ export async function run (config) {
 
   // Create the logger instance with the given log level.
   const logger = createLogger(context.log)
-  logger.log('context', { context, restOfConfig })
 
   // Add the absolute paths of the test files to the run context.
   const globOptions = { absolute: true, filesOnly: true }
