@@ -108,8 +108,8 @@ with their **default** values:
 Declare a test by calling the test function with a name and a function:
 
 ```js
-const { test } = require('@ianwalter/bff')
-const someFunctionality = require('./someFunctionality')
+const { test } from '@ianwalter/bff')
+const someFunctionality from './someFunctionality')
 
 test('some functionality', ({ expect }) => {
   expect(someFunctionality()).toBeTruthy()

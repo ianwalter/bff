@@ -1,17 +1,15 @@
-const path = require('path')
+import path from 'path'
 
-module.exports = function toHookRun (hookName, ...args) {
+export default function toHookRun (hookName, ...args) {
   return file => async () => {
     let plugin
     try {
-      plugin = require(file)
+      plugin = (await import(file)).default
     } catch (err) {
       // Don't need to handle this error.
     }
-    plugin = plugin || require(path.resolve(file))
+    plugin = plugin || (await import(path.resolve(file))).default
     const hook = plugin[hookName]
-    if (hook) {
-      await hook(...args)
-    }
+    if (hook) await hook(...args)
   }
 }

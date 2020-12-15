@@ -1,7 +1,9 @@
-const { utils } = require('jest-snapshot')
-const cloneable = require('@ianwalter/cloneable')
+import jestSnapshot from 'jest-snapshot'
+import cloneable from '@ianwalter/cloneable'
 
-module.exports = async function runTest (testContext, testFn) {
+const { utils } = jestSnapshot
+
+export default async function runTest (testContext, testFn) {
   function done () {
     testContext.sp.pub('done')
   }

@@ -3,7 +3,8 @@
   "description": "Your friendly test framework",
   "version": "9.13.0",
   "license": "SEE LICENSE IN LICENSE",
-  "main": "index.js",
+  "type": "module",
+  "module": "index.js",
   "scripts": {
     "test": "./cli.js",
     "test:ci": "./cli.js -V tests/bff.js",

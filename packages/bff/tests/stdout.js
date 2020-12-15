@@ -1,4 +1,4 @@
-const { test } = require('..')
+import { test } from '../index.js'
 
 test('console.log', t => {
   t.expect('ok').toBeTruthy()

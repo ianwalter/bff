@@ -1,11 +1,16 @@
-const { createLogger } = require('@generates/logger')
+import { createLogger } from '@generates/logger'
+import standalone from 'selenium-standalone'
+import { remote } from 'webdriverio'
+import zalenium from './integrations/zalenium.js'
+import appium from './integrations/appium.js'
+import cleanup from './cleanup.js'
 
 const webdriverVersion = '3.141.59'
 const logger = createLogger({ level: 'info', namespace: 'bff.webdriver' })
 
 let seleniumStandalone
 
-module.exports = {
+export default {
   webdriverVersion,
   async before (context) {
     try {
@@ -16,7 +21,6 @@ module.exports = {
       if (context.webdriver.standalone) {
         logger.debug('Starting Selenium Standalone')
         return new Promise((resolve, reject) => {
-          const standalone = require('selenium-standalone')
           const spawnOptions = { stdio: 'inherit' }
           const { version, drivers } = context.webdriver || {}
 
@@ -78,8 +82,6 @@ module.exports = {
   async beforeEach (_, context) {
     try {
       logger.debug('Adding WebDriver integrations')
-      const zalenium = require('./integrations/zalenium')
-      const appium = require('./integrations/appium')
 
       // Add enabled integrations to the integrations array so they can be used
       // later.
@@ -99,7 +101,6 @@ module.exports = {
       logger.debug('Creating WebdriverIO browser instance')
 
       // Set up the browser instance and add it to the test context.
-      const { remote } = require('webdriverio')
       context.testContext.browser = await remote({
         path: '/wd/hub',
         ...context.webdriver,
@@ -144,7 +145,6 @@ module.exports = {
         if (context.err) {
           logger.write('\n')
           logger.log('👉', 'bff-webdriver: Running manual cleanup')
-          const cleanup = require('./cleanup')
           await cleanup()
         }
       }

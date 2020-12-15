@@ -1,5 +1,5 @@
-const { test } = require('..')
-const { html } = require('common-tags')
+import { test } from '../index.js'
+import { html } from 'common-tags'
 
 test('no assertions', () => true)
 

@@ -1,1 +1,1 @@
-require('thing-that-doesnt-exist')
+import 'thing-that-doesnt-exist'

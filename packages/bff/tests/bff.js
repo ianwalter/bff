@@ -1,7 +1,7 @@
-const { promises: fs } = require('fs')
-const path = require('path')
-const execa = require('execa')
-const { test, run, FailFastError } = require('..')
+import { promises as fs } from 'fs'
+import path from 'path'
+import execa from 'execa'
+import { test, run, FailFastError } from '../index.js'
 
 const config = {
   timeout: 5000,
@@ -16,10 +16,10 @@ const execaOpts = { reject: false }
 // the results match their snapshots and the status counts are correct.
 test('bff', async t => {
   const result = await run(config)
-  t.expect(result.filesRegistered).toBe(6)
-  t.expect(result.testsRegistered).toBe(33)
-  t.expect(result.testsRun).toBe(33)
-  t.expect(result.passed.length).toBe(18)
+  t.expect(result.filesRegistered).toBe(5)
+  t.expect(result.testsRegistered).toBe(32)
+  t.expect(result.testsRun).toBe(32)
+  t.expect(result.passed.length).toBe(17)
   t.expect(result.passed.map(toName).sort()).toMatchSnapshot()
   t.expect(result.failed.length).toBe(10)
   t.expect(result.failed.map(toName).sort()).toMatchSnapshot()
@@ -57,7 +57,7 @@ test('bff --tag dev --tag qa --match every', async t => {
 // are caught and fail the test suite via the CLI.
 test('uncaught exception in test file', async t => {
   const { stdout } = await execa('./cli.js', ['tests/uncaught.js'], execaOpts)
-  t.expect(stdout).toContain("Cannot find module 'thing-that-doesnt-exist'")
+  t.expect(stdout).toContain("Cannot find package 'thing-that-doesnt-exist'")
 })
 
 // This tests that the test results are outputted to a JUnit file properly via

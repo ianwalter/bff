@@ -1,6 +1,7 @@
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 
-module.exports = {
+export default {
   before (context) {
     const standalone = process.env.SELENIUM_STANDALONE
     const hostname = process.env.SELENIUM_HUB_HOST

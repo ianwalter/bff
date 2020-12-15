@@ -1,11 +1,11 @@
-const { createLogger } = require('@generates/logger')
+import { createLogger } from '@generates/logger'
 
 const logger = createLogger({
   level: 'info',
   namespace: 'bff.webdriver.appium'
 })
 
-module.exports = function appium (context) {
+export default function appium (context) {
   logger.debug('Appium integration enabled')
 
   // Define the global capability options.

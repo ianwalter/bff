@@ -1,18 +1,21 @@
-const readline = require('readline')
-const path = require('path')
-const workerpool = require('workerpool')
-const glob = require('tiny-glob')
-const { createLogger, chalk } = require('@generates/logger')
-const { oneLine } = require('common-tags')
-const pSeries = require('p-series')
-const { SnapshotState } = require('jest-snapshot')
-const merge = require('@ianwalter/merge')
-const callsites = require('callsites')
-const shuffle = require('array-shuffle')
+import readline from 'readline'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import workerpool from 'workerpool'
+import glob from 'tiny-glob'
+import { createLogger, chalk } from '@generates/logger'
+import { oneLine } from 'common-tags'
+import pSeries from 'p-series'
+import jestSnapshot from 'jest-snapshot'
+import merge from '@ianwalter/merge'
+import callsites from 'callsites'
+import shuffle from 'array-shuffle'
+import toHookRun from './lib/toHookRun.js'
 
+const { SnapshotState } = jestSnapshot
 const defaultFiles = ['**/*@(.pptr|.play|tests).?(m|c)js']
 
-class FailFastError extends Error {
+export class FailFastError extends Error {
   constructor () {
     super(FailFastError.message)
   }
@@ -23,7 +26,7 @@ FailFastError.message = 'Run failed immediately since failFast option is set'
  * Collects test names from test files and assigns them to a worker in a
  * worker pool that runs the associated test.
  */
-async function run (config) {
+export async function run (config) {
   // Create the run context using the passed configuration and defaults.
   const context = {
     tests: defaultFiles,
@@ -71,6 +74,7 @@ async function run (config) {
   }
 
   // Set the path to the file used to create a worker.
+  const __dirname = path.dirname(fileURLToPath(import.meta.url))
   const workerPath = path.join(__dirname, 'worker.js')
 
   // For registering individual tests exported from test files:
@@ -112,7 +116,6 @@ async function run (config) {
   })
 
   // Sequentially run any before hooks specified by plugins.
-  const toHookRun = require('./lib/toHookRun')
   if (context.plugins && context.plugins.length) {
     await pSeries(context.plugins.map(toHookRun('before', context)))
   }
@@ -285,7 +288,7 @@ function handleTestArgs (name, tags, test = {}) {
   }
 }
 
-function test (name, ...tags) {
+export function test (name, ...tags) {
   return handleTestArgs(name, tags)
 }
 
@@ -300,5 +303,3 @@ test.only = function only (name, ...tags) {
 test.warn = function warn (name, ...tags) {
   return handleTestArgs(name, tags, { warn: true })
 }
-
-module.exports = { run, test, FailFastError }

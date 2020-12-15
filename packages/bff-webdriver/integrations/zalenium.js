@@ -1,11 +1,12 @@
-const { createLogger } = require('@generates/logger')
+import { createLogger } from '@generates/logger'
+import { oneLine } from 'common-tags'
 
 const logger = createLogger({
   level: 'info',
   namespace: 'bff.webdriver.zalenium'
 })
 
-module.exports = function zalenium (context) {
+export default function zalenium (context) {
   logger.debug('Zalenium integration enabled')
 
   context.webdriver.integrations.push({
@@ -19,7 +20,6 @@ module.exports = function zalenium (context) {
         if (testContext.result.failed && webdriver.zalenium.dashboardUrl) {
           // If the test failed, log the Zalenium Dashboard URL for this
           // session to make it easier for the user to debug.
-          const { oneLine } = require('common-tags')
           const query = oneLine`
             ${testContext.capability['zal:name']}
             ${testContext.capability['zal:build']}
