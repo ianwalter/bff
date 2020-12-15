@@ -2,7 +2,7 @@
 
 import cli from '@ianwalter/cli'
 import { createLogger } from '@generates/logger'
-import selenium from 'selenium-standalone.js'
+import selenium from 'selenium-standalone'
 import cleanup from './cleanup.js'
 import { webdriverVersion } from './index.js'
 
