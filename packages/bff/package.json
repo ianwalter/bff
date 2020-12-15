@@ -52,7 +52,6 @@
     "@ianwalter/cli": "^4.1.0",
     "@ianwalter/clone": "^6.0.1",
     "@ianwalter/cloneable": "^2.0.0",
-    "@ianwalter/dist": "^6.0.0",
     "@ianwalter/sleep": "^0.0.1",
     "@ianwalter/subpub": "^3.0.0",
     "@ianwalter/timer": "^2.0.2",
@@ -65,7 +64,6 @@
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
-    "require-from-string": "^2.0.2",
     "tiny-glob": "^0.2.8",
     "workerpool": "^6.0.3"
   },

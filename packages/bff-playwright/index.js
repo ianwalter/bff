@@ -28,10 +28,10 @@ export default {
       logger.debug('Adding browser', name)
       context.testContext[name] = async options => {
         logger.debug('Launching browser', name)
-        this.instance = await playwright[name].launch(options)
-        const browserContext = await this.instance.newContext()
+        const browser = await playwright[name].launch(options)
+        const browserContext = await browser.newContext()
         const page = await browserContext.newPage()
-        return { browser: this.instance, browserContext, page }
+        return { browser, browserContext, page }
       }
     }
   },
