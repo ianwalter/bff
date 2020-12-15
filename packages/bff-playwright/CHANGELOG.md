@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 4.0.0
+
+### Major Changes
+
+- 3a243c9: Converting to ESM
+
 ## 3.1.0
 
 ### Minor Changes
