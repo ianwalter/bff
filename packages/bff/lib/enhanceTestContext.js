@@ -1,4 +1,9 @@
-const expect = require('expect')
+import expect from 'expect'
+import jestSnapshot from 'jest-snapshot'
+import clone from '@ianwalter/clone'
+import { Subpub } from '@ianwalter/subpub'
+import sleep from '@ianwalter/sleep'
+
 const {
   SnapshotState,
   addSerializer,
@@ -6,12 +11,9 @@ const {
   toMatchInlineSnapshot,
   toThrowErrorMatchingSnapshot,
   toThrowErrorMatchingInlineSnapshot
-} = require('jest-snapshot')
-const clone = require('@ianwalter/clone')
-const { Subpub } = require('@ianwalter/subpub')
-const sleep = require('@ianwalter/sleep')
+} = jestSnapshot
 
-module.exports = function enhanceTestContext (testContext) {
+export default function enhanceTestContext (testContext) {
   // Add a Subpub instance to the testContext so it can listen for the 'done'
   // event.
   testContext.sp = new Subpub()

@@ -1,4 +1,4 @@
-const { test } = require('..')
+import { test } from '../index.js'
 
 test.skip('skip no assertions', () => true)
 

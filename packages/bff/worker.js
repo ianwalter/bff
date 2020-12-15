@@ -1,45 +1,38 @@
-const { worker } = require('workerpool')
-const pSeries = require('p-series')
-const { createLogger, chalk } = require('@generates/logger')
-const { merge } = require('@generates/merger')
+import { worker } from 'workerpool'
+import pSeries from 'p-series'
+import { createLogger, chalk } from '@generates/logger'
+import { merge } from '@generates/merger'
+import workerThreads from 'worker_threads'
+import createTimer from '@ianwalter/timer'
+import toHookRun from './lib/toHookRun.js'
+import runTest from './lib/runTest.js'
+import enhanceTestContext from './lib/enhanceTestContext.js'
+import cloneable from '@ianwalter/cloneable'
 
-let threadId = process.pid
-try {
-  const workerThreads = require('worker_threads')
-  threadId = workerThreads.threadId
-} catch (err) {
-  // Ignore error.
-}
+const threadId = workerThreads.threadId
 
 async function importTests (file, testKey = null) {
+  // Return a single test if it's been requested and already imported.
+  const tests = testKey && global.bff?.tests
+  let test = tests && tests[file.path] && tests[file.path][testKey]
+  if (test) return test
+
+  // Add the file to global so that the tests get namespaced with the filename
+  // when the test file is imported/executed and added to global.
+  const data = { file: file.path, tests: {} }
+  global.bff = global.bff ? merge(global.bff, data) : data
+
+  // Import the tests from the test file.
   try {
-    // Return a single test if it's been requested and already imported.
-    const tests = testKey && global.bff?.tests
-    const test = tests && tests[file.path] && tests[file.path][testKey]
-    if (test) return test
-
-    // Add the file to global so that the tests get namespaced with the filename
-    // when the test file is imported/executed and added to global.
-    const data = { file: file.path, tests: {} }
-    global.bff = global.bff ? merge(global.bff, data) : data
-
-    // Import the tests from the test file.
-    require(file.path)
+    await import(file.path)
   } catch (err) {
-    if (err.code === 'ERR_REQUIRE_ESM') {
-      // If the test file is a ES Module, compile it to CommonJS before
-      // requiring/importing it.
-      const dist = require('@ianwalter/dist')
-      const requireFromString = require('require-from-string')
-      const { cjs } = await dist({ input: file.path, cjs: true })
-      requireFromString(cjs[1], file.name)
-    } else {
-      throw err
-    }
+    // Wrap errorr in cloneable so that it can be sent back to the main thread
+    // properly.
+    throw cloneable(err)
   }
 
   // Return a single test if only one is requested.
-  const test = testKey && global.bff.tests[file.path][testKey]
+  test = testKey && global.bff.tests[file.path][testKey]
   if (test) return test
 
   // Otherwise, return a map of all tests in the test file.
@@ -63,7 +56,6 @@ worker({
     logger.debug(`Registration worker ${threadId}`, relativePath)
 
     // Sequentially run any registration hooks specified by plugins.
-    const toHookRun = require('./lib/toHookRun')
     if (context.plugins && context.plugins.length) {
       await pSeries(
         context.plugins.map(toHookRun('registration', file, context))
@@ -98,10 +90,6 @@ worker({
     return file
   },
   async test (file, test, context) {
-    const merge = require('@ianwalter/merge')
-    const createTimer = require('@ianwalter/timer')
-    const toHookRun = require('./lib/toHookRun')
-
     // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.test`
@@ -135,7 +123,6 @@ worker({
 
         // Enhance the context passed to the test function with testing
         // utilities.
-        const enhanceTestContext = require('./lib/enhanceTestContext')
         enhanceTestContext(context.testContext)
         context.testContext.logger = logger
 
@@ -143,7 +130,6 @@ worker({
         const { fn } = await importTests(file, test.key)
 
         // Run the test!
-        const runTest = require('./lib/runTest')
         await runTest(context.testContext, fn)
         context.testContext.hasRun = true
       }

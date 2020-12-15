@@ -1,7 +1,7 @@
-const execa = require('execa')
-const pSettle = require('p-settle')
+import execa from 'execa'
+import pSettle from 'p-settle'
 
-module.exports = async function cleanup () {
+export default async function cleanup () {
   const names = [
     'selenium',
     'webdriver',

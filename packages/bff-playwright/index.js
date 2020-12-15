@@ -1,10 +1,10 @@
-const playwright = require('playwright')
-const { createLogger } = require('@generates/logger')
+import playwright from 'playwright'
+import { createLogger } from '@generates/logger'
 
 const logger = createLogger({ level: 'info', namespace: 'bff.playwright' })
 const availableBrowsers = ['chromium', 'firefox', 'webkit']
 
-module.exports = {
+export default {
   async beforeEach (file, context) {
     logger.debug(file.relativePath, '•', context.testContext.name)
     context.testContext.playwright = playwright
@@ -28,10 +28,10 @@ module.exports = {
       logger.debug('Adding browser', name)
       context.testContext[name] = async options => {
         logger.debug('Launching browser', name)
-        this.instance = await playwright[name].launch(options)
-        const browserContext = await this.instance.newContext()
+        const browser = await playwright[name].launch(options)
+        const browserContext = await browser.newContext()
         const page = await browserContext.newPage()
-        return { browser: this.instance, browserContext, page }
+        return { browser, browserContext, page }
       }
     }
   },

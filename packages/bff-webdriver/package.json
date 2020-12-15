@@ -11,7 +11,8 @@
   "bin": {
     "bff-webdriver": "cli.js"
   },
-  "main": "index.js",
+  "type": "module",
+  "module": "index.js",
   "scripts": {
     "test": "bff",
     "bff-webdriver": "./cli.js",

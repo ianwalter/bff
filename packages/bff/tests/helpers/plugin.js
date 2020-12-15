@@ -1,8 +1,8 @@
-module.exports = {
+export default {
   before (context) {
     context.beforeMessage = 'before was here'
   },
-  registration (file, context) {
+  registration (_, context) {
     context.augmentTests = tests => tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
@@ -16,7 +16,7 @@ module.exports = {
       []
     )
   },
-  beforeEach (file, context) {
+  beforeEach (_, context) {
     context.beforeEachMessage = 'beforeEach was here'
   }
 }

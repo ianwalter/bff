@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   title: '@ianwalter/bff',
   themeConfig: {
     repo: 'ianwalter/bff',

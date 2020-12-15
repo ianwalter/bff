@@ -1,6 +1,6 @@
-const { test } = require('..')
-const { html } = require('common-tags')
-const createTimer = require('@ianwalter/timer')
+import { test } from '../index.js'
+import { html } from 'common-tags'
+import createTimer from '@ianwalter/timer'
 
 test(`
   A

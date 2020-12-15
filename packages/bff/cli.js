@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
-const { promises: fs } = require('fs')
-const path = require('path')
-const cli = require('@ianwalter/cli')
-const { createLogger, chalk } = require('@generates/logger')
-const bff = require('.')
+import { promises as fs } from 'fs'
+import path from 'path'
+import cli from '@ianwalter/cli'
+import { createLogger, chalk } from '@generates/logger'
+import camaro from 'camaro'
+import junitBuilder from 'junit-report-builder'
+import * as bff from './index.js'
 
 // Set stdout to blocking so that the program doesn't exit with log statements
 // still waiting to be logged to the console.
@@ -102,7 +104,6 @@ async function run () {
 
   // Only run tests marked as failed in a JUnit file.
   if (config.failed) {
-    const camaro = require('camaro')
     const file = typeof config.failed === 'string' ? config.failed : 'junit.xml'
     const xml = await fs.readFile(path.resolve(file), 'utf8')
     const template = { failed: ['//testcase[failure]', '@name'] }
@@ -163,8 +164,6 @@ async function run () {
 
   // If configured, generate a junit XML report file based on the test results.
   if (config.junit) {
-    const junitBuilder = require('junit-report-builder')
-
     // Determine the junit report file path.
     const junit = typeof config.junit === 'string' ? config.junit : 'junit.xml'
 
