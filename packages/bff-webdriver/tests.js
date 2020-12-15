@@ -1,6 +1,6 @@
-const { test } = require('@ianwalter/bff')
-const { createApp } = require('@ianwalter/nrg')
-const createUrl = require('@ianwalter/url')
+import { test } from '@ianwalter/bff'
+import { createApp } from '@ianwalter/nrg'
+import createUrl from '@ianwalter/url'
 
 test('test server', async t => {
   const app = createApp({ log: false })

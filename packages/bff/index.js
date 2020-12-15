@@ -1,23 +1,21 @@
-const readline = require('readline')
-const path = require('path')
-const workerpool = require('workerpool')
-const globby = require('globby')
-const { createLogger, chalk } = require('@generates/logger')
-const { oneLine } = require('common-tags')
-const pSeries = require('p-series')
-const { SnapshotState } = require('jest-snapshot')
-const { merge } = require('@generates/merger')
-const callsites = require('callsites')
-const shuffle = require('array-shuffle')
+import readline from 'readline'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import workerpool from 'workerpool'
+import glob from 'tiny-glob'
+import { createLogger, chalk } from '@generates/logger'
+import { oneLine } from 'common-tags'
+import pSeries from 'p-series'
+import jestSnapshot from 'jest-snapshot'
+import { merge } from '@generates/merger'
+import callsites from 'callsites'
+import shuffle from 'array-shuffle'
+import toHookRun from './lib/toHookRun.js'
 
-const defaultFiles = [
-  '*tests.js',
-  '*pptr.js',
-  'tests/**/*tests.js',
-  'tests/**/*pptr.js'
-]
+const { SnapshotState } = jestSnapshot
+const defaultFiles = ['**/*@(.pptr|.play|tests).?(m|c)js']
 
-class FailFastError extends Error {
+export class FailFastError extends Error {
   constructor () {
     super(FailFastError.message)
   }
@@ -28,7 +26,7 @@ FailFastError.message = 'Run failed immediately since failFast option is set'
  * Collects test names from test files and assigns them to a worker in a
  * worker pool that runs the associated test.
  */
-async function run (config) {
+export async function run (config) {
   // Create the run context using the passed configuration and defaults.
   const context = {
     tests: defaultFiles,
@@ -62,13 +60,13 @@ async function run (config) {
   // logger.log('context', { context, restOfConfig })
 
   // Add the absolute paths of the test files to the run context.
-  context.files = shuffle(await globby(context.tests, { absolute: true }))
+  const globOptions = { absolute: true, filesOnly: true }
+  const files = await Promise.all(context.tests.map(t => glob(t, globOptions)))
+  context.files = shuffle(files.flat())
   logger.debug('Run context', context)
 
   // Throw an error if there are no tests files found.
-  if (context.files.length === 0) {
-    throw new Error('No test files found.')
-  }
+  if (context.files.length === 0) throw new Error('No test files found.')
 
   // Set the worker pool options. For now, it only sets the maximum amount of
   // workers used if the concurrency setting is set.
@@ -77,6 +75,7 @@ async function run (config) {
   }
 
   // Set the path to the file used to create a worker.
+  const __dirname = path.dirname(fileURLToPath(import.meta.url))
   const workerPath = path.join(__dirname, 'worker.js')
 
   // For registering individual tests exported from test files:
@@ -118,7 +117,6 @@ async function run (config) {
   })
 
   // Sequentially run any before hooks specified by plugins.
-  const toHookRun = require('./lib/toHookRun')
   if (context.plugins && context.plugins.length) {
     await pSeries(context.plugins.map(toHookRun('before', context)))
   }
@@ -241,16 +239,12 @@ async function run (config) {
         // If the failFast option is set, throw an error so that the test run is
         // immediately failed.
         const [err] = context.failed
-        if (err && context.failFast) {
-          throw new FailFastError()
-        }
+        if (err && context.failFast) throw new FailFastError()
       }))
 
       // The snapshot tests that weren't checked are obsolete and can be
       // removed from the snapshot file.
-      if (snapshotState.getUncheckedCount()) {
-        snapshotState.removeUncheckedKeys()
-      }
+      if (snapshotState.getUncheckedCount()) snapshotState.removeUncheckedKeys()
 
       // Save the snapshot changes.
       snapshotState.save()
@@ -272,16 +266,19 @@ async function run (config) {
 }
 
 function handleTestArgs (name, tags, test = {}) {
-  // Prevent caching of this module so module.parent is always accurate. Thanks
-  // sindresorhus/meow.
-  delete require.cache[__filename]
-
   // Add the test line number to the object so it can be shown in verbose mode.
   test.lineNumber = callsites()[2].getLineNumber()
 
+  // Extract the test function from the function arguments.
   const testFn = tags.pop()
   Object.assign(test, { fn: testFn, tags })
-  module.parent.exports[oneLine(name)] = test
+  const key = oneLine(name)
+
+  // Add the test to the global namespaced by the test filename.
+  const file = global.bff.file
+  if (!global.bff.tests[file]) global.bff.tests[file] = {}
+  global.bff.tests[file][key] = test
+
   if (testFn && typeof testFn === 'function') {
     return test
   } else {
@@ -292,7 +289,7 @@ function handleTestArgs (name, tags, test = {}) {
   }
 }
 
-function test (name, ...tags) {
+export function test (name, ...tags) {
   return handleTestArgs(name, tags)
 }
 
@@ -307,5 +304,3 @@ test.only = function only (name, ...tags) {
 test.warn = function warn (name, ...tags) {
   return handleTestArgs(name, tags, { warn: true })
 }
-
-module.exports = { run, test, FailFastError }

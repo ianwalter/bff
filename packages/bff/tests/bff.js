@@ -1,12 +1,12 @@
-const { promises: fs } = require('fs')
-const path = require('path')
-const execa = require('execa')
-const { test, run, FailFastError } = require('..')
+import { promises as fs } from 'fs'
+import path from 'path'
+import execa from 'execa'
+import { test, run, FailFastError } from '../index.js'
 
 const config = {
   timeout: 5000,
   plugins: ['tests/helpers/plugin.js'],
-  log: { stream: false, level: 'info' },
+  log: { stream: false, level: 'debug' },
   match: 'some'
 }
 const toName = ({ name }) => name
@@ -57,7 +57,7 @@ test('bff --tag dev --tag qa --match every', async t => {
 // are caught and fail the test suite via the CLI.
 test('uncaught exception in test file', async t => {
   const { stdout } = await execa('./cli.js', ['tests/uncaught.js'], execaOpts)
-  t.expect(stdout).toContain("Cannot find module 'thing-that-doesnt-exist'")
+  t.expect(stdout).toContain("Cannot find package 'thing-that-doesnt-exist'")
 })
 
 // This tests that the test results are outputted to a JUnit file properly via

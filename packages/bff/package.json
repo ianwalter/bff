@@ -1,9 +1,10 @@
 {
   "name": "@ianwalter/bff",
   "description": "Your friendly test framework",
-  "version": "9.12.3",
+  "version": "9.13.0",
   "license": "SEE LICENSE IN LICENSE",
-  "main": "index.js",
+  "type": "module",
+  "module": "index.js",
   "scripts": {
     "test": "./cli.js",
     "test:ci": "./cli.js -V tests/bff.js",
@@ -37,12 +38,16 @@
   "bugs": {
     "url": "https://github.com/ianwalter/bff/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ianwalter"
+  },
   "homepage": "https://github.com/ianwalter/bff#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^0.0.8",
+    "@generates/logger": "^0.0.9",
     "@generates/merger": "^0.1.1",
     "@ianwalter/cli": "^4.1.0",
     "@ianwalter/clone": "^6.0.1",
@@ -54,11 +59,12 @@
     "callsites": "^3.1.0",
     "camaro": "^6.0.2",
     "common-tags": "^1.8.0",
+    "esm-to-cjs": "^1.2.0",
     "expect": "^26.6.2",
-    "globby": "^11.0.1",
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
+    "tiny-glob": "^0.2.8",
     "workerpool": "^6.0.3"
   },
   "devDependencies": {

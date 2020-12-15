@@ -1,13 +1,42 @@
-const { worker } = require('workerpool')
-const pSeries = require('p-series')
-const { createLogger, chalk } = require('@generates/logger')
+import { worker } from 'workerpool'
+import pSeries from 'p-series'
+import { createLogger, chalk } from '@generates/logger'
+import { merge } from '@generates/merger'
+import workerThreads from 'worker_threads'
+import createTimer from '@ianwalter/timer'
+import toHookRun from './lib/toHookRun.js'
+import runTest from './lib/runTest.js'
+import enhanceTestContext from './lib/enhanceTestContext.js'
+import cloneable from '@ianwalter/cloneable'
 
-let threadId = process.pid
-try {
-  const workerThreads = require('worker_threads')
-  threadId = workerThreads.threadId
-} catch (err) {
-  // Ignore error.
+const threadId = workerThreads.threadId
+
+async function importTests (file, testKey = null) {
+  // Return a single test if it's been requested and already imported.
+  const tests = testKey && global.bff?.tests
+  let test = tests && tests[file.path] && tests[file.path][testKey]
+  if (test) return test
+
+  // Add the file to global so that the tests get namespaced with the filename
+  // when the test file is imported/executed and added to global.
+  const data = { file: file.path, tests: {} }
+  global.bff = global.bff ? merge(global.bff, data) : data
+
+  // Import the tests from the test file.
+  try {
+    await import(file.path)
+  } catch (err) {
+    // Wrap errorr in cloneable so that it can be sent back to the main thread
+    // properly.
+    throw cloneable(err)
+  }
+
+  // Return a single test if only one is requested.
+  test = testKey && global.bff.tests[file.path][testKey]
+  if (test) return test
+
+  // Otherwise, return a map of all tests in the test file.
+  return global.bff.tests[file.path]
 }
 
 worker({
@@ -27,7 +56,6 @@ worker({
     logger.debug(`Registration worker ${threadId}`, relativePath)
 
     // Sequentially run any registration hooks specified by plugins.
-    const toHookRun = require('./lib/toHookRun')
     if (context.plugins && context.plugins.length) {
       await pSeries(
         context.plugins.map(toHookRun('registration', file, context))
@@ -35,11 +63,8 @@ worker({
     }
 
     // If the map of tests in the current test file hasn't been added to the
-    // context, require the test file and use it's exports object as the test
-    // map.
-    if (!context.testMap) {
-      context.testMap = require(file.path)
-    }
+    // context, import the tests from the test file.
+    if (!context.testMap) context.testMap = await importTests(file)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
@@ -59,18 +84,12 @@ worker({
 
     // If an augmentTests method has been added to the context by a plugin, call
     // it with the list of tests so that the plugin can alter them if necessary.
-    if (context.augmentTests) {
-      file.tests = context.augmentTests(file.tests)
-    }
+    if (context.augmentTests) file.tests = context.augmentTests(file.tests)
 
     // Return the file context with the the list of registered tests.
     return file
   },
   async test (file, test, context) {
-    const { merge } = require('@generates/merger')
-    const createTimer = require('@ianwalter/timer')
-    const toHookRun = require('./lib/toHookRun')
-
     // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.test`
@@ -92,9 +111,7 @@ worker({
         )
 
         // If the verbose option is set, start a timer for the test.
-        if (context.verbose) {
-          context.timer = createTimer()
-        }
+        if (context.verbose) context.timer = createTimer()
 
         // Sequentially run any runTest hooks specified by plugins.
         await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
@@ -102,21 +119,17 @@ worker({
 
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
-        if (context.verbose) {
-          context.timer = createTimer()
-        }
+        if (context.verbose) context.timer = createTimer()
 
         // Enhance the context passed to the test function with testing
         // utilities.
-        const enhanceTestContext = require('./lib/enhanceTestContext')
         enhanceTestContext(context.testContext)
         context.testContext.logger = logger
 
-        // Load the test file and extract the relevant test function.
-        const { fn } = require(file.path)[test.key]
+        // Import the tests from the test file.
+        const { fn } = await importTests(file, test.key)
 
         // Run the test!
-        const runTest = require('./lib/runTest')
         await runTest(context.testContext, fn)
         context.testContext.hasRun = true
       }

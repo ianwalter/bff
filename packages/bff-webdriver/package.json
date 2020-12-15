@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff-webdriver",
   "description": "A bff plugin to enable WebDriver-based testing",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "author": {
     "name": "Ian Walter",
     "url": "https://ianwalter.dev"
@@ -11,7 +11,8 @@
   "bin": {
     "bff-webdriver": "cli.js"
   },
-  "main": "index.js",
+  "type": "module",
+  "module": "index.js",
   "scripts": {
     "test": "bff",
     "bff-webdriver": "./cli.js",
@@ -24,6 +25,10 @@
   },
   "bugs": {
     "url": "https://github.com/ianwalter/bff/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ianwalter"
   },
   "keywords": [
     "bff",
@@ -44,7 +49,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^0.0.8",
+    "@generates/logger": "^0.0.9",
     "@ianwalter/cli": "^4.1.0",
     "dotenv": "^8.2.0",
     "execa": "^5.0.0",
@@ -53,12 +58,8 @@
     "webdriverio": "^6.10.5"
   },
   "devDependencies": {
-    "@ianwalter/bff": "^9.12.3",
     "@ianwalter/nrg": "^0.3.1",
     "@ianwalter/url": "^2.0.0"
-  },
-  "peerDependencies": {
-    "@ianwalter/bff": "^9.12.3"
   },
   "bff": {
     "log": {

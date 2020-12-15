@@ -1,7 +1,9 @@
-const { utils } = require('jest-snapshot')
-const cloneable = require('@ianwalter/cloneable')
+import jestSnapshot from 'jest-snapshot'
+import cloneable from '@ianwalter/cloneable'
 
-module.exports = async function runTest (testContext, testFn) {
+const { utils } = jestSnapshot
+
+export default async function runTest (testContext, testFn) {
   function done () {
     testContext.sp.pub('done')
   }
@@ -18,7 +20,7 @@ module.exports = async function runTest (testContext, testFn) {
     // Run the test in parallel with a timeout promise that will throw an error
     // if the specified timeout is reached.
     await Promise.race([
-      new Promise((resolve, reject) => testContext.sp.sub('done', resolve)),
+      new Promise(resolve => testContext.sp.sub('done', resolve)),
       new Promise((resolve, reject) => {
         try {
           const result = testFn(testContext, done)
