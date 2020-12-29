@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 10.0.1
+
+### Patch Changes
+
+- dd6db4a: Update dependency webdriverio to ^6.10.11
+
 ## 10.0.0
 
 ### Major Changes

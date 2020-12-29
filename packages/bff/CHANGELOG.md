@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 10.0.1
+
+### Patch Changes
+
+- a3f105d: Updating @generates/merger
+
 ## 10.0.0
 
 ### Major Changes
