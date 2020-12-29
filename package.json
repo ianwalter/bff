@@ -3,7 +3,7 @@
   "description": "Your friendly test runner/framework",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslit",
     "test:bff": "npm run --prefix packages/bff test:ci",
     "test:webdriver": "npm run --prefix packages/bff-webdriver test",
     "test:puppeteer": "npm run --prefix packages/bff-puppeteer test",
@@ -17,6 +17,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.12.0",
     "@ianwalter/eslint-config": "^6.1.0",
+    "@ianwalter/eslit": "^1.0.1",
     "@ianwalter/renovate-config": "^1.4.2",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
     "vuepress": "^1.7.1"
