@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@generates/logger": "^0.0.9",
-    "@generates/merger": "^0.1.1",
+    "@generates/merger": "^0.1.2",
     "@ianwalter/cli": "^4.1.0",
     "@ianwalter/clone": "^6.0.1",
     "@ianwalter/cloneable": "^2.0.0",
