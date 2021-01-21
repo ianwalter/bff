@@ -65,7 +65,7 @@
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
     "tiny-glob": "^0.2.8",
-    "workerpool": "^6.0.3"
+    "workerpool": "^6.0.4"
   },
   "devDependencies": {
     "execa": "^5.0.0"
