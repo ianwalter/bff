@@ -1,5 +1,13 @@
 # @ianwalter/bff
 
+## 10.0.2
+
+### Patch Changes
+
+- 9420121: Update dependency workerpool to ^6.0.4
+- 4d4b31b: Update dependency @generates/logger to ^0.1.0
+- 4bd38f4: Update dependency @generates/merger to ^0.1.3
+
 ## 10.0.1
 
 ### Patch Changes
