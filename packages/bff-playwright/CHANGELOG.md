@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 4.0.1
+
+### Patch Changes
+
+- 4d4b31b: Update dependency @generates/logger to ^0.1.0
+
 ## 4.0.0
 
 ### Major Changes
