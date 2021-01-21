@@ -49,7 +49,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^0.0.9",
+    "@generates/logger": "^0.1.0",
     "@ianwalter/cli": "^4.1.0",
     "dotenv": "^8.2.0",
     "execa": "^5.0.0",
