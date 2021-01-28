@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "bff",
   "description": "Your friendly test runner/framework",
   "license": "SEE LICENSE IN LICENSE",
