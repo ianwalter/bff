@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 4.1.0
+
+### Minor Changes
+
+- 3ed96f3: Updating playwright to v1.8.0
+
 ## 4.0.1
 
 ### Patch Changes
