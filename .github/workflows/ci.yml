@@ -24,23 +24,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: npm ci
+        run: yarn
       - name: Lint
-        run: npm run lint
+        run: yarn lint
       - name: Test bff
-        run: cd packages/bff; npm run test:ci
+        run: cd packages/bff; yarn test:ci
       # TODO:
       # - name: Test bff-webdriver
       #   run: npm run test:webdriver
   playwright:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/playwright:v2.0.0
+      image: ianwalter/playwright:v2.1.0
     timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: npm ci
+        run: yarn
       - name: Test bff
-        run: npm run test:playwright
+        run: yarn test:playwright
