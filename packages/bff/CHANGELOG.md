@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 10.0.4
+
+### Patch Changes
+
+- 0b8cc04: Fix #341: dont show skipped test line numbers with --verbose
+
 ## 10.0.3
 
 ### Patch Changes
