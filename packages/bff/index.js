@@ -1,8 +1,9 @@
 import readline from 'readline'
 import path from 'path'
+import util from 'util'
 import { fileURLToPath } from 'url'
 import workerpool from 'workerpool'
-import glob from 'tiny-glob'
+import glob from 'glob'
 import { createLogger, chalk } from '@generates/logger'
 import { oneLine } from 'common-tags'
 import pSeries from 'p-series'
@@ -13,7 +14,11 @@ import shuffle from 'array-shuffle'
 import toHookRun from './lib/toHookRun.js'
 
 const { SnapshotState } = jestSnapshot
-const defaultFiles = ['**/*@(.pptr|.play|tests).?(m|c)js']
+const globa = util.promisify(glob)
+const defaultFiles = [
+  '*@(tests|play|pptr).?(m|c)js',
+  'tests/**/*@(tests|play|pptr).?(m|c)js'
+]
 
 export class FailFastError extends Error {
   constructor () {
@@ -59,8 +64,9 @@ export async function run (config) {
   const logger = createLogger(context.log)
 
   // Add the absolute paths of the test files to the run context.
-  const globOptions = { absolute: true, filesOnly: true }
-  const files = await Promise.all(context.tests.map(t => glob(t, globOptions)))
+  const ignore = 'node_modules/**'
+  const globOptions = { nosort: true, nodir: true, ignore, absolute: true }
+  const files = await Promise.all(context.tests.map(t => globa(t, globOptions)))
   context.files = shuffle(files.flat())
   logger.debug('Run context', context)
 
