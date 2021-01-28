@@ -232,10 +232,10 @@ export async function run (config) {
           context.testsRun++
 
           // Log the relative file path and test duration if in verbose mode.
-          if (context.verbose && !context.receivedSigint) {
+          if (context.verbose && !context.receivedSigint && result) {
             const pad = ''.padEnd((context.testsRun * 100).toString().length)
             logger.log(`${pad}${file.relativePath}:${test.lineNumber}`)
-            if (result && result.duration) {
+            if (result.duration) {
               logger.log(chalk.dim(`${pad}in`, result.duration))
             }
           }
