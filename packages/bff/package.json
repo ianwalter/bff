@@ -61,10 +61,10 @@
     "common-tags": "^1.8.0",
     "esm-to-cjs": "^1.2.0",
     "expect": "^26.6.2",
+    "glob": "^7.1.6",
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^2.0.0",
     "p-series": "^2.1.0",
-    "tiny-glob": "^0.2.8",
     "workerpool": "^6.0.4"
   },
   "devDependencies": {
