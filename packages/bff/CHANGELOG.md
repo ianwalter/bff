@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 10.0.3
+
+### Patch Changes
+
+- 38660a5: Fixing #324: file globbing
+
 ## 10.0.2
 
 ### Patch Changes
