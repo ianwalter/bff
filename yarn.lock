@@ -1375,23 +1375,23 @@
   dependencies:
     "@ianwalter/requester" "^2.4.3"
 
-"@ianwalter/nrg-validation@^1.4.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-validation/-/nrg-validation-1.5.0.tgz#5356e33a595220b9ccf8d60f5ea61dcd9a218d62"
-  integrity sha512-xXb9r1QO0KA5C4cI0yZnVUmeIB41DPxBNSa46zoyJ5N3exAkzeOXl5f3mDB8M022Ohlufw+Cd1a7NDClXXBCGw==
+"@ianwalter/nrg-validation@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-validation/-/nrg-validation-2.0.0.tgz#78597afa0d9df850c8be8cd2ba5fe9e9ab3cc1a8"
+  integrity sha512-Q7gAFzL1MVSfbueXbjN5xaVzviEwfY6C+NorcqbCdLRgQl0Mkrf2UNpasskcInH3fEKCzTW90tGI9kl9CNqXDw==
   dependencies:
     "@generates/logger" "^0.1.0"
     "@generates/merger" "^0.1.3"
     date-fns "^2.16.1"
     decamelize "^4.0.0"
-    is-phone "^2.0.0"
     isemail "^3.2.0"
+    libphonenumber-js "^1.9.9"
     zxcvbn "^4.4.2"
 
-"@ianwalter/nrg@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.18.0.tgz#0378d34032f3b5196d2e478d73045bb0722fc8a9"
-  integrity sha512-/nmxqEP5k7H8rRVFDd+/nrOMr5W19MYMfxb4M1+5f5DrCt9fCEFu2W4RTmPP33LJ69M5jXMqZnF1MPskkrChpw==
+"@ianwalter/nrg@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.18.1.tgz#b2ae16e85cdf8d0272af20cc0c4121024e0e2e4a"
+  integrity sha512-cisMyoB+Cq+TaAtfxNtjS/4NfdKat9PTIS6IORidKGyGTgKV1ctQbvN32woYGVLKUbGXArfZiMppIOnkoE92vg==
   dependencies:
     "@generates/cli" "^0.0.10"
     "@generates/logger" "^0.1.0"
@@ -1406,7 +1406,7 @@
     "@ianwalter/nrg-router" "^1.1.1"
     "@ianwalter/nrg-session" "^7.0.2"
     "@ianwalter/nrg-test" "^1.2.2"
-    "@ianwalter/nrg-validation" "^1.4.0"
+    "@ianwalter/nrg-validation" "^2.0.0"
     "@ianwalter/requester" "^2.4.3"
     "@ianwalter/url" "^2.0.0"
     bcrypt "5.0.0"
@@ -7033,13 +7033,6 @@ is-path-inside@^3.0.1:
   resolved "https://registry.yarnpkg.com/is-path-inside/-/is-path-inside-3.0.2.tgz#f5220fc82a3e233757291dddc9c5877f2a1f3017"
   integrity sha512-/2UGPSgmtqwo1ktx8NDHjuPwZWmHhO+gj0f93EkhLB5RgW9RZevWYYlIkS6zePc6U2WpOdQYIwHe9YC4DWEBVg==
 
-is-phone@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/is-phone/-/is-phone-2.0.0.tgz#c9f80d61a48197f9a19db0e4f08cdc22be0ad2ea"
-  integrity sha1-yfgNYaSBl/mhnbDk8IzcIr4K0uo=
-  dependencies:
-    phone-regex "^2.0.0"
-
 is-plain-obj@^1.0.0, is-plain-obj@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
@@ -7730,6 +7723,11 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+libphonenumber-js@^1.9.9:
+  version "1.9.9"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.9.tgz#e097f00f834f92fe44abd8377b4118c6c6358e40"
+  integrity sha512-RhtAvacOkq4wc+RrswYE9MteJQy/1yd4lgLJTdL+HdYYRLZbERFv4ZRj/Nt+/gIB2xVSgW0MLNqb32hx042W+g==
 
 liftoff@3.1.0:
   version "3.1.0"
@@ -9435,11 +9433,6 @@ pgpass@1.x:
   integrity sha512-YmuA56alyBq7M59vxVBfPJrGSozru8QAdoNlWuW3cz8l+UX3cWge0vTvjKhsSHSJpo3Bom8/Mm6hf0TR5GY0+w==
   dependencies:
     split2 "^3.1.1"
-
-phone-regex@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/phone-regex/-/phone-regex-2.1.0.tgz#255f9f8518f0196094ce21ba1dfe732277d20c0d"
-  integrity sha512-9lXTghLpr/jU6Dx9JIacAUt3Hl7qVucW8+Iqwx99dvFSO9imlB2xvY6IyT6Sw554QTtHMnhvPUygGaN5k0pv9Q==
 
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
