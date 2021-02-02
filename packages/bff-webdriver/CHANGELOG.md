@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 10.0.3
+
+### Patch Changes
+
+- 80f5fce: Fixing generates/logger import
+
 ## 10.0.2
 
 ### Patch Changes

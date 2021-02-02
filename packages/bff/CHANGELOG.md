@@ -1,5 +1,13 @@
 # @ianwalter/bff
 
+## 10.0.5
+
+### Patch Changes
+
+- 6cd3a0f: Update dependency camaro to ^6.1.0
+- 59d6bd3: Update dependency workerpool to ^6.1.0
+- 80f5fce: Fixing generates/logger import
+
 ## 10.0.4
 
 ### Patch Changes
