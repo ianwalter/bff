@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 4.1.1
+
+### Patch Changes
+
+- 80f5fce: Fixing generates/logger import
+
 ## 4.1.0
 
 ### Minor Changes
