@@ -4,7 +4,7 @@ import util from 'util'
 import { fileURLToPath } from 'url'
 import workerpool from 'workerpool'
 import glob from 'glob'
-import { createLogger, chalk } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 import { oneLine } from 'common-tags'
 import pSeries from 'p-series'
 import jestSnapshot from 'jest-snapshot'
@@ -13,6 +13,7 @@ import callsites from 'callsites'
 import shuffle from 'array-shuffle'
 import toHookRun from './lib/toHookRun.js'
 
+const { createLogger, chalk } = generatesLogger
 const { SnapshotState } = jestSnapshot
 const globa = util.promisify(glob)
 const defaultFiles = [

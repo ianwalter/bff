@@ -3,7 +3,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import cli from '@ianwalter/cli'
-import { createLogger, chalk } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 import camaro from 'camaro'
 import junitBuilder from 'junit-report-builder'
 import * as bff from './index.js'
@@ -12,6 +12,7 @@ import * as bff from './index.js'
 // still waiting to be logged to the console.
 if (process.stdout._handle) process.stdout._handle.setBlocking(true)
 
+const { createLogger, chalk } = generatesLogger
 const logger = createLogger({ namespace: 'bff.cli', level: 'info' })
 
 async function run () {

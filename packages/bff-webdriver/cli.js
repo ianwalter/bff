@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import cli from '@ianwalter/cli'
-import { createLogger } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 import selenium from 'selenium-standalone'
 import cleanup from './cleanup.js'
 import { webdriverVersion } from './index.js'
 
+const { createLogger } = generatesLogger
 const logger = createLogger({ level: 'info', namespace: 'bff.webdriver.cli' })
 
 async function run () {

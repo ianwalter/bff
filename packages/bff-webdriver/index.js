@@ -1,4 +1,4 @@
-import { createLogger } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 import standalone from 'selenium-standalone'
 import { remote } from 'webdriverio'
 import zalenium from './integrations/zalenium.js'
@@ -6,6 +6,8 @@ import appium from './integrations/appium.js'
 import cleanup from './cleanup.js'
 
 export const webdriverVersion = '3.141.59'
+
+const { createLogger } = generatesLogger
 const logger = createLogger({ level: 'info', namespace: 'bff.webdriver' })
 
 let seleniumStandalone

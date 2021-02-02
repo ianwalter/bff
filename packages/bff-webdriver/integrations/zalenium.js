@@ -1,6 +1,7 @@
-import { createLogger } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 import { oneLine } from 'common-tags'
 
+const { createLogger } = generatesLogger
 const logger = createLogger({
   level: 'info',
   namespace: 'bff.webdriver.zalenium'

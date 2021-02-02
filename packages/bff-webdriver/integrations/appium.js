@@ -1,5 +1,6 @@
-import { createLogger } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 
+const { createLogger } = generatesLogger
 const logger = createLogger({
   level: 'info',
   namespace: 'bff.webdriver.appium'

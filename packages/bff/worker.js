@@ -1,6 +1,6 @@
 import { worker } from 'workerpool'
 import pSeries from 'p-series'
-import { createLogger, chalk } from '@generates/logger'
+import generatesLogger from '@generates/logger'
 import { merge } from '@generates/merger'
 import workerThreads from 'worker_threads'
 import createTimer from '@ianwalter/timer'
@@ -9,6 +9,7 @@ import runTest from './lib/runTest.js'
 import enhanceTestContext from './lib/enhanceTestContext.js'
 import cloneable from '@ianwalter/cloneable'
 
+const { createLogger, chalk } = generatesLogger
 const threadId = workerThreads.threadId
 
 async function importTests (file, testKey = null) {
