@@ -6,8 +6,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container:
-      image: node:15.4-buster
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -19,7 +17,7 @@ jobs:
       - name: Install
         run: yarn
       - name: Changesets
-        uses: changesets/action@bfeb9e077e6cf393e4c4ef17e2bbc75b308b4364
+        uses: changesets/action@b3300fad33b6ab794313da28d27424c0e2f78991
         with:
           publish: yarn changeset publish
         env:
