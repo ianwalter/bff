@@ -58,7 +58,7 @@
     "webdriverio": "^6.11.3"
   },
   "devDependencies": {
-    "@ianwalter/nrg": "^0.18.1",
+    "@ianwalter/nrg": "^0.19.0",
     "@ianwalter/url": "^2.0.0"
   },
   "bff": {
