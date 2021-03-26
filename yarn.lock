@@ -1085,6 +1085,20 @@
     getopts "^2.2.5"
     read-pkg-up "^7.0.1"
 
+"@generates/cli@^1.0.0":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@generates/cli/-/cli-1.0.2.tgz#4c32cb0c563763c9262cc3dc4844b4722e926e19"
+  integrity sha512-KFrqzroWwuKNOdFuG0kiPo8D7iUx2XH7erarA0Ouc1sMzUwiFFwB+Fj9DR/XSN7E/TTlZ7E4krGCMjyEqSbCuQ==
+  dependencies:
+    "@generates/dotter" "^2.0.0"
+    "@generates/logger" "^0.1.2"
+    "@generates/merger" "^0.1.3"
+    camelcase "^6.0.0"
+    common-tags "^1.8.0"
+    decamelize "^4.0.0"
+    getopts "^2.2.5"
+    read-pkg-up "^7.0.1"
+
 "@generates/dotter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@generates/dotter/-/dotter-2.0.0.tgz#680523dbe6782ad8b924082258898378472106e5"
@@ -1151,19 +1165,37 @@
     marked-terminal "^4.1.0"
     strip-ansi "^6.0.0"
 
+"@generates/logger@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@generates/logger/-/logger-0.1.2.tgz#fcf9d9ee60323a092ce51c3bb0baff4f5d6e5e09"
+  integrity sha512-tTQdLa5luH79IWaDx3pZGe5+qGjflQPewDm11dIGXXFw+MLt99Nz8tUlgQa71KLtOY51wcR2XmuVpXCNWjErsQ==
+  dependencies:
+    "@generates/cli" "^1.0.0"
+    "@generates/dotter" "^2.0.0"
+    "@generates/merger" "^0.1.0"
+    "@ianwalter/chromafi" "^1.0.1"
+    "@ianwalter/clone" "^6.0.1"
+    "@ianwalter/cloneable" "^2.0.0"
+    chalk "^4.1.0"
+    has-ansi "^4.0.0"
+    has-emoji "^1.1.0"
+    marked "^2.0.0"
+    marked-terminal "^4.1.0"
+    strip-ansi "^6.0.0"
+
 "@generates/merger@^0.1.0", "@generates/merger@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@generates/merger/-/merger-0.1.3.tgz#6808e51767b45bf75a8354f739d645826de85677"
   integrity sha512-x4KKHexiP4hIfoGZumc3RSac1t9d/aGErxbG9NASHcx59mljW2uyKDt4qP3igi9hszIHV5mjb4TbAYUNFoWg3w==
 
-"@generates/modulizer@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@generates/modulizer/-/modulizer-7.0.0.tgz#646af6254b5c5eebac1720a975bcf8619de68b3e"
-  integrity sha512-Tq3IZhAd9FxxXRc7nNPjvoacDwRnUPGA2lDtXusCr1QDfOjVNTWvoywWIv3uh+gllxSvB5Q6bPMKx1LOOZ2wUA==
+"@generates/modulizer@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@generates/modulizer/-/modulizer-7.0.1.tgz#46693097a8610141b7d8b39839650d55a3e4050c"
+  integrity sha512-K1mkbc6G97tHOij1G1TX93JM1p8VfdO6NLnc/pzc2QKn516dEpYBClLaAPbuunN4512LH6Bu4BieV/4hkCrEHw==
   dependencies:
     "@babel/core" "^7.8.6"
-    "@generates/cli" "^0.0.10"
-    "@generates/logger" "^0.1.1"
+    "@generates/cli" "^1.0.0"
+    "@generates/logger" "^0.1.2"
     "@ianwalter/npm-short-name" "^1.0.0"
     "@ianwalter/rollup-plugin-hashbang" "^1.3.0"
     "@rollup/plugin-babel" "^5.3.0"
@@ -1282,22 +1314,22 @@
   dependencies:
     csrf "^3.1.0"
 
-"@ianwalter/nrg-logger@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-logger/-/nrg-logger-0.3.1.tgz#bc6d970201a4c4c228fa10ba0950f72cca55a87b"
-  integrity sha512-HyzQICopGSG1H42iwDFzb8ZZ1M2bdhZKa7keBG4NE+Os7lPGgl5uXuhve3A4dw7E3LkAFXJd164XOyR+NmQ9hA==
+"@ianwalter/nrg-logger@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-logger/-/nrg-logger-0.3.2.tgz#a9e10d062201af5a7b26cab76358578990e3691c"
+  integrity sha512-99AsMuE22M+JkPZJLj7lSmDw78Y3x5yIrrt5SLgY4afKUi5T2gC16+1WSe74hSV+vBne4lSuxqHEQWuq2nRZLw==
   dependencies:
-    "@generates/logger" "^0.1.1"
+    "@generates/logger" "^0.1.2"
     "@ianwalter/timer" "^2.0.2"
 
-"@ianwalter/nrg-mq@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-mq/-/nrg-mq-1.2.4.tgz#782934204feec7377bbffe404a86c03f4430a25e"
-  integrity sha512-3yBb9SMs2oKIKqC/DRQ1CqhqbjjRqQSnrobMuQpH7BXkPBPjdWhX6rK1PwWyESuEYSfktkfxK5CXpnY9saGwEw==
+"@ianwalter/nrg-mq@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-mq/-/nrg-mq-1.2.5.tgz#9a7d3926ffe68fa68476256f08ae3e64bdd5c73e"
+  integrity sha512-5ECAPRlWQsbh7G1mWV729TCES+n1s1S38dzjgnCLZRBGlhJdK46Q+sKJmsaSBqduQoAiUmCF178WfEeMlIw8fg==
   dependencies:
-    "@generates/logger" "^0.1.1"
+    "@generates/logger" "^0.1.2"
     amqp-connection-manager "^3.2.2"
-    amqplib "^0.6.0"
+    amqplib "^0.7.0"
 
 "@ianwalter/nrg-router@^1.1.2":
   version "1.1.2"
@@ -1324,12 +1356,12 @@
   dependencies:
     "@ianwalter/requester" "^2.5.0"
 
-"@ianwalter/nrg-validation@2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-validation/-/nrg-validation-2.1.1.tgz#a188cef6ed7cb4e2f8942085333508297be4016a"
-  integrity sha512-qS5RsRFwE65kKIwtodTqkYfa+x83a9dU7+xczMUPHkhr4Ew1zZC+CrbqtqQqnxnKRVNJc5YfnYvXlNyw1Yo0qw==
+"@ianwalter/nrg-validation@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-validation/-/nrg-validation-3.0.0.tgz#4234eeb294c908819c3077349b1f607a151f146c"
+  integrity sha512-PA6VVSKZ69ZG51kV4pZZiYcivKTPsz5v7R37tsR9S5w9amYB5yfcPmRTjkX9LHomtpGo+BFbBXtlnSYPhJ4h7g==
   dependencies:
-    "@generates/logger" "^0.1.1"
+    "@generates/logger" "^0.1.2"
     "@generates/merger" "^0.1.3"
     date-fns "^2.17.0"
     decamelize "^4.0.0"
@@ -1337,25 +1369,25 @@
     libphonenumber-js "^1.9.10"
     zxcvbn "^4.4.2"
 
-"@ianwalter/nrg@^0.19.0":
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.19.0.tgz#aef470820f50aa0ba30ae4f5feaa551628177cd8"
-  integrity sha512-Ji9gdlwTtMEb/ZRmI5HbYHgdT0llZjXTADxIrbaAt/mfekRwGgfCLiH2q21MI1ygd+1xUxgspB2Ph1ssNtMD5g==
+"@ianwalter/nrg@^0.19.3":
+  version "0.19.3"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.19.3.tgz#df26b85d76f4d260d37b1f80026e5eb315accdf5"
+  integrity sha512-WnthGnsSGcB0fUlTkdoPmWN7pImLGqNe8f7t5Nwk+sEawmFhCuMEaZhtHv1uvSR5dXEjOxP0DbDlBdq4ENQl5A==
   dependencies:
     "@generates/cli" "^0.0.10"
     "@generates/dotter" "^2.0.0"
     "@generates/extractor" "^1.1.2"
-    "@generates/logger" "^0.1.1"
+    "@generates/logger" "^0.1.2"
     "@generates/merger" "^0.1.3"
-    "@generates/modulizer" "^7.0.0"
+    "@generates/modulizer" "^7.0.1"
     "@ianwalter/cloneable" "^2.0.0"
     "@ianwalter/nrg-csrf" "^1.0.0"
-    "@ianwalter/nrg-logger" "^0.3.1"
-    "@ianwalter/nrg-mq" "^1.2.4"
+    "@ianwalter/nrg-logger" "^0.3.2"
+    "@ianwalter/nrg-mq" "^1.2.5"
     "@ianwalter/nrg-router" "^1.1.2"
     "@ianwalter/nrg-session" "^7.0.2"
     "@ianwalter/nrg-test" "^1.2.3"
-    "@ianwalter/nrg-validation" "2.1.1"
+    "@ianwalter/nrg-validation" "3.0.0"
     "@ianwalter/requester" "^2.5.0"
     "@ianwalter/url" "^2.0.0"
     bcrypt "5.0.0"
@@ -1365,7 +1397,7 @@
     dotenv "^8.2.0"
     ejs "^3.1.3"
     grant "^5.4.9"
-    knex "^0.21.17"
+    knex "^0.21.18"
     koa "^2.13.1"
     koa-bodyparser "^4.3.0"
     koa-compress "^5.0.1"
@@ -2357,17 +2389,17 @@ amqp-connection-manager@^3.2.2:
   dependencies:
     promise-breaker "^5.0.0"
 
-amqplib@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/amqplib/-/amqplib-0.6.0.tgz#87857c7c95d56d22438ced4cf1f7e5f0dc43b309"
-  integrity sha512-zXCh4jQ77TBZe1YtvZ1n7sUxnTjnNagpy8MVi2yc1ive239pS3iLwm4e4d5o4XZGx1BdTKQ/U0ZmaDU3c8MxYQ==
+amqplib@^0.7.0:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/amqplib/-/amqplib-0.7.1.tgz#1ac60934cbddb445bdc9c648310a0d232a53b3af"
+  integrity sha512-KePK3tTOLGU4emTo+PwSDMbc123jrxo13FpRpim1LzJoSlQrIBB2/kMeCC40jK/Zb0olHGaABjLqXDsdK46iLA==
   dependencies:
     bitsyntax "~0.1.0"
-    bluebird "^3.5.2"
+    bluebird "^3.7.2"
     buffer-more-ints "~1.0.0"
     readable-stream "1.x >=1.1.9"
-    safe-buffer "~5.1.2"
-    url-parse "~1.4.3"
+    safe-buffer "~5.2.1"
+    url-parse "~1.5.1"
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -2841,7 +2873,7 @@ bl@^4.0.3:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-bluebird@^3.1.1, bluebird@^3.5.2, bluebird@^3.5.5:
+bluebird@^3.1.1, bluebird@^3.5.5, bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
@@ -7521,10 +7553,10 @@ kind-of@^6.0.0, kind-of@^6.0.2, kind-of@^6.0.3:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
-knex@^0.21.17:
-  version "0.21.17"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.21.17.tgz#f99f5b90132b9bb9c6eb5c81f0a035e0232c870f"
-  integrity sha512-kAt58lRwjzqwedApKF7luYPa7HsLb0oDiczwKrkZcekIzTmSow5YGK149S2C8HjH63R3NcOBo9+1rjvWnC1Paw==
+knex@^0.21.18:
+  version "0.21.19"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.21.19.tgz#df504a184eb29e286245839db0867e3ca161af00"
+  integrity sha512-6etvrq9XI1Ck6mEc/XiXFGVpD1Lmj6v9XWojqZgEbOvyMbW7XRvgZ99yIhN/kaBH+43FEy3xv/AcbRaH+1pJtw==
   dependencies:
     colorette "1.2.1"
     commander "^6.2.0"
@@ -10666,7 +10698,7 @@ safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1, safe-buffer@~5.1.2:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
-safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.1.2, safe-buffer@^5.2.0, safe-buffer@~5.2.0:
+safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.1.2, safe-buffer@^5.2.0, safe-buffer@~5.2.0, safe-buffer@~5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
@@ -12066,10 +12098,18 @@ url-parse-lax@^3.0.0:
   dependencies:
     prepend-http "^2.0.0"
 
-url-parse@^1.4.3, url-parse@^1.4.7, url-parse@~1.4.3:
+url-parse@^1.4.3, url-parse@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
   integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
+  dependencies:
+    querystringify "^2.1.1"
+    requires-port "^1.0.0"
+
+url-parse@~1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.1.tgz#d5fa9890af8a5e1f274a2c98376510f6425f6e3b"
+  integrity sha512-HOfCOUJt7iSYzEx/UqgtwKRMC6EU91NFhsCHMv9oM03VJcVo2Qrp8T8kI9D7amFf1cu+/3CEhgb3rF9zL7k85Q==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
