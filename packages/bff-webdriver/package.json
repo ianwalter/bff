@@ -8,15 +8,10 @@
   },
   "homepage": "https://github.com/ianwalter/bff/blob/main/packages/bff-webdriver#readme",
   "license": "SEE LICENSE IN LICENSE",
-  "bin": {
-    "bff-webdriver": "cli.js"
-  },
   "type": "module",
   "module": "index.js",
   "scripts": {
-    "test": "bff",
-    "bff-webdriver": "./cli.js",
-    "postinstall": "./cli.js setup"
+    "test": "bff"
   },
   "repository": {
     "type": "git",
@@ -41,25 +36,19 @@
   ],
   "files": [
     "index.js",
-    "cleanup.js",
-    "cli.js",
     "integrations"
   ],
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^0.1.0",
-    "@ianwalter/cli": "^4.1.0",
-    "dotenv": "^8.2.0",
-    "execa": "^5.0.0",
-    "p-settle": "^4.1.1",
-    "selenium-standalone": "^6.23.0",
+    "@generates/logger": "^0.1.2",
     "webdriverio": "^6.11.3"
   },
   "devDependencies": {
     "@ianwalter/nrg": "^0.18.1",
-    "@ianwalter/url": "^2.0.0"
+    "@ianwalter/url": "^2.0.0",
+    "dotenv": "^8.2.0"
   },
   "bff": {
     "log": {

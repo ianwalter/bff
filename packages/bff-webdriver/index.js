@@ -1,7 +1,6 @@
 import generatesLogger from '@generates/logger'
 import standalone from 'selenium-standalone'
 import { remote } from 'webdriverio'
-import zalenium from './integrations/zalenium.js'
 import appium from './integrations/appium.js'
 import cleanup from './cleanup.js'
 
@@ -88,7 +87,6 @@ export default {
       // Add enabled integrations to the integrations array so they can be used
       // later.
       context.webdriver.integrations = context.webdriver.integrations || []
-      if (context.webdriver.zalenium) zalenium(context)
       if (context.webdriver.appium) appium(context)
 
       // Go through each enabled integration and allow it to enahance the

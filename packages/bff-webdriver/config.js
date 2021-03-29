@@ -1,17 +1,12 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import 'dotenv/config.js'
 
 export default {
   before (context) {
-    const standalone = process.env.SELENIUM_STANDALONE
-    const hostname = process.env.SELENIUM_HUB_HOST
-    const appium = process.env.APPIUM
-    if (standalone) {
-      context.webdriver.standalone = standalone
-    } else if (appium) {
+    const { SELENIUM_HUB_HOST, APPIUM } = process.env
+    if (APPIUM) {
       context.webdriver.appium = true
-    } else if (hostname) {
-      context.webdriver.hostname = hostname
+    } else if (SELENIUM_HUB_HOST) {
+      context.webdriver.hostname = SELENIUM_HUB_HOST
     }
   }
 }
