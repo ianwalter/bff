@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff-webdriver",
   "description": "A bff plugin to enable WebDriver-based testing",
-  "version": "10.0.4",
+  "version": "10.0.5",
   "author": {
     "name": "Ian Walter",
     "url": "https://ianwalter.dev"
