@@ -1,5 +1,13 @@
 # @ianwalter/bff-webdriver
 
+## 10.0.4
+
+### Patch Changes
+
+- 8f35c44: Update dependency @generates/logger to ^0.1.2
+- 60ab8c3: Removing zalenium integraiton and selenium-standalone
+- 1e592c4: Update dependency @generates/logger to ^0.1.1
+
 ## 10.0.3
 
 ### Patch Changes

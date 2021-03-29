@@ -1,5 +1,13 @@
 # @ianwalter/bff
 
+## 10.0.6
+
+### Patch Changes
+
+- 23472d8: Update dependency junit-report-builder to v3
+- 8f35c44: Update dependency @generates/logger to ^0.1.2
+- 1e592c4: Update dependency @generates/logger to ^0.1.1
+
 ## 10.0.5
 
 ### Patch Changes
