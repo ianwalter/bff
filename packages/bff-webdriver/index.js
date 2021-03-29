@@ -1,7 +1,6 @@
 import generatesLogger from '@generates/logger'
 import { remote } from 'webdriverio'
 import appium from './integrations/appium.js'
-import cleanup from './cleanup.js'
 
 export const webdriverVersion = '3.141.59'
 
