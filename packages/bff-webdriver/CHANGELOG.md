@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 10.0.5
+
+### Patch Changes
+
+- bb0aca3: Removing leftover selenium-standalone refs
+
 ## 10.0.4
 
 ### Patch Changes
