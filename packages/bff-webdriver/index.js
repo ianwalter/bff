@@ -1,5 +1,4 @@
 import generatesLogger from '@generates/logger'
-import standalone from 'selenium-standalone'
 import { remote } from 'webdriverio'
 import appium from './integrations/appium.js'
 import cleanup from './cleanup.js'
@@ -9,8 +8,6 @@ export const webdriverVersion = '3.141.59'
 const { createLogger } = generatesLogger
 const logger = createLogger({ level: 'info', namespace: 'bff.webdriver' })
 
-let seleniumStandalone
-
 export default {
   webdriverVersion,
   async before (context) {
@@ -18,30 +15,6 @@ export default {
       // Set the WebDriver version if not already configured.
       context.webdriver.version = context.webdriver.version || webdriverVersion
       logger.debug('Using WebDriver version', context.webdriver.version)
-
-      if (context.webdriver.standalone) {
-        logger.debug('Starting Selenium Standalone')
-        return new Promise((resolve, reject) => {
-          const spawnOptions = { stdio: 'inherit' }
-          const { version, drivers } = context.webdriver || {}
-
-          // Start the Selenium Standalone server.
-          standalone.start({ spawnOptions, version, drivers }, (err, child) => {
-            if (err) {
-              // If there was an error but a child process was still created,
-              // kill the child process.
-              if (child) child.kill()
-
-              reject(err)
-            } else {
-              // Assign the child process to the seleniumStandalone variable so
-              // that it can be killed later when the after hook runs.
-              seleniumStandalone = child
-              resolve()
-            }
-          })
-        })
-      }
     } catch (err) {
       logger.error(err)
     }
@@ -128,25 +101,6 @@ export default {
         // Tell Selenium to delete the browser session once the test is over.
         logger.debug('Terminating WebdriverIO browser instance')
         await context.testContext.browser.deleteSession()
-      }
-    } catch (err) {
-      logger.error(err)
-    }
-  },
-  async after (context) {
-    try {
-      if (seleniumStandalone) {
-        // Kill the Selenium Standalone child process.
-        logger.write('\n')
-        logger.log('👉', 'bff-webdriver: Stopping Selenium Standalone')
-        seleniumStandalone.kill()
-
-        // Run cleanup in case there are any orphaned processes hanging around.
-        if (context.err) {
-          logger.write('\n')
-          logger.log('👉', 'bff-webdriver: Running manual cleanup')
-          await cleanup()
-        }
       }
     } catch (err) {
       logger.error(err)
