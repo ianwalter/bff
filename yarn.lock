@@ -1147,24 +1147,6 @@
     marked-terminal "^4.1.0"
     strip-ansi "^6.0.0"
 
-"@generates/logger@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@generates/logger/-/logger-0.1.1.tgz#3348ed03bef8382a9515e8e605443a101596f2eb"
-  integrity sha512-JsI7DEzilu/VzMPgn5P5/po1GmhLC9X29kLiv+TFzS2aycPHYIqK7CeUZAcV7aJysAvYSF6JtYXO6fpaBkaXkg==
-  dependencies:
-    "@generates/cli" "^0.0.10"
-    "@generates/dotter" "^2.0.0"
-    "@generates/merger" "^0.1.0"
-    "@ianwalter/chromafi" "^1.0.1"
-    "@ianwalter/clone" "^6.0.1"
-    "@ianwalter/cloneable" "^2.0.0"
-    chalk "^4.1.0"
-    has-ansi "^4.0.0"
-    has-emoji "^1.1.0"
-    marked "^2.0.0"
-    marked-terminal "^4.1.0"
-    strip-ansi "^6.0.0"
-
 "@generates/logger@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@generates/logger/-/logger-0.1.2.tgz#fcf9d9ee60323a092ce51c3bb0baff4f5d6e5e09"
@@ -1369,10 +1351,10 @@
     libphonenumber-js "^1.9.14"
     zxcvbn "^4.4.2"
 
-"@ianwalter/nrg@^0.20.0":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.20.0.tgz#585d01803c7b06854dbb6a3e98924f3ebe5f40bd"
-  integrity sha512-8FTLdiPfdRO6lwtaQ38DHaSReSP3S5S+NFXOUOZ0RKaSUSOFHJaDXnf7PG7UdlDgi3nGB+f0EVQtEzVOcTLycA==
+"@ianwalter/nrg@^0.20.1":
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.20.1.tgz#e0d562bcffe699febfe10209193b049e055f5208"
+  integrity sha512-xQ38rBjlZbdpRZ3cZ5Hc9RePgI6SEu4MZJh39hlmDQmaonwyCzuI1eNHkB/1y4N9sGeA9jbdJkSZSPOPWFV4gQ==
   dependencies:
     "@generates/cli" "^1.0.2"
     "@generates/dotter" "^2.0.0"
