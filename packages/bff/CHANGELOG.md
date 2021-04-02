@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 10.0.7
+
+### Patch Changes
+
+- b6187ef: Update dependency workerpool to ^6.1.3
+
 ## 10.0.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 10.1.0
+
+### Minor Changes
+
+- 36cf630: Update dependency webdriverio to v7
+
 ## 10.0.5
 
 ### Patch Changes
