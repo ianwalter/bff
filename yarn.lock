@@ -1378,10 +1378,10 @@
     libphonenumber-js "^1.9.14"
     zxcvbn "^4.4.2"
 
-"@ianwalter/nrg@^0.20.1":
-  version "0.20.1"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.20.1.tgz#e0d562bcffe699febfe10209193b049e055f5208"
-  integrity sha512-xQ38rBjlZbdpRZ3cZ5Hc9RePgI6SEu4MZJh39hlmDQmaonwyCzuI1eNHkB/1y4N9sGeA9jbdJkSZSPOPWFV4gQ==
+"@ianwalter/nrg@^0.20.2":
+  version "0.20.2"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.20.2.tgz#2b87b91c316edb8129b1d68a4e7ff58bd63d1d55"
+  integrity sha512-YMfpVRioKttEOxTAUmhEp9lUJG8KZjQRIpW1/R68vK7VnHCeRVCfU3JfQKhGoVwUu1ZvU17zpqGMVMKAoQ4c5g==
   dependencies:
     "@generates/cli" "^1.0.2"
     "@generates/dotter" "^2.0.0"
@@ -1406,7 +1406,7 @@
     dotenv "^8.2.0"
     ejs "^3.1.3"
     grant "^5.4.9"
-    ioredis "^4.24.5"
+    ioredis "^4.25.0"
     knex "^0.95.4"
     koa "^2.13.1"
     koa-bodyparser "^4.3.0"
@@ -6690,10 +6690,10 @@ ioredis@^4.14.1:
     redis-parser "^3.0.0"
     standard-as-callback "^2.0.1"
 
-ioredis@^4.24.5:
-  version "4.24.5"
-  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.24.5.tgz#32f56ccb04d2e9ff00aa935caf348fd4e19867b0"
-  integrity sha512-a1uk8WXM4Xe9bfYUJH17Up9ODEASjYCWiD/BKojPHp5YDDMX/QBOWxgSmrtpRE+ARdLYUoXSLeyGZyegLdHcOg==
+ioredis@^4.25.0:
+  version "4.25.0"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.25.0.tgz#bc78d1fcda9d2b6f120f47c5764672734810b369"
+  integrity sha512-UoeqXpZB05aerGD3gB9NiigMsAyph+N+GWH8+3lX1+26caVV03GkL6JoLxS2HCxyvqCWbNsVSZTAp5W12qe23A==
   dependencies:
     cluster-key-slot "^1.1.0"
     debug "^4.3.1"
