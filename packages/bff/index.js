@@ -37,6 +37,7 @@ export async function run (config) {
   const context = {
     tests: defaultFiles,
     testContext: { hasRun: false, result: {}, timeout: config.timeout },
+    plugins: [],
     // Initialize a count for each time a test file has been registered so that
     // the main thread can figure out when registration has completed and the
     // worker pool can be terminated.
@@ -97,7 +98,7 @@ export async function run (config) {
   })
 
   // Handle <ctrl>c / SIGINT events.
-  rl.on('SIGINT', function onSigint () {
+  rl.on('SIGINT', async function onSigint () {
     // Inform the user that the event has been received.
     logger.write('\n')
     if (context.receivedSigint) {
@@ -118,14 +119,15 @@ export async function run (config) {
     // Terminate the registration workers immediately.
     registrationPool.terminate(true)
 
+    //
+    await pSeries(context.plugins.map(toHookRun('after', context)))
+
     // Forward the SIGINT to the test workers via the seppuku task.
     for (const worker of runPool.workers) worker.exec('seppuku')
   })
 
   // Sequentially run any before hooks specified by plugins.
-  if (context.plugins && context.plugins.length) {
-    await pSeries(context.plugins.map(toHookRun('before', context)))
-  }
+  await pSeries(context.plugins.map(toHookRun('before', context)))
 
   try {
     // For each test file found, pass the filename to a registration pool
@@ -261,9 +263,7 @@ export async function run (config) {
   }
 
   // Sequentially run any after hooks specified by plugins.
-  if (context.plugins && context.plugins.length) {
-    await pSeries(context.plugins.map(toHookRun('after', context)))
-  }
+  await pSeries(context.plugins.map(toHookRun('after', context)))
 
   // Terminate the run pool now that all tests have been run.
   runPool.terminate().then(() => logger.debug('Run pool terminated'))
