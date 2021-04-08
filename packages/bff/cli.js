@@ -2,7 +2,7 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import cli from '@ianwalter/cli'
+import cli from '@generates/cli'
 import generatesLogger from '@generates/logger'
 import camaro from 'camaro'
 import junitBuilder from 'junit-report-builder'
