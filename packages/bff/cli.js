@@ -16,7 +16,7 @@ const { createLogger, chalk } = generatesLogger
 const logger = createLogger({ namespace: 'bff.cli', level: 'info' })
 
 async function run () {
-  const config = cli({
+  const input = cli({
     name: 'bff',
     usage: 'bff [path-to-tests] [options]',
     options: {
@@ -101,25 +101,29 @@ async function run () {
     }
   })
 
-  if (config.help) return logger.info(config.helpText)
+  if (input?.helpText) {
+    process.stdout.write('\n')
+    logger.info(input.helpText)
+    process.stdout.write('\n')
+    process.exit(0)
+  }
 
   // Only run tests marked as failed in a JUnit file.
-  if (config.failed) {
-    const file = typeof config.failed === 'string' ? config.failed : 'junit.xml'
+  if (input.failed) {
+    const file = typeof input.failed === 'string' ? input.failed : 'junit.xml'
     const xml = await fs.readFile(path.resolve(file), 'utf8')
     const template = { failed: ['//testcase[failure]', '@name'] }
     const { failed } = await camaro.transform(xml, template)
     logger.write('\n')
     logger.info(`Running failed tests in ${file}:`, '\n', failed.join('\n'))
     logger.write('\n')
-    config.failed = failed
+    input.failed = failed
   }
 
   // Set tests as whatever paths were passed as input to the CLI or whatever
-  // is configured and delete the _ (input) attribute to get rid of duplicate
-  // data.
-  config.tests = config._.length ? config._ : config.tests
-  delete config._
+  // is configured and delete the args attribute to get rid of duplicate data.
+  input.tests = input.args.length ? input.args : input.tests
+  delete input.args
 
   // Run the tests and wait for a response with the passed/failed/skipped
   // counts.
@@ -127,8 +131,8 @@ async function run () {
   const failed = []
   const warnings = []
   const skipped = []
-  for (let runs = 0; runs < config.runs; runs++) {
-    const result = await bff.run(config)
+  for (let runs = 0; runs < input.runs; runs++) {
+    const result = await bff.run(input)
 
     // Add a blank line between the test output and result summary so it's
     // easier to spot.
@@ -164,9 +168,9 @@ async function run () {
   }
 
   // If configured, generate a junit XML report file based on the test results.
-  if (config.junit) {
+  if (input.junit) {
     // Determine the junit report file path.
-    const junit = typeof config.junit === 'string' ? config.junit : 'junit.xml'
+    const junit = typeof input.junit === 'string' ? input.junit : 'junit.xml'
 
     // Group tests by test file so that the test file relative path can be used
     // as the suite name.
