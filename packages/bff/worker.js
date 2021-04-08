@@ -61,8 +61,7 @@ worker({
     logger.debug(`Registration worker ${threadId}`, relativePath)
 
     // Sequentially run any registration hooks specified by plugins.
-    const hooks = context.plugins?.map(toHookRun('registration', file, context))
-    await pSeries(hooks)
+    await pSeries(context.plugins.map(toHookRun('registration', file, context)))
 
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
@@ -107,14 +106,13 @@ worker({
 
     try {
       // Sequentially run any beforeEach hooks specified by plugins.
-      const hooks = context.plugins?.map(toHookRun('beforeEach', file, context))
-      await pSeries(hooks)
+      await pSeries(context.plugins.map(toHookRun('beforeEach', file, context)))
 
       // If the verbose option is set, start a timer for the test.
       if (context.verbose) context.timer = createTimer()
 
       // Sequentially run any runTest hooks specified by plugins.
-      await pSeries(context.plugins?.map(toHookRun('runTest', file, context)))
+      await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
 
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
@@ -142,7 +140,7 @@ worker({
       }
     } finally {
       // Sequentially run any afterEach hooks specified by plugins.
-      await pSeries(context.plugins?.map(toHookRun('afterEach', file, context)))
+      await pSeries(context.plugins.map(toHookRun('afterEach', file, context)))
     }
 
     // Return the test result to the main thread.
