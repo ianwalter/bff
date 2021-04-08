@@ -21,22 +21,22 @@ async function run () {
     usage: 'bff [path-to-tests] [options]',
     options: {
       concurrency: {
-        alias: 'c',
+        aliases: ['c'],
         arg: '<number>',
         description: 'Specifies how many tests/workers to run in parallel'
       },
       updateSnapshot: {
-        alias: 'u',
+        aliases: ['u'],
         description: 'Specifies whether snapshots should be created or updated',
         default: false
       },
       log: {
-        alias: 'l',
+        aliases: ['l'],
         description: 'Specifies logging configuration',
         default: { namespace: 'bff.main', level: 'info' }
       },
       tag: {
-        alias: 't',
+        aliases: ['t'],
         arg: '<tag>',
         description: `
           Specifies which test tags should be used to match tests. How it
@@ -44,7 +44,7 @@ async function run () {
         `
       },
       timeout: {
-        alias: 'T',
+        aliases: ['T'],
         arg: '<milliseconds>',
         description: `
           Specifies how long a test should take in milliseconds before it's
@@ -53,7 +53,7 @@ async function run () {
         default: 60000
       },
       failFast: {
-        alias: 'f',
+        aliases: ['f'],
         description: `
           Specifies whether to exit when a test fails instead of continuing to
           run tests
@@ -61,7 +61,7 @@ async function run () {
         default: false
       },
       junit: {
-        alias: 'j',
+        aliases: ['j'],
         arg: '[path]',
         description: `
           Specifies whether or not to write the results to a junit report file
@@ -69,7 +69,7 @@ async function run () {
         `
       },
       match: {
-        alias: 'm',
+        aliases: ['m'],
         arg: '<type>',
         description: `
           Specifies whether a test needs \`some\` or \`every\` specified tag in
@@ -78,7 +78,7 @@ async function run () {
         default: 'some'
       },
       verbose: {
-        alias: 'V',
+        aliases: ['V'],
         description: `
           Logs more information for each test: test tags, relative file path,
           and timing information
@@ -86,13 +86,13 @@ async function run () {
         default: false
       },
       runs: {
-        alias: 'r',
+        aliases: ['r'],
         arg: '<count>',
         description: 'Specifies the number of test runs to execute',
         default: 1
       },
       failed: {
-        alias: 'F',
+        aliases: ['F'],
         arg: '[junit file]',
         description: `
           Only run tests marked as failed in ./junit.xml (or specified file)
