@@ -100,7 +100,7 @@ export async function run (config) {
   // Handle <ctrl>c / SIGINT events.
   rl.on('SIGINT', async function onSigint () {
     // Inform the user that the event has been received.
-    logger.write('\n')
+    process.stdout.write('\n')
     if (context.receivedSigint) {
       // Terminate the workers immediately.
       logger.warn('Second SIGINT received. Forcing worker termination.')
@@ -108,19 +108,21 @@ export async function run (config) {
     } else {
       logger.warn('SIGINT received. Forwarding to workers.')
     }
-    logger.write('\n')
+    process.stdout.write('\n')
+
+    // Terminate the registration workers immediately.
+    registrationPool.terminate(true)
+
+    // If SIGINT wasn't already received, run after hooks.
+    if (!context.receivedSigint) {
+      await pSeries(context.plugins.map(toHookRun('after', context)))
+    }
 
     // Keep track of the fact that bff has received a SIGINT.
     context.receivedSigint = true
 
     // Mark the run as having failed in the context.
     context.err = new Error('RUN CANCELLED!')
-
-    // Terminate the registration workers immediately.
-    registrationPool.terminate(true)
-
-    //
-    await pSeries(context.plugins.map(toHookRun('after', context)))
 
     // Forward the SIGINT to the test workers via the seppuku task.
     for (const worker of runPool.workers) worker.exec('seppuku')

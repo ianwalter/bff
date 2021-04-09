@@ -114,9 +114,9 @@ async function run () {
     const xml = await fs.readFile(path.resolve(file), 'utf8')
     const template = { failed: ['//testcase[failure]', '@name'] }
     const { failed } = await camaro.transform(xml, template)
-    logger.write('\n')
+    process.stdout.write('\n')
     logger.info(`Running failed tests in ${file}:`, '\n', failed.join('\n'))
-    logger.write('\n')
+    process.stdout.write('\n')
     input.failed = failed
   }
 
@@ -136,14 +136,14 @@ async function run () {
 
     // Add a blank line between the test output and result summary so it's
     // easier to spot.
-    logger.write('\n')
+    process.stdout.write('\n')
 
     // If there was an error thrown outside of the test functions (e.g.
     // requiring a module that wasn't found) then output a fatal error.
     if (result.err) {
       logger.fatal(result.err)
       if (result.err instanceof bff.FailFastError) {
-        logger.write('\n')
+        process.stdout.write('\n')
       } else {
         process.exit(1)
       }
@@ -164,7 +164,7 @@ async function run () {
     skipped.push(...result.skipped)
 
     // Add blank line after the result summary so it's easier to spot.
-    logger.write('\n')
+    process.stdout.write('\n')
   }
 
   // If configured, generate a junit XML report file based on the test results.
@@ -207,7 +207,7 @@ async function run () {
 }
 
 run().catch(err => {
-  logger.write('\n')
+  process.stdout.write('\n')
   logger.fatal(err)
   process.exit(1)
 })
