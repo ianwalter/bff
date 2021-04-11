@@ -110,17 +110,19 @@ export async function run (config) {
     }
     process.stdout.write('\n')
 
+    // Terminate the registration workers immediately.
+    registrationPool.terminate(true)
+
+    // If SIGINT wasn't already received, run after hooks.
+    if (!context.receivedSigint) {
+      await pSeries(context.plugins.map(toHookRun('after', context)))
+    }
+
     // Keep track of the fact that bff has received a SIGINT.
     context.receivedSigint = true
 
     // Mark the run as having failed in the context.
     context.err = new Error('RUN CANCELLED!')
-
-    // Terminate the registration workers immediately.
-    registrationPool.terminate(true)
-
-    //
-    await pSeries(context.plugins.map(toHookRun('after', context)))
 
     // Forward the SIGINT to the test workers via the seppuku task.
     for (const worker of runPool.workers) worker.exec('seppuku')
