@@ -79,6 +79,8 @@ export default async function runTest (testContext, testFn) {
     // Use cloneable to convert the error into an object that can be passed from
     // the test worker to the main thread via postMessage by removing all
     // methods.
-    testContext.result.failed = cloneable(err)
+    if (!testContext.result.skipped && !testContext.result.warned) {
+      testContext.result.failed = cloneable(err)
+    }
   }
 }

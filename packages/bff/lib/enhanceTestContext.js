@@ -81,4 +81,18 @@ export default function enhanceTestContext (testContext) {
   }
   testContext.pass = (why = 'manual pass') => (testContext.result.passed = why)
   Object.assign(testContext, sleep)
+
+  // Allow skipping a test from within the test with t.skip. Throw an error so
+  // execution stops right away.
+  testContext.skip = (why = 'in-test skip') => {
+    testContext.result = { skipped: why }
+    throw new Error(why)
+  }
+
+  // Allow passing a test with a warning from within the test with t.warn. Throw
+  // an error so execution stops right away.
+  testContext.warn = (why = 'in-test warn') => {
+    testContext.result = { warned: why }
+    throw new Error(why)
+  }
 }
