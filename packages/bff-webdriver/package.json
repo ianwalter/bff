@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@generates/logger": "^1.0.0",
-    "webdriverio": "^7.3.0"
+    "webdriverio": "^7.3.1"
   },
   "devDependencies": {
     "@ianwalter/nrg": "^0.20.2",
