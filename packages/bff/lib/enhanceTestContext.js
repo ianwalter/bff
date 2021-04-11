@@ -89,7 +89,7 @@ export default function enhanceTestContext (testContext) {
     throw new Error(why)
   }
 
-  // Allow passing a test with a warning from within the test with t.warn. Throw
+  // Allow marking a test with a warning from within the test with t.warn. Throw
   // an error so execution stops right away.
   testContext.warn = (why = 'in-test warn') => {
     testContext.result = { warned: why }
