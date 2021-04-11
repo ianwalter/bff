@@ -100,7 +100,7 @@ export async function run (config) {
   // Handle <ctrl>c / SIGINT events.
   rl.on('SIGINT', async function onSigint () {
     // Inform the user that the event has been received.
-    logger.write('\n')
+    process.stdout.write('\n')
     if (context.receivedSigint) {
       // Terminate the workers immediately.
       logger.warn('Second SIGINT received. Forcing worker termination.')
@@ -108,7 +108,7 @@ export async function run (config) {
     } else {
       logger.warn('SIGINT received. Forwarding to workers.')
     }
-    logger.write('\n')
+    process.stdout.write('\n')
 
     // Keep track of the fact that bff has received a SIGINT.
     context.receivedSigint = true
