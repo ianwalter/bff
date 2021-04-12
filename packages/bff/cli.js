@@ -97,9 +97,6 @@ async function run () {
         description: `
           Only run tests marked as failed in ./junit.xml (or specified file)
         `
-      },
-      enhanceTestContext: {
-        default: true
       }
     }
   })

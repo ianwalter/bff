@@ -53,7 +53,8 @@ export async function run (config) {
     // Initialize a count for the total number of tests that have been run so
     // that the run can figure out when all tests have completed and the worker
     // pool can be terminated.
-    testsRun: 0
+    testsRun: 0,
+    enhanceTestContext: true
   }
 
   // Destructure passed configuration and add it to testContext and context.
