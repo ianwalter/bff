@@ -1,5 +1,19 @@
 # @ianwalter/bff
 
+## 10.1.0
+
+### Minor Changes
+
+- 8cb3368: Add #367: Add t.warn and t.skip to enhanceTestContext
+- 0df5bc8: Add #383: Enhance test context before "each" hooks are called
+- 3c51612: Updating cli to use @generates/cli
+- 158dd03: Running after hook on SIGINT
+
+### Patch Changes
+
+- 51e7ebf: Update dependency @generates/logger to v1
+- 7676ac2: Update dependency webdriverio to ^7.3.1
+
 ## 10.0.7
 
 ### Patch Changes
