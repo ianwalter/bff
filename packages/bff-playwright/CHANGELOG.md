@@ -1,5 +1,15 @@
 # @ianwalter/bff-playwright
 
+## 4.2.0
+
+### Minor Changes
+
+- 5669483: Update dependency playwright to ^1.10.0
+
+### Patch Changes
+
+- 51e7ebf: Update dependency @generates/logger to v1
+
 ## 4.1.2
 
 ### Patch Changes

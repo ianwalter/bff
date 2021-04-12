@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 10.1.1
+
+### Patch Changes
+
+- 51e7ebf: Update dependency @generates/logger to v1
+
 ## 10.1.0
 
 ### Minor Changes
