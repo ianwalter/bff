@@ -40,11 +40,13 @@ Array [
 exports[`bff 3`] = `
 Array [
   "warn fail",
+  "warn in-test",
 ]
 `;
 
 exports[`bff 4`] = `
 Array [
+  "skip in-test",
   "skip no assertions",
   "skip via only",
   "skip with no test function",
