@@ -6,7 +6,7 @@ import workerThreads from 'worker_threads'
 import createTimer from '@ianwalter/timer'
 import toHookRun from './lib/toHookRun.js'
 import runTest from './lib/runTest.js'
-import enhanceTestContext from './lib/enhanceTestContext.js'
+import enhanceTestContext from './lib/enhanceNodeTestContext.js'
 import cloneable from '@ianwalter/cloneable'
 
 const { createLogger, chalk } = generatesLogger
@@ -105,7 +105,7 @@ worker({
     merge(context.testContext, file, test)
 
     // Enhance the context passed to the test function with testing utilities.
-    enhanceTestContext(context.testContext)
+    if (context.enhanceTestContext) enhanceTestContext(context.testContext)
 
     try {
       // Sequentially run any beforeEach hooks specified by plugins.
@@ -120,9 +120,6 @@ worker({
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
         if (context.verbose) context.timer = createTimer()
-
-        // Add the logger to the test context.
-        context.testContext.logger = logger
 
         // Import the tests from the test file.
         const { fn } = await importTests(file, test.key)

@@ -73,13 +73,19 @@ export default function enhanceTestContext (testContext) {
     currentTestName: testContext.key
   })
 
-  // Add utilities to the testContext object.
+  // Add the expect utility to the test context so assertions can be made.
   testContext.expect = expect
+
+  // Add a fail method to the test context so tests can be manually failed.
   testContext.fail = (why = 'manual failure') => {
     testContext.failed = new Error(why)
     throw testContext.failed
   }
+
+  // Add a pass method to the test context so tests can be manually passed.
   testContext.pass = (why = 'manual pass') => (testContext.result.passed = why)
+
+  // Add the sleep methods to the test context for convenience.
   Object.assign(testContext, sleep)
 
   // Allow skipping a test from within the test with t.skip. Throw an error so
@@ -95,4 +101,7 @@ export default function enhanceTestContext (testContext) {
     testContext.result = { warned: why }
     throw new Error(why)
   }
+
+  // Add console.log to the test context as the default logger.
+  testContext.logger = console.log
 }
