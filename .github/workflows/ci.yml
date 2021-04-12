@@ -35,7 +35,7 @@ jobs:
   playwright:
     runs-on: ubuntu-latest
     container:
-      image: ianwalter/playwright:v2.1.0
+      image: ianwalter/playwright:v2.2.0
     timeout-minutes: 5
     steps:
       - name: Checkout
