@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@generates/logger": "^1.0.0",
+    "dockerode": "^3.2.1",
     "webdriverio": "^7.3.1"
   },
   "devDependencies": {

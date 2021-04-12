@@ -1,0 +1,9 @@
+{
+  "name": "@ianwalter/bff-provisioner",
+  "version": "0.0.0",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "dependencies": {
+    "dockerode": "^3.2.1"
+  }
+}
