@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@generates/logger": "^1.0.0",
-    "playwright": "^1.8.0"
+    "playwright": "^1.10.0"
   },
   "bff": {
     "plugins": [
