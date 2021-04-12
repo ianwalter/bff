@@ -104,6 +104,9 @@ worker({
     // Add the file and test data to the testContext.
     merge(context.testContext, file, test)
 
+    // Enhance the context passed to the test function with testing utilities.
+    enhanceTestContext(context.testContext)
+
     try {
       // Sequentially run any beforeEach hooks specified by plugins.
       await pSeries(context.plugins.map(toHookRun('beforeEach', file, context)))
@@ -118,9 +121,7 @@ worker({
         // If the verbose option is set, start a timer for the test.
         if (context.verbose) context.timer = createTimer()
 
-        // Enhance the context passed to the test function with testing
-        // utilities.
-        enhanceTestContext(context.testContext)
+        // Add the logger to the test context.
         context.testContext.logger = logger
 
         // Import the tests from the test file.

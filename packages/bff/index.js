@@ -196,6 +196,19 @@ export async function run (config) {
           } else if (!failed || failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
             result = await runPool.exec('test', [file, test, context])
+            logger.debug('Test result', { test: test.name, ...result })
+
+            // If t.skip was called within the test, mark it as skipped.
+            if (result.skipped) {
+              logger.log('🛌', `${context.testsRun + 1}. ${test.name}`)
+              return context.skipped.push({ ...test, file: relativePath })
+            }
+
+            // If t.warn was called within the test, mark it as a warning.
+            if (result.warned) {
+              logger.warn(`${context.testsRun + 1}. ${test.name}`)
+              return context.warnings.push({ ...test, file: relativePath })
+            }
 
             // Update the snapshot state with the snapshot data received from
             // the worker.

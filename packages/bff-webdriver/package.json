@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff-webdriver",
   "description": "A bff plugin to enable WebDriver-based testing",
-  "version": "10.1.0",
+  "version": "10.1.1",
   "author": {
     "name": "Ian Walter",
     "url": "https://ianwalter.dev"
@@ -42,9 +42,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^0.1.2",
+    "@generates/logger": "^1.0.0",
     "dockerode": "^3.2.1",
-    "webdriverio": "^7.3.0"
+    "webdriverio": "^7.3.1"
   },
   "devDependencies": {
     "@ianwalter/nrg": "^0.20.2",
