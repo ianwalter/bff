@@ -2056,13 +2056,13 @@
     vuepress-plugin-container "^2.0.2"
     vuepress-plugin-smooth-scroll "^0.0.3"
 
-"@wdio/config@7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-7.3.1.tgz#487a2cd8105641ad51b038dbec5ba6f01d769ca9"
-  integrity sha512-n4hr+EB5VqTPywgzCOAcuh1q+95gIxobJgONtdnq17uQG/Xqu1EYxOXM9wDCPZ62sObxOfeIPomr8rkbmXk4WQ==
+"@wdio/config@7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-7.4.0.tgz#748c634a684db4b3edde10d24af4c2205902a2e0"
+  integrity sha512-YrChp7FX+aPgPx74mw5i05v6QuJf/GLVrZFpmY7RPZEo48lVY3U7IkMd0S2ebxBLtEk2ZIZVg8adxjWaC2LgUg==
   dependencies:
     "@wdio/logger" "7.0.0"
-    "@wdio/types" "7.3.1"
+    "@wdio/types" "7.4.0"
     deepmerge "^4.0.0"
     glob "^7.1.2"
 
@@ -2081,27 +2081,27 @@
   resolved "https://registry.yarnpkg.com/@wdio/protocols/-/protocols-7.1.1.tgz#fcf93a4484778d2fa470678445ac428abdc7d881"
   integrity sha512-JLwmuQcTsewP2z4DZ2J9mi+uTuVOzFeWMbbEwNjxKbXfD2zi+TGIarMkETGyW0EtQtVscQtbZcqdkvBPEye8iA==
 
-"@wdio/repl@7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-7.3.1.tgz#db8be110ac1bac83066e659276bb8a35231b5acb"
-  integrity sha512-DRgAfE7KoYirzf1uFoa8LiUaTmHGjHq304rk9LQonzIniroMPIQqYmnf0aBHu/lz3FNFEh1f4kOQtcTK/s9c5A==
+"@wdio/repl@7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-7.4.0.tgz#521ce9fb0edfc6183b4ac663bfaa8c97e29f43b4"
+  integrity sha512-nzJYkHweK1aKjXIgiOZF0IRZXD1OZL2o1snnGfm7SWQ8u+8zkjHPjtUQpyRPyT/qkf5EcZsXOtYsRdjS6V4npA==
   dependencies:
-    "@wdio/utils" "7.3.1"
+    "@wdio/utils" "7.4.0"
 
-"@wdio/types@7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@wdio/types/-/types-7.3.1.tgz#caac699a33df160ab8e057f71990cbfe8191050f"
-  integrity sha512-bRsVN8neezagQLwPIp5nJP8g9mYoGeAeWrh1Ooyrqlg9iPi/a2QzLMiUqWtg1e4cUGal/bh+aKMXcAWSFxooLQ==
+"@wdio/types@7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@wdio/types/-/types-7.4.0.tgz#225f08015849cd42acfb2a8011b9aaabf68d092d"
+  integrity sha512-KDUdiEEYl4nL8Yu0jITuPfCxWMxL6qJ9DEGqzhxVf71mRbwadgbUL4j7xQT2d6qwOKSUlnFWoRLnKGHxXyGB5g==
   dependencies:
     got "^11.8.1"
 
-"@wdio/utils@7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@wdio/utils/-/utils-7.3.1.tgz#55032f576b029b1fca9cec4bdfe1d9b1d3d6450c"
-  integrity sha512-/Vl3PX5TDqlnAQK3sDXimm3WsTv9Gu7mNYDB/haPDRRkMVQWvgAXjczPWz2n68G/2NQXg19ivg3QzWDancgbEA==
+"@wdio/utils@7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@wdio/utils/-/utils-7.4.0.tgz#5e497b81ee0b3caff951f49b9cdbea7b34a87a44"
+  integrity sha512-fZ6IoM0kiAYOiTHHqSI1nu+HvO1iXkSor2Fr/f7v+vSzcMJw1ujvXzIjb/SzppVcVtrfhziLID9JR35QSnsvqg==
   dependencies:
     "@wdio/logger" "7.0.0"
-    "@wdio/types" "7.3.1"
+    "@wdio/types" "7.4.0"
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -4547,16 +4547,16 @@ devtools-protocol@^0.0.863986:
   resolved "https://registry.yarnpkg.com/devtools-protocol/-/devtools-protocol-0.0.863986.tgz#a9f1b13daeb1dba671580e59f3a8aa9cb0c921c8"
   integrity sha512-WMf5KuRLsLwJMp9JdawSvoEpxZPqyyNeOZ3YR8QF8lE9IVHbbpdWeuXV22SJxPUemFeznvVlwSBeQz91nL+41A==
 
-devtools@7.3.1:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/devtools/-/devtools-7.3.1.tgz#be5814461715d66100bdbccc8fd54582034b9db6"
-  integrity sha512-hdMW9r2qS/xx4On1aQNyUBVeTWhzz5MmLFF9g0HT9OXYwZnpRhtXva+T1lb2EmEJScYdVFN8mxMITly/kIUdXA==
+devtools@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/devtools/-/devtools-7.4.0.tgz#b30dd8b2c56d22bbcf9ced53688f5a65a6900aef"
+  integrity sha512-/dgq0ezcC2YsgxHFSdjcODWdH+YTyDqbrsG+fE8W6C0WaLuJf5ppF2YyX4vPq//Zgbreh8DSjFn3dxJxQ+Neag==
   dependencies:
-    "@wdio/config" "7.3.1"
+    "@wdio/config" "7.4.0"
     "@wdio/logger" "7.0.0"
     "@wdio/protocols" "7.1.1"
-    "@wdio/types" "7.3.1"
-    "@wdio/utils" "7.3.1"
+    "@wdio/types" "7.4.0"
+    "@wdio/utils" "7.4.0"
     chrome-launcher "^0.13.1"
     edge-paths "^2.1.0"
     puppeteer-core "^7.1.0"
@@ -12188,37 +12188,37 @@ web-resource-inliner@^4.3.1:
     valid-data-url "^2.0.0"
     xtend "^4.0.2"
 
-webdriver@7.3.1:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-7.3.1.tgz#5d0ed65dcf37c29528f5958b9c953a0c39a6e6c0"
-  integrity sha512-3F/YmquurBi0AQKpU0E00Ba4zRljSKT4WxFQZQ0/b0mGjvNPLoDQOstCrm/0KQjU4zPXDBSvcMgmKetXlQ+N2Q==
+webdriver@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-7.4.0.tgz#1f4a611ebfe20eac6fe7d03c51e5b67d96b646e1"
+  integrity sha512-sXUMvbHeYdOZUdYytNncTKqmQRKBx0rBCkxA4r+aV11sVkN+/I9GhU+7bpFfypXao6yw00p0rXQ1+rrU0VABkA==
   dependencies:
-    "@wdio/config" "7.3.1"
+    "@wdio/config" "7.4.0"
     "@wdio/logger" "7.0.0"
     "@wdio/protocols" "7.1.1"
-    "@wdio/types" "7.3.1"
-    "@wdio/utils" "7.3.1"
+    "@wdio/types" "7.4.0"
+    "@wdio/utils" "7.4.0"
     got "^11.0.2"
     lodash.merge "^4.6.1"
 
-webdriverio@^7.3.1:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-7.3.1.tgz#c0a431026f052320da62c8a24c2830bb8e9bba19"
-  integrity sha512-I/hEzQrYQFMHcVY2+TvnEqOdBa//Hn9zK4XfBGNBsp8rFEZnJUjGzNpmkCNLszAc26DA2POJBaPnw3uHD7N5Tg==
+webdriverio@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-7.4.0.tgz#d59482406da0a86a60bbb3617146a8f5fe66851f"
+  integrity sha512-x01Z6n+wjX8Lf9hmlU8Iy1jUsPaVjygvQybk1AkrzEzPSOd5m8sbhLIoT96frhbt29uSzX/cFTtVb/UY4a2Tjg==
   dependencies:
     "@types/aria-query" "^4.2.1"
-    "@wdio/config" "7.3.1"
+    "@wdio/config" "7.4.0"
     "@wdio/logger" "7.0.0"
     "@wdio/protocols" "7.1.1"
-    "@wdio/repl" "7.3.1"
-    "@wdio/types" "7.3.1"
-    "@wdio/utils" "7.3.1"
+    "@wdio/repl" "7.4.0"
+    "@wdio/types" "7.4.0"
+    "@wdio/utils" "7.4.0"
     archiver "^5.0.0"
     aria-query "^4.2.2"
     atob "^2.1.2"
     css-shorthand-properties "^1.1.1"
     css-value "^0.0.1"
-    devtools "7.3.1"
+    devtools "7.4.0"
     devtools-protocol "^0.0.863986"
     fs-extra "^9.0.1"
     get-port "^5.1.1"
@@ -12232,7 +12232,7 @@ webdriverio@^7.3.1:
     resq "^1.9.1"
     rgb2hex "0.2.3"
     serialize-error "^8.0.0"
-    webdriver "7.3.1"
+    webdriver "7.4.0"
 
 webpack-chain@^4.9.0:
   version "4.12.1"
