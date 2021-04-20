@@ -151,7 +151,8 @@ export async function run (config) {
 
       // Perform registration on the test file to collect the tests that need
       // to be run.
-      merge(file, await registrationPool.exec('register', [file, context]))
+      const ctx = { ...context, file }
+      merge(file, await registrationPool.exec('register', [ctx]))
 
       // Increment the registration count now that registration has completed
       // for the current test file.
@@ -199,7 +200,8 @@ export async function run (config) {
             context.skipped.push({ ...test, file: relativePath })
           } else if (!failed || failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
-            result = await runPool.exec('test', [file, test, context])
+            const ctx = { ...context, file, test }
+            result = await runPool.exec('test', [ctx])
             logger.debug('Test result', { test: test.name, ...result })
 
             // If t.skip was called within the test, mark it as skipped.

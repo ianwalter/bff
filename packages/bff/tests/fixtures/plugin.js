@@ -1,11 +1,11 @@
 export default function examplePlugin (plug) {
-  plug.in('beforeRun', function example (context, next) {
-    context.beforeMessage = 'before was here'
+  plug.in('beforeRun', function example (ctx, next) {
+    ctx.beforeMessage = 'before was here'
     return next()
   })
 
-  plug.in('registration', function example (context, next) {
-    context.augmentTests = tests => tests.reduce(
+  plug.in('afterRegistration', function example (ctx, next) {
+    ctx.file.tests = ctx.file.tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
           return acc.concat([
@@ -20,8 +20,8 @@ export default function examplePlugin (plug) {
     return next()
   })
 
-  plug.in('afterRun', function example (context, next) {
-    context.beforeEachMessage = 'beforeEach was here'
+  plug.in('afterRun', function example (ctx, next) {
+    ctx.beforeEachMessage = 'beforeEach was here'
     return next()
   })
 }
