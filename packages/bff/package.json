@@ -50,6 +50,7 @@
     "@generates/cli": "^1.0.3",
     "@generates/logger": "^1.0.0",
     "@generates/merger": "^0.1.3",
+    "@generates/plug": "^0.0.1",
     "@ianwalter/clone": "^6.0.1",
     "@ianwalter/cloneable": "^2.0.0",
     "@ianwalter/sleep": "^0.0.1",
@@ -64,7 +65,6 @@
     "glob": "^7.1.6",
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^3.0.0",
-    "p-series": "^2.1.0",
     "workerpool": "^6.1.3"
   },
   "devDependencies": {

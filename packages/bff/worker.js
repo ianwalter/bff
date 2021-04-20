@@ -1,10 +1,9 @@
 import { worker } from 'workerpool'
-import pSeries from 'p-series'
+import plug from '@generates/plug'
 import generatesLogger from '@generates/logger'
 import { merge } from '@generates/merger'
 import workerThreads from 'worker_threads'
 import createTimer from '@ianwalter/timer'
-import toHookRun from './lib/toHookRun.js'
 import runTest from './lib/runTest.js'
 import enhanceTestContext from './lib/enhanceNodeTestContext.js'
 import cloneable from '@ianwalter/cloneable'
@@ -60,8 +59,14 @@ worker({
     const relativePath = chalk.dim(file.relativePath)
     logger.debug(`Registration worker ${threadId}`, relativePath)
 
-    // Sequentially run any registration hooks specified by plugins.
-    await pSeries(context.plugins.map(toHookRun('registration', file, context)))
+    // Register configured plugins.
+    const executePluginPhase = plug({
+      phases: ['registration'],
+      files: context.plugins
+    })
+
+    // Execute the registration phase for conigured plugins.
+    await executePluginPhase('registration', { ...context, file })
 
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
@@ -107,15 +112,21 @@ worker({
     // Enhance the context passed to the test function with testing utilities.
     if (context.enhanceTestContext) enhanceTestContext(context.testContext)
 
+    // Register configured plugins.
+    const executePluginPhase = plug({
+      phases: ['beforeTest', 'test', 'afterTest'],
+      files: context.plugins
+    })
+
     try {
-      // Sequentially run any beforeEach hooks specified by plugins.
-      await pSeries(context.plugins.map(toHookRun('beforeEach', file, context)))
+      // Execute the beforeTest phase for conigured plugins.
+      await executePluginPhase('beforeTest', { ...context, file })
 
       // If the verbose option is set, start a timer for the test.
       if (context.verbose) context.timer = createTimer()
 
-      // Sequentially run any runTest hooks specified by plugins.
-      await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
+      // Execute the test phase for conigured plugins.
+      await executePluginPhase('test', { ...context, file })
 
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
@@ -137,8 +148,8 @@ worker({
         context.testContext.result.duration = duration
       }
     } finally {
-      // Sequentially run any afterEach hooks specified by plugins.
-      await pSeries(context.plugins.map(toHookRun('afterEach', file, context)))
+      // Execute the afterTest phase for conigured plugins.
+      await executePluginPhase('afterTest', { ...context, file })
     }
 
     // Return the test result to the main thread.

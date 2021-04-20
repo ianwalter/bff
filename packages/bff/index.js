@@ -6,12 +6,11 @@ import workerpool from 'workerpool'
 import glob from 'glob'
 import generatesLogger from '@generates/logger'
 import { oneLine } from 'common-tags'
-import pSeries from 'p-series'
 import jestSnapshot from 'jest-snapshot'
 import { merge } from '@generates/merger'
 import callsites from 'callsites'
 import shuffle from 'array-shuffle'
-import toHookRun from './lib/toHookRun.js'
+import plug from '@generates/plug'
 
 const { createLogger, chalk } = generatesLogger
 const { SnapshotState } = jestSnapshot
@@ -98,6 +97,12 @@ export async function run (config) {
     output: process.stdout
   })
 
+  // Register configured plugins.
+  const executePluginPhase = plug({
+    phases: ['beforeRun', 'afterRun'],
+    files: config.plugins
+  })
+
   // Handle <ctrl>c / SIGINT events.
   rl.on('SIGINT', async function onSigint () {
     // Inform the user that the event has been received.
@@ -115,9 +120,7 @@ export async function run (config) {
     registrationPool.terminate(true)
 
     // If SIGINT wasn't already received, run after hooks.
-    if (!context.receivedSigint) {
-      await pSeries(context.plugins.map(toHookRun('after', context)))
-    }
+    if (!context.receivedSigint) await executePluginPhase('afterRun', context)
 
     // Keep track of the fact that bff has received a SIGINT.
     context.receivedSigint = true
@@ -130,7 +133,7 @@ export async function run (config) {
   })
 
   // Sequentially run any before hooks specified by plugins.
-  await pSeries(context.plugins.map(toHookRun('before', context)))
+  await executePluginPhase('beforeRun', context)
 
   try {
     // For each test file found, pass the filename to a registration pool
@@ -279,7 +282,7 @@ export async function run (config) {
   }
 
   // Sequentially run any after hooks specified by plugins.
-  await pSeries(context.plugins.map(toHookRun('after', context)))
+  await executePluginPhase('afterRun', context)
 
   // Terminate the run pool now that all tests have been run.
   runPool.terminate().then(() => logger.debug('Run pool terminated'))

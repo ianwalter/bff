@@ -1230,6 +1230,36 @@
     rollup "^2.39.0"
     rollup-plugin-terser "^7.0.0"
 
+"@generates/modulizer@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@generates/modulizer/-/modulizer-7.0.2.tgz#d78b864eb117289b637cc4303fec78125ed11e46"
+  integrity sha512-LUt8yaBq/1qQvcvc4KG9K4n8hmN/yifrNjk/r9Mnw8gJV58Y3Oq5ZhqVqur69PM6Jb/Xs6og9hDSEPWGk3XeWg==
+  dependencies:
+    "@babel/core" "^7.8.6"
+    "@generates/cli" "^1.0.3"
+    "@generates/logger" "^1.0.0"
+    "@ianwalter/npm-short-name" "^1.0.0"
+    "@ianwalter/rollup-plugin-hashbang" "^1.3.0"
+    "@rollup/plugin-babel" "^5.3.0"
+    "@rollup/plugin-commonjs" "^18.0.0"
+    "@rollup/plugin-json" "^4.1.0"
+    "@rollup/plugin-node-resolve" "^11.2.0"
+    builtin-modules "^3.1.0"
+    p-settle "^4.0.0"
+    read-pkg-up "^6.0.0"
+    require-from-string "^2.0.2"
+    rollup "^2.39.0"
+    rollup-plugin-terser "^7.0.0"
+
+"@generates/plug@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-0.0.1.tgz#3aa182c945e45628caa8730e657671bea744cbaa"
+  integrity sha512-nO2Z2CuCPcXrbqI8drVxR4f62anlNIW0iVoFUw57ec6LWPgy4RvFLf0xUJTLEzfVkb0jCUk/WENwua8CktgqAQ==
+  dependencies:
+    "@generates/logger" "^1.0.0"
+    "@generates/modulizer" "^7.0.2"
+    koa-compose "^4.1.0"
+
 "@ianwalter/chromafi@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@ianwalter/chromafi/-/chromafi-1.0.1.tgz#6df9f38719cbfea689e820e04c5d292da38f15ca"
@@ -1561,6 +1591,19 @@
     magic-string "^0.25.7"
     resolve "^1.17.0"
 
+"@rollup/plugin-commonjs@^18.0.0":
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-18.0.0.tgz#50dc7518b5aa9e66a270e529ea85115d269825c4"
+  integrity sha512-fj92shhg8luw7XbA0HowAqz90oo7qtLGwqTKbyZ8pmOyH8ui5e+u0wPEgeHLH3djcVma6gUCUrjY6w5R2o1u6g==
+  dependencies:
+    "@rollup/pluginutils" "^3.1.0"
+    commondir "^1.0.1"
+    estree-walker "^2.0.1"
+    glob "^7.1.6"
+    is-reference "^1.2.1"
+    magic-string "^0.25.7"
+    resolve "^1.17.0"
+
 "@rollup/plugin-json@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-json/-/plugin-json-4.1.0.tgz#54e09867ae6963c593844d8bd7a9c718294496f3"
@@ -1593,11 +1636,6 @@
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
-
-"@sindresorhus/is@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.15.0.tgz#96915baa05e6a6a1d137badf4984d3fc05820bb6"
-  integrity sha512-lu8BpxjAtRCAo5ifytTpCPCj99LF7o/2Myn+NXyNCBqvPYn7Pjd76AMmUB5l7XF1U6t0hcWrlEM5ESufW7wAeA==
 
 "@sindresorhus/is@^4.0.0":
   version "4.0.0"
@@ -8944,11 +8982,6 @@ p-map@^2.0.0, p-map@^2.1.0:
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-2.1.0.tgz#310928feef9c9ecc65b68b17693018a665cea175"
   integrity sha512-y3b8Kpd8OAN444hxfBbFfj1FY/RjtTd8tzYwhUqNYXx0fXx2iX4maP4Qr6qhIKbQXI02wTLAda4fYUbDagTUFw==
 
-p-reduce@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/p-reduce/-/p-reduce-2.1.0.tgz#09408da49507c6c274faa31f28df334bc712b64a"
-  integrity sha512-2USApvnsutq8uoxZBGbbWM0JIYLiEMJ9RlaN7fAzVNb9OZN0SHjjTTfIcb667XynS5Y1VhwDJVDa72TnPzAYWw==
-
 p-reflect@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/p-reflect/-/p-reflect-2.1.0.tgz#5d67c7b3c577c4e780b9451fc9129675bd99fe67"
@@ -8960,14 +8993,6 @@ p-retry@^3.0.1:
   integrity sha512-XE6G4+YTTkT2a0UWb2kjZe8xNwf8bIbnqpc/IS/idOBVhyves0mK5OJgeocjx7q5pvX/6m23xuzVPYT1uGM73w==
   dependencies:
     retry "^0.12.0"
-
-p-series@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/p-series/-/p-series-2.1.0.tgz#7035b3a81e2644d4ba407c1ebbc21776e353fa29"
-  integrity sha512-vEAnkG1ikRT1kPBrKwpj7AFYQkd1hjt/oHeppxtpoPxy5gEt+OWiHZJN3tMqvFa+UJfVwO3lwHoMUpMYBLKnaQ==
-  dependencies:
-    "@sindresorhus/is" "^0.15.0"
-    p-reduce "^2.1.0"
 
 p-settle@^4.0.0:
   version "4.1.1"
