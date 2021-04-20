@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 5.0.0
+
+### Major Changes
+
+- f455e82: Replacing plugin system with @generates/plug
+
 ## 4.2.0
 
 ### Minor Changes

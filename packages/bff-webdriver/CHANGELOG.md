@@ -1,5 +1,15 @@
 # @ianwalter/bff-webdriver
 
+## 11.0.0
+
+### Major Changes
+
+- f455e82: Replacing plugin system with @generates/plug
+
+### Minor Changes
+
+- a773fb1: Update dependency webdriverio to ^7.5.0
+
 ## 10.1.1
 
 ### Patch Changes
