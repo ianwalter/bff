@@ -200,8 +200,7 @@ export async function run (config) {
             context.skipped.push({ ...test, file: relativePath })
           } else if (!failed || failed.includes(test.name)) {
             // Send the test to a worker in the run pool to be run.
-            const ctx = { ...context, file, test }
-            result = await runPool.exec('test', [ctx])
+            result = await runPool.exec('test', [{ ...context, file, test }])
             logger.debug('Test result', { test: test.name, ...result })
 
             // If t.skip was called within the test, mark it as skipped.

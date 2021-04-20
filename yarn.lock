@@ -1213,10 +1213,10 @@
     rollup "^2.39.0"
     rollup-plugin-terser "^7.0.0"
 
-"@generates/plug@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-0.0.1.tgz#3aa182c945e45628caa8730e657671bea744cbaa"
-  integrity sha512-nO2Z2CuCPcXrbqI8drVxR4f62anlNIW0iVoFUw57ec6LWPgy4RvFLf0xUJTLEzfVkb0jCUk/WENwua8CktgqAQ==
+"@generates/plug@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-0.0.2.tgz#a663d1f5defaa305fe7cd6d0696df7d66b6e7ed0"
+  integrity sha512-aHRc8LfrbN5Su12gCHTbVw6CgbxmvepsESZjVk23PGzhd3tv/VNjDw1Mrm1LZLnpxEtHvQOUxNb34Q6hyPt3eA==
   dependencies:
     "@generates/logger" "^1.0.0"
     "@generates/modulizer" "^7.0.2"
