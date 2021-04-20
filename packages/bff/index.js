@@ -98,7 +98,7 @@ export async function run (config) {
   })
 
   // Register configured plugins.
-  const executePluginPhase = plug({
+  const executePluginPhase = await plug({
     phases: ['beforeRun', 'afterRun'],
     files: config.plugins
   })

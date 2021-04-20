@@ -60,7 +60,7 @@ worker({
     logger.debug(`Registration worker ${threadId}`, relativePath)
 
     // Register configured plugins.
-    const executePluginPhase = plug({
+    const executePluginPhase = await plug({
       phases: ['registration'],
       files: context.plugins
     })
@@ -113,7 +113,7 @@ worker({
     if (context.enhanceTestContext) enhanceTestContext(context.testContext)
 
     // Register configured plugins.
-    const executePluginPhase = plug({
+    const executePluginPhase = await plug({
       phases: ['beforeTest', 'test', 'afterTest'],
       files: context.plugins
     })

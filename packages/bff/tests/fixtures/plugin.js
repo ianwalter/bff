@@ -1,8 +1,10 @@
-export default {
-  before (context) {
+export default function examplePlugin (plug) {
+  plug.in('beforeRun', function example (context, next) {
     context.beforeMessage = 'before was here'
-  },
-  registration (_, context) {
+    return next()
+  })
+
+  plug.in('registration', function example (context, next) {
     context.augmentTests = tests => tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
@@ -15,8 +17,11 @@ export default {
       },
       []
     )
-  },
-  beforeEach (_, context) {
+    return next()
+  })
+
+  plug.in('afterRun', function example (context, next) {
     context.beforeEachMessage = 'beforeEach was here'
-  }
+    return next()
+  })
 }
