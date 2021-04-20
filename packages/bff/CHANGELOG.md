@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 11.0.0
+
+### Major Changes
+
+- f455e82: Replacing plugin system with @generates/plug
+
 ## 10.2.0
 
 ### Minor Changes
