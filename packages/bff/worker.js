@@ -1,10 +1,9 @@
 import { worker } from 'workerpool'
-import pSeries from 'p-series'
+import plug from '@generates/plug'
 import generatesLogger from '@generates/logger'
 import { merge } from '@generates/merger'
 import workerThreads from 'worker_threads'
 import createTimer from '@ianwalter/timer'
-import toHookRun from './lib/toHookRun.js'
 import runTest from './lib/runTest.js'
 import enhanceTestContext from './lib/enhanceNodeTestContext.js'
 import cloneable from '@ianwalter/cloneable'
@@ -49,102 +48,113 @@ worker({
     // Emit a SIGINT to itself so that processes terminate gracefully.
     process.kill(process.pid, 'SIGINT')
   },
-  async register (file, context) {
+  async register (ctx) {
     // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.register`
-    const logger = createLogger({ ...context.log, namespace })
+    const logger = createLogger({ ...ctx.log, namespace })
 
     // Log a debug statement for this registration action with the relative
     // path of the test file that's having it's tests registered.
-    const relativePath = chalk.dim(file.relativePath)
+    const relativePath = chalk.dim(ctx.file.relativePath)
     logger.debug(`Registration worker ${threadId}`, relativePath)
 
-    // Sequentially run any registration hooks specified by plugins.
-    await pSeries(context.plugins.map(toHookRun('registration', file, context)))
+    // Register configured plugins.
+    const executePluginPhase = await plug({
+      phases: ['beforeRegistration', 'afterRegistration'],
+      files: ctx.plugins
+    })
+
+    // Execute the beforeRegistration phase for conigured plugins.
+    await executePluginPhase('beforeRegistration', ctx)
 
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
-    if (!context.testMap) context.testMap = await importTests(file)
+    if (!ctx.testMap) ctx.testMap = await importTests(ctx.file)
 
     // Add a list of tests from the test file that are intended to be run to
     // the file context.
-    const { tags, match } = context
+    const { tags, match } = ctx
     const tagsMatch = test => {
       if (['some', 'every'].includes(match)) {
         return tags[match](tag => test.tags.includes(tag))
       }
       throw new Error(`match value must be 'some' or 'every', not '${match}'`)
     }
-    file.tests = Object.entries(context.testMap).reduce(
+    ctx.file.tests = Object.entries(ctx.testMap).reduce(
       (acc, [name, test]) => !tags.length || (tags.length && tagsMatch(test))
         ? acc.concat([{ key: name, name, ...test, fn: null }])
         : acc,
       []
     )
 
-    // If an augmentTests method has been added to the context by a plugin, call
-    // it with the list of tests so that the plugin can alter them if necessary.
-    if (context.augmentTests) file.tests = context.augmentTests(file.tests)
+    // Execute the afterRegistration phase for conigured plugins.
+    await executePluginPhase('afterRegistration', ctx)
 
     // Return the file context with the the list of registered tests.
-    return file
+    return ctx.file
   },
-  async test (file, test, context) {
+  async test (ctx) {
     // Create the logger instance based on the log level set in the context
     // received from the main thread.
     const namespace = `bff.worker.${threadId}.test`
-    const logger = createLogger({ ...context.log, namespace })
+    const logger = createLogger({ ...ctx.log, namespace })
 
     // Log a debug statement for this test action with the test name and
     // relative path of the test file it belongs to.
-    const relativePath = chalk.dim(file.relativePath)
-    logger.debug(`Test worker ${threadId}`, chalk.cyan(test.name), relativePath)
+    const rel = chalk.dim(ctx.file.relativePath)
+    logger.debug(`Test worker ${threadId}`, chalk.cyan(ctx.test.name), rel)
 
     // Add the file and test data to the testContext.
-    merge(context.testContext, file, test)
+    merge(ctx.testContext, ctx.file, ctx.test)
 
     // Enhance the context passed to the test function with testing utilities.
-    if (context.enhanceTestContext) enhanceTestContext(context.testContext)
+    if (ctx.enhanceTestContext) enhanceTestContext(ctx.testContext)
+
+    // Register configured plugins.
+    const executePluginPhase = await plug({
+      phases: ['beforeTest', 'test', 'afterTest'],
+      files: ctx.plugins
+    })
 
     try {
-      // Sequentially run any beforeEach hooks specified by plugins.
-      await pSeries(context.plugins.map(toHookRun('beforeEach', file, context)))
+      // Execute the beforeTest phase for conigured plugins.
+      await executePluginPhase('beforeTest', ctx)
 
       // If the verbose option is set, start a timer for the test.
-      if (context.verbose) context.timer = createTimer()
+      if (ctx.verbose) ctx.timer = createTimer()
 
-      // Sequentially run any runTest hooks specified by plugins.
-      await pSeries(context.plugins.map(toHookRun('runTest', file, context)))
+      // Execute the test phase for conigured plugins.
+      await executePluginPhase('test', ctx)
 
-      if (!context.testContext.hasRun) {
+      if (!ctx.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
-        if (context.verbose) context.timer = createTimer()
+        if (ctx.verbose) ctx.timer = createTimer()
 
         // Import the tests from the test file.
-        const { fn } = await importTests(file, test.key)
+        const { fn } = await importTests(ctx.file, ctx.test.key)
 
         // Run the test!
-        await runTest(context.testContext, fn)
-        context.testContext.hasRun = true
+        await runTest(ctx.testContext, fn)
+        ctx.testContext.hasRun = true
       }
 
       // If there was a timer started for the test, stop the timer, get the
       // timer's duration, and add it to the test result.
-      if (context.timer) {
-        const duration = context.timer.duration()
+      if (ctx.timer) {
+        const duration = ctx.timer.duration()
         logger.debug('Test duration', duration)
-        context.testContext.result.duration = duration
+        ctx.testContext.result.duration = duration
       }
     } finally {
-      // Sequentially run any afterEach hooks specified by plugins.
-      await pSeries(context.plugins.map(toHookRun('afterEach', file, context)))
+      // Execute the afterTest phase for conigured plugins.
+      await executePluginPhase('afterTest', ctx)
     }
 
     // Return the test result to the main thread.
-    if (context.testContext.result.failed) {
-      throw context.testContext.result.failed
+    if (ctx.testContext.result.failed) {
+      throw ctx.testContext.result.failed
     }
-    return context.testContext.result
+    return ctx.testContext.result
   }
 })

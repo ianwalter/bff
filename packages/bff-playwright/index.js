@@ -1,15 +1,15 @@
-import playwright from 'playwright'
+import pw from 'playwright'
 import generatesLogger from '@generates/logger'
 
 const { createLogger } = generatesLogger
 const logger = createLogger({ level: 'info', namespace: 'bff.playwright' })
 const availableBrowsers = ['chromium', 'firefox', 'webkit']
 
-export default {
-  async beforeEach (file, context) {
-    logger.debug(file.relativePath, '•', context.testContext.name)
-    context.testContext.playwright = playwright
-    context.testContext.browsers = availableBrowsers
+export default function playwrightPlugin (plug) {
+  plug.in('beforeTest', function playwright (ctx, next) {
+    logger.debug(ctx.file.relativePath, '•', ctx.testContext.name)
+    ctx.testContext.playwright = pw
+    ctx.testContext.browsers = availableBrowsers
 
     // Produce the configuration that will be used.
     // let { browsers = ['chromium'] } = context.playwright || {}
@@ -27,22 +27,26 @@ export default {
 
     for (const name of availableBrowsers) {
       logger.debug('Adding browser', name)
-      context.testContext[name] = async options => {
+      ctx.testContext[name] = async options => {
         logger.debug('Launching browser', name)
-        const browser = await playwright[name].launch(options)
+        const browser = await pw[name].launch(options)
         const browserContext = await browser.newContext()
         const page = await browserContext.newPage()
         return { browser, browserContext, page }
       }
     }
-  },
-  async afterEach (_, context) {
+
+    return next()
+  })
+
+  plug.in('afterTest', async function playwright (ctx, next) {
     for (const name of availableBrowsers) {
-      const browser = context.testContext[name]
+      const browser = ctx.testContext[name]
       if (browser.instance) {
         logger.debug('Closing browser', name)
         await browser.instance.close()
       }
     }
-  }
+    return next()
+  })
 }

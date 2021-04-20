@@ -1,9 +1,11 @@
-export default {
-  before (context) {
-    context.beforeMessage = 'before was here'
-  },
-  registration (_, context) {
-    context.augmentTests = tests => tests.reduce(
+export default function examplePlugin (plug) {
+  plug.in('beforeRun', function example (ctx, next) {
+    ctx.beforeMessage = 'before was here'
+    return next()
+  })
+
+  plug.in('afterRegistration', function example (ctx, next) {
+    ctx.file.tests = ctx.file.tests.reduce(
       (acc, test) => {
         if (test.key === 'registration') {
           return acc.concat([
@@ -15,8 +17,11 @@ export default {
       },
       []
     )
-  },
-  beforeEach (_, context) {
-    context.beforeEachMessage = 'beforeEach was here'
-  }
+    return next()
+  })
+
+  plug.in('afterRun', function example (ctx, next) {
+    ctx.beforeEachMessage = 'beforeEach was here'
+    return next()
+  })
 }
