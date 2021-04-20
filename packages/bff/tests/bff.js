@@ -5,7 +5,7 @@ import { test, run, FailFastError } from '../index.js'
 
 const config = {
   timeout: 5000,
-  plugins: ['tests/helpers/plugin.js'],
+  plugins: ['tests/fixtures/plugin.js'],
   log: { stream: false, level: 'debug' },
   match: 'some'
 }

@@ -66,7 +66,8 @@ worker({
     })
 
     // Execute the registration phase for conigured plugins.
-    await executePluginPhase('registration', { ...context, file })
+    context.file = file // TODO:
+    await executePluginPhase('registration', context)
 
     // If the map of tests in the current test file hasn't been added to the
     // context, import the tests from the test file.
@@ -120,13 +121,14 @@ worker({
 
     try {
       // Execute the beforeTest phase for conigured plugins.
-      await executePluginPhase('beforeTest', { ...context, file })
+      context.file = file // TODO:
+      await executePluginPhase('beforeTest', context)
 
       // If the verbose option is set, start a timer for the test.
       if (context.verbose) context.timer = createTimer()
 
       // Execute the test phase for conigured plugins.
-      await executePluginPhase('test', { ...context, file })
+      await executePluginPhase('test', context)
 
       if (!context.testContext.hasRun) {
         // If the verbose option is set, start a timer for the test.
@@ -149,7 +151,7 @@ worker({
       }
     } finally {
       // Execute the afterTest phase for conigured plugins.
-      await executePluginPhase('afterTest', { ...context, file })
+      await executePluginPhase('afterTest', context)
     }
 
     // Return the test result to the main thread.
