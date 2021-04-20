@@ -1,4 +1,4 @@
-import playwright from 'playwright'
+import pw from 'playwright'
 import generatesLogger from '@generates/logger'
 
 const { createLogger } = generatesLogger
@@ -6,10 +6,9 @@ const logger = createLogger({ level: 'info', namespace: 'bff.playwright' })
 const availableBrowsers = ['chromium', 'firefox', 'webkit']
 
 export default function playwrightPlugin (plug) {
-  plug.in('beforeTest', function (ctx, next) {
-    this.name = 'playwright'
+  plug.in('beforeTest', function playwright (ctx, next) {
     logger.debug(ctx.file.relativePath, '•', ctx.testContext.name)
-    ctx.testContext.playwright = playwright
+    ctx.testContext.playwright = pw
     ctx.testContext.browsers = availableBrowsers
 
     // Produce the configuration that will be used.
@@ -30,7 +29,7 @@ export default function playwrightPlugin (plug) {
       logger.debug('Adding browser', name)
       ctx.testContext[name] = async options => {
         logger.debug('Launching browser', name)
-        const browser = await playwright[name].launch(options)
+        const browser = await pw[name].launch(options)
         const browserContext = await browser.newContext()
         const page = await browserContext.newPage()
         return { browser, browserContext, page }
@@ -40,9 +39,7 @@ export default function playwrightPlugin (plug) {
     return next()
   })
 
-  plug.in('afterTest', async function (ctx, next) {
-    this.name = 'playwright'
-
+  plug.in('afterTest', async function playwright (ctx, next) {
     for (const name of availableBrowsers) {
       const browser = ctx.testContext[name]
       if (browser.instance) {
@@ -50,7 +47,6 @@ export default function playwrightPlugin (plug) {
         await browser.instance.close()
       }
     }
-
     return next()
   })
 }
