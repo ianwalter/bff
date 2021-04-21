@@ -6,6 +6,42 @@ const { createLogger } = generatesLogger
 const logger = createLogger({ level: 'info', namespace: 'bff.webdriver' })
 
 export default function webdriverPlugin (plug) {
+  plug.in('afterRegistration', function webdriver (ctx, next) {
+    try {
+      // Extract the WebDriver capabilities from the test configuration.
+      const capabilities = Array.isArray(ctx.webdriver.capabilities)
+        ? ctx.webdriver.capabilities
+        : [ctx.webdriver.capabilities]
+
+      // Go through the browser tests and split them up by capability so that
+      // they can be run individually/in parallel.
+      ctx.file.tests = ctx.file.tests.reduce(
+        (acc, test) => acc.concat(capabilities.map(capability => {
+          let name = test.name
+          if (capabilities.length > 1) {
+            // Modify the test name to contain the name of the browser it's
+            // being tested in.
+            name = `${test.name} in ${capability.browserName}`
+
+            // Modify the test name to contain the version of the browser it's
+            // being tested in, if configured.
+            if (capability.browserVersion) {
+              name += ` ${capability.browserVersion}`
+            }
+          }
+
+          // Return the test with it's modified name and capability
+          // configuration.
+          return { ...test, name, capability }
+        })),
+        []
+      )
+    } catch (err) {
+      logger.error(err)
+    }
+    return next()
+  })
+
   plug.in('beforeTest', async function webdriver (ctx, next) {
     try {
       logger.debug('Adding WebDriver integrations')
