@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 11.0.1
+
+### Patch Changes
+
+- dfcce86: Adding back registration phase to bff-webdriver
+
 ## 11.0.0
 
 ### Major Changes
