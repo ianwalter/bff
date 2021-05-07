@@ -21,7 +21,7 @@
     "@ianwalter/eslit": "^1.0.1",
     "@ianwalter/renovate-config": "^1.4.4",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
-    "vuepress": "^1.8.0"
+    "vuepress": "^1.8.2"
   },
   "eslintConfig": {
     "root": true,
