@@ -48,7 +48,7 @@
   "devDependencies": {
     "@ianwalter/nrg": "^0.20.2",
     "@ianwalter/url": "^2.0.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.6.0"
   },
   "bff": {
     "log": {
