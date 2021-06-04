@@ -5,12 +5,12 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "lint": "eslit",
-    "test:bff": "npm run --prefix packages/bff test:ci",
-    "test:webdriver": "npm run --prefix packages/bff-webdriver test",
-    "test:puppeteer": "npm run --prefix packages/bff-puppeteer test",
-    "test:playwright": "npm run --prefix packages/bff-playwright test",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "test.bff": "npm run --prefix packages/bff test.ci",
+    "test.webdriver": "npm run --prefix packages/bff-webdriver test",
+    "test.puppeteer": "npm run --prefix packages/bff-puppeteer test",
+    "test.playwright": "npm run --prefix packages/bff-playwright test",
+    "docs.dev": "vuepress dev docs",
+    "docs.build": "vuepress build docs"
   },
   "workspaces": [
     "packages/*"

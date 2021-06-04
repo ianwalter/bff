@@ -7,8 +7,8 @@
   "module": "index.js",
   "scripts": {
     "test": "./cli.js",
-    "test:ci": "./cli.js -V tests/bff.js",
-    "test:out": "./cli.js tests/stdout.js | wc -c"
+    "test.ci": "./cli.js -V tests/bff.js",
+    "test.out": "./cli.js tests/stdout.js | wc -c"
   },
   "bin": {
     "bff": "cli.js"
