@@ -28,10 +28,10 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Test bff
-        run: cd packages/bff; yarn test:ci
+        run: cd packages/bff; yarn test.ci
       # TODO:
       # - name: Test bff-webdriver
-      #   run: npm run test:webdriver
+      #   run: npm run test.webdriver
   playwright:
     runs-on: ubuntu-latest
     container:
@@ -43,4 +43,4 @@ jobs:
       - name: Install
         run: yarn
       - name: Test bff
-        run: yarn test:playwright
+        run: yarn test.playwright

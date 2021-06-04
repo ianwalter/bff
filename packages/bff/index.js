@@ -192,7 +192,7 @@ export async function run (config) {
           snapshotState.markSnapshotsAsCheckedForTest(test.name)
 
           const skipViaOnly = hasOnly && !test.only
-          if (skipViaOnly || test.skip) {
+          if ((skipViaOnly || test.skip) && !failed) {
             // Output the test name and increment the skip count to remind
             // the user that some tests are being explicitly skipped.
             const msg = `${context.testsRun + 1}. ${test.name}`
