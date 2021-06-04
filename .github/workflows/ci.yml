@@ -43,4 +43,4 @@ jobs:
       - name: Install
         run: yarn
       - name: Test bff
-        run: yarn test:playwright
+        run: yarn test.playwright
