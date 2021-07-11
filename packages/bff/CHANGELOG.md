@@ -1,5 +1,11 @@
 # @ianwalter/bff
 
+## 11.0.1
+
+### Patch Changes
+
+- c674f38: Fix #420: Dont show skipped tests when running with the --failed flag
+
 ## 11.0.0
 
 ### Major Changes
