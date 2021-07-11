@@ -61,7 +61,7 @@
     "camaro": "^6.1.0",
     "common-tags": "^1.8.0",
     "esm-to-cjs": "^1.2.0",
-    "expect": "^26.6.2",
+    "expect": "^27.0.6",
     "glob": "^7.1.6",
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^3.0.0",
