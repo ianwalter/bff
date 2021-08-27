@@ -65,7 +65,7 @@
     "glob": "^7.1.7",
     "jest-snapshot": "^26.6.2",
     "junit-report-builder": "^3.0.0",
-    "workerpool": "^6.1.3"
+    "workerpool": "^6.1.5"
   },
   "devDependencies": {
     "execa": "^5.1.1"
