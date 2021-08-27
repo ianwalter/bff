@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 11.1.0
+
+### Minor Changes
+
+- 4717ad6: Update dependency webdriverio to ^7.6.0
+
 ## 11.0.1
 
 ### Patch Changes
