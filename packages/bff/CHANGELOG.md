@@ -1,5 +1,17 @@
 # @ianwalter/bff
 
+## 11.1.0
+
+### Minor Changes
+
+- a2f9064: Update dependency expect to v27
+
+### Patch Changes
+
+- d382186: Update dependency workerpool to ^6.1.5
+- 37a4601: Update dependency array-shuffle to v3
+- c688c77: Update dependency jest-snapshot to v27
+
 ## 11.0.1
 
 ### Patch Changes
