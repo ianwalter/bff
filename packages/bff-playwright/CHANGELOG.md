@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 5.1.0
+
+### Minor Changes
+
+- 72691d0: Update dependency playwright to ^1.14.1
+
 ## 5.0.0
 
 ### Major Changes

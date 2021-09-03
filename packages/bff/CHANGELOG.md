@@ -1,5 +1,13 @@
 # @ianwalter/bff
 
+## 11.0.1
+
+### Patch Changes
+
+- c674f38: Fix #420: Dont show skipped tests when running with the --failed flag
+- e17caeb: Update dependency callsites to v4
+- acbc85f: Update dependency glob to ^7.1.7
+
 ## 11.0.0
 
 ### Major Changes
