@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 11.2.0
+
+### Minor Changes
+
+- ec5744a: Update dependency webdriverio to ^7.11.1
+
 ## 11.1.0
 
 ### Minor Changes
