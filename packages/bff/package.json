@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@generates/cli": "^2.0.0",
-    "@generates/logger": "^2.0.0",
+    "@generates/logger": "^2.0.1",
     "@generates/merger": "^0.1.3",
     "@generates/plug": "^0.1.1",
     "@ianwalter/clone": "^6.0.1",
