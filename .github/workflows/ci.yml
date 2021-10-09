@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: node:15.4-buster
+      image: node:16-buster
       options: --network-alias testHost
     timeout-minutes: 10
     env:
