@@ -1,5 +1,16 @@
 # @ianwalter/bff
 
+## 11.1.1
+
+### Patch Changes
+
+- f8b3a8a: Update dependency @generates/plug to ^0.1.1
+- 05f0686: Update dependency @generates/logger to v2
+- 77a62fd: Update dependency expect to ^27.2.5
+- 8ba795a: Update dependency @generates/cli to v2
+- 6c375e6: Update dependency jest-snapshot to ^27.2.5
+- effa4f1: Update dependency glob to ^7.2.0
+
 ## 11.1.0
 
 ### Minor Changes

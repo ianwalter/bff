@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/bff",
   "description": "Your friendly test framework",
-  "version": "11.1.0",
+  "version": "11.1.1",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "module": "index.js",
