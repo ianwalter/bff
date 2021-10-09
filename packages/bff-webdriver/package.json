@@ -42,7 +42,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^1.0.0",
+    "@generates/logger": "^2.0.0",
     "webdriverio": "^7.14.1"
   },
   "devDependencies": {
