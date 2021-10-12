@@ -10,7 +10,7 @@ import jestSnapshot from 'jest-snapshot'
 import { merge } from '@generates/merger'
 import callsites from 'callsites'
 import shuffle from 'array-shuffle'
-import plug from '@generates/plug'
+import plug from '@generates/plug/index.js'
 
 const { SnapshotState } = jestSnapshot
 const globa = util.promisify(glob)

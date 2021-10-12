@@ -1,5 +1,5 @@
 import { worker } from 'workerpool'
-import plug from '@generates/plug'
+import plug from '@generates/plug/index.js'
 import { createLogger, chalk } from '@generates/logger'
 import { merge } from '@generates/merger'
 import workerThreads from 'worker_threads'
