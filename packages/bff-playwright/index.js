@@ -1,7 +1,6 @@
 import pw from 'playwright'
-import generatesLogger from '@generates/logger'
+import { createLogger } from '@generates/logger'
 
-const { createLogger } = generatesLogger
 const logger = createLogger({ level: 'info', namespace: 'bff.playwright' })
 const availableBrowsers = ['chromium', 'firefox', 'webkit']
 

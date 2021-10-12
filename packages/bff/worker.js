@@ -1,6 +1,6 @@
 import { worker } from 'workerpool'
-import plug from '@generates/plug'
-import generatesLogger from '@generates/logger'
+import plug from '@generates/plug/index.js'
+import { createLogger, chalk } from '@generates/logger'
 import { merge } from '@generates/merger'
 import workerThreads from 'worker_threads'
 import createTimer from '@ianwalter/timer'
@@ -8,7 +8,6 @@ import runTest from './lib/runTest.js'
 import enhanceTestContext from './lib/enhanceNodeTestContext.js'
 import cloneable from '@ianwalter/cloneable'
 
-const { createLogger, chalk } = generatesLogger
 const threadId = workerThreads.threadId
 
 async function importTests (file, testKey = null) {
