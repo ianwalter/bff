@@ -4,7 +4,7 @@ import util from 'util'
 import { fileURLToPath } from 'url'
 import workerpool from 'workerpool'
 import glob from 'glob'
-import generatesLogger from '@generates/logger'
+import { createLogger, chalk } from '@generates/logger'
 import { oneLine } from 'common-tags'
 import jestSnapshot from 'jest-snapshot'
 import { merge } from '@generates/merger'
@@ -12,7 +12,6 @@ import callsites from 'callsites'
 import shuffle from 'array-shuffle'
 import plug from '@generates/plug'
 
-const { createLogger, chalk } = generatesLogger
 const { SnapshotState } = jestSnapshot
 const globa = util.promisify(glob)
 const defaultFiles = [
