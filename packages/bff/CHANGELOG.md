@@ -1,5 +1,15 @@
 # @ianwalter/bff
 
+## 11.2.0
+
+### Minor Changes
+
+- e9ae633: Update dependency jest-snapshot to ^27.3.1
+
+### Patch Changes
+
+- f97e4d6: Update dependency @generates/plug to v1
+
 ## 11.1.1
 
 ### Patch Changes
