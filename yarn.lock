@@ -1530,10 +1530,10 @@
   resolved "https://registry.yarnpkg.com/@generates/number-lines/-/number-lines-0.0.1.tgz#794a6899d2c7180e953477cf46243880a818b210"
   integrity sha512-oTVUBNkvqjue0A6vypGr3Vx2fqBbgSAOx6KS0rsNeUNrUxGb/n15SRC+XSE3AAul8X096vblfBifGqRrBsAlCQ==
 
-"@generates/plug@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-0.1.1.tgz#77f91f612d02c75c32bc40dbaaca5af53c24a13b"
-  integrity sha512-cUUg8U5cPyKCpNeX1gcER5LeBfq5kaKIKRlw9kG+9xIY1BxCCVzybPAnWxYG+DGgcBF5vMCZ7MYAGtsauEg3PA==
+"@generates/plug@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-1.0.0.tgz#12fc9d7b13de5ac770ef6d274d31312678ebe11d"
+  integrity sha512-CE/s27eVerOHCzivdY1XJmi+1nnYGm3rQyNYE7CJRwtDHzV8clNEqeLvd+PJWYULkeaQCAD//c6u7Mq4r/XRPw==
   dependencies:
     "@generates/logger" "^2.0.0"
     "@generates/modulizer" "^8.0.3"
