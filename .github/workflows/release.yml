@@ -17,7 +17,7 @@ jobs:
       - name: Install
         run: yarn
       - name: Changesets
-        uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
+        uses: changesets/action@21240c3cd1d2efa2672d64e0235a03cf139b83e6
         with:
           publish: yarn changeset publish
         env:
