@@ -19,7 +19,7 @@
     "@changesets/cli": "2.17.0",
     "@ianwalter/eslint-config": "^6.2.0",
     "@ianwalter/eslit": "^1.0.1",
-    "@ianwalter/renovate-config": "^1.4.5",
+    "@ianwalter/renovate-config": "^1.4.6",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
     "vuepress": "^1.8.0"
   },
