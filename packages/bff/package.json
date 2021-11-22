@@ -4,6 +4,7 @@
   "version": "11.2.0",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
+  "main": "index.js",
   "module": "index.js",
   "scripts": {
     "test": "./cli.js",
