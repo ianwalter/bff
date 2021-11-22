@@ -1,5 +1,11 @@
 # @ianwalter/bff-webdriver
 
+## 11.2.2
+
+### Patch Changes
+
+- ad375bb: Update dependency @generates/logger to ^2.0.3
+
 ## 11.2.1
 
 ### Patch Changes
