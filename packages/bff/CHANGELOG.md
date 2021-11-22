@@ -1,5 +1,13 @@
 # @ianwalter/bff
 
+## 11.2.1
+
+### Patch Changes
+
+- ad375bb: Update dependency @generates/logger to ^2.0.3
+- d616507: Update dependency @generates/plug to ^1.0.1
+- e567f1c: Update dependency common-tags to ^1.8.2
+
 ## 11.2.0
 
 ### Minor Changes
