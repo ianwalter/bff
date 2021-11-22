@@ -1612,20 +1612,20 @@
   dependencies:
     csrf "^3.1.0"
 
-"@ianwalter/nrg-logger@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-logger/-/nrg-logger-0.5.0.tgz#7fde1f20a3c37a55e1b9d6f45a0520a4b23fef18"
-  integrity sha512-Xfyfjt9tC2JfJrODdC6aBiXWVtYG0Y8DniSy3dQmW7jClPH8KEm2qTCUqyTmJ7SvxNfqJx2FSMuZN9O1ErFn+A==
+"@ianwalter/nrg-logger@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-logger/-/nrg-logger-0.5.2.tgz#68d482921ea0018de2419a43c5b26a29e42ac99c"
+  integrity sha512-5cT/9mEuE9ra9WSDbbsgnN6lu/KwKrc/NipDnuc+8q4wLSukLaffOi6U/RqMq0F5pIe6Au6HCzyEqviLNQc8uQ==
   dependencies:
-    "@generates/logger" "^1.0.0"
+    "@generates/logger" "^2.0.3"
     "@ianwalter/timer" "^2.0.2"
 
-"@ianwalter/nrg-mq@^1.2.9":
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-mq/-/nrg-mq-1.2.9.tgz#1dd09af308a45f3891327174da56acaedd9a5972"
-  integrity sha512-PMEkiyK5lejfSbjQZ69bPoGvzAujDWoP1J1wGhJ77AzIt1Ms4ZcCYQ59PnXSQFhZp9NNvsgkSDTlvvQgvS+v4w==
+"@ianwalter/nrg-mq@^1.2.10":
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-mq/-/nrg-mq-1.2.10.tgz#ca3acd4760adda7e4c022334f4d27d11057569d7"
+  integrity sha512-pjQZwBuUCMNa6AfcdrbCQ7z8bcVQlHmCtKLZRo6Fd09hYPxAFotZWSFu6FSC6yOvrZd6TeSfBwp6PeIPeEefvA==
   dependencies:
-    "@generates/logger" "^1.0.0"
+    "@generates/logger" "^2.0.3"
     amqp-connection-manager "^3.7.0"
     amqplib "^0.8.0"
 
@@ -1654,13 +1654,13 @@
   dependencies:
     "@ianwalter/requester" "^2.5.0"
 
-"@ianwalter/nrg-validation@4.1.3":
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-validation/-/nrg-validation-4.1.3.tgz#77e3d78a69f9d0bda499fe39906baf5715b139e0"
-  integrity sha512-LfS1xOntzSK57iLAWU7/qHEXz0EMtt22/AylqLFkwS4hIam8WSrh93wTD/ZCOFbea7y0/HP33hQz8Z8ytotSiQ==
+"@ianwalter/nrg-validation@4.1.4":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg-validation/-/nrg-validation-4.1.4.tgz#481dd43e042828ae25527c65b6987954eed9406c"
+  integrity sha512-Fk5TD0G7NsKpEoOv0NKPqDbzW23/so/RflVACFjbMvwXEVwOUNQi9mxWaxa5ZLqvLa9mN3GRcDpAypLrMMAGyQ==
   dependencies:
     "@generates/dotter" "^2.0.3"
-    "@generates/logger" "^1.0.0"
+    "@generates/logger" "^2.0.3"
     "@generates/merger" "^0.1.3"
     date-fns "^2.26.0"
     decamelize "^6.0.0"
@@ -1668,10 +1668,10 @@
     libphonenumber-js "^1.9.43"
     zxcvbn "^4.4.2"
 
-"@ianwalter/nrg@^0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.26.0.tgz#9dea74a60a4f13707b34043e667099013be3ad5d"
-  integrity sha512-rJ2SScYotiHqoVG32V+FeRb6fgLjGRtLi7IDYFYrtZDRpu5gMTwABP3Wl61db3JlNRzZ9832lVWBuBLvWm9Ang==
+"@ianwalter/nrg@^0.26.1":
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/@ianwalter/nrg/-/nrg-0.26.1.tgz#bb0e2fb9a82806342154b4625bf56c96b2d2e8d0"
+  integrity sha512-aC9T81HoJFdE7YlT+DrTbhi7SNiqoT0dfVi/4Zmx7ZjjIueoVu47esi6dAzhc7bwPVEQmyn3xkLCBKP0qlmUUQ==
   dependencies:
     "@generates/cli" "^1.0.3"
     "@generates/dotter" "^2.0.3"
@@ -1681,12 +1681,12 @@
     "@generates/modulizer" "^8.0.5"
     "@ianwalter/cloneable" "^2.0.0"
     "@ianwalter/nrg-csrf" "^1.0.1"
-    "@ianwalter/nrg-logger" "^0.5.0"
-    "@ianwalter/nrg-mq" "^1.2.9"
+    "@ianwalter/nrg-logger" "^0.5.2"
+    "@ianwalter/nrg-mq" "^1.2.10"
     "@ianwalter/nrg-router" "^1.1.2"
     "@ianwalter/nrg-session" "^8.0.2"
     "@ianwalter/nrg-test" "^1.2.3"
-    "@ianwalter/nrg-validation" "4.1.3"
+    "@ianwalter/nrg-validation" "4.1.4"
     "@ianwalter/requester" "^2.5.0"
     "@ianwalter/url" "^2.0.0"
     bcrypt "5.0.0"
@@ -1713,7 +1713,6 @@
     pkg-dir "^6.0.1"
     rate-limiter-flexible "^2.3.5"
     read-pkg-up "^7.0.1"
-    replace-string "^4.0.0"
     require-from-string "^2.0.2"
 
 "@ianwalter/renovate-config@^1.4.6":
@@ -10923,11 +10922,6 @@ repeat-string@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/repeat-string/-/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
   integrity sha1-jcrkcOHIirwtYA//Sndihtp15jc=
-
-replace-string@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/replace-string/-/replace-string-4.0.0.tgz#2f7270b3e38d118a00ff328481305561c7fe74cf"
-  integrity sha512-fcgyZ62o26oBaihEC302pZQ2WectvmZ4sGOq4Lwa8ad12lPbhIlZCvLpgpI1sOAsbN83kpXiH5KCcr3pcZa8bA==
 
 request-compose@^2.1.4:
   version "2.1.4"
