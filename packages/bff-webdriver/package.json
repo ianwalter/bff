@@ -9,6 +9,7 @@
   "homepage": "https://github.com/ianwalter/bff/blob/main/packages/bff-webdriver#readme",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
+  "main": "index.js",
   "module": "index.js",
   "scripts": {
     "test": "bff"
