@@ -17,7 +17,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "2.18.0",
-    "@ianwalter/eslint-config": "^6.2.0",
+    "@ianwalter/eslint-config": "^7.0.1",
     "@ianwalter/eslit": "^1.0.1",
     "@ianwalter/renovate-config": "^1.4.6",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
