@@ -1,5 +1,12 @@
 # @ianwalter/bff-webdriver
 
+## 11.2.3
+
+### Patch Changes
+
+- 66b367f: Update dependency webdriverio to ^7.16.9
+- a15e4b6: Update dependency @generates/logger to ^2.0.4
+
 ## 11.2.2
 
 ### Patch Changes

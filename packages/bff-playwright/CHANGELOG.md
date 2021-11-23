@@ -1,5 +1,11 @@
 # @ianwalter/bff-playwright
 
+## 5.1.3
+
+### Patch Changes
+
+- a15e4b6: Update dependency @generates/logger to ^2.0.4
+
 ## 5.1.2
 
 ### Patch Changes
