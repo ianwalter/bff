@@ -40,7 +40,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@generates/logger": "^2.0.3",
+    "@generates/logger": "^2.0.4",
     "playwright": "^1.14.1"
   },
   "bff": {
