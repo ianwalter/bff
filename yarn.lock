@@ -1498,6 +1498,26 @@
     marked-terminal "^4.1.0"
     strip-ansi "^7.0.0"
 
+"@generates/logger@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@generates/logger/-/logger-2.0.4.tgz#d4e91195000235d3f1c01915a212ceb17d5d6bb7"
+  integrity sha512-hyGJ0hFb0lWYTby/igXyIxTE8pL0EOfPY+iBUeaDd+vPQJ+RKj3n02p3vj8z+xCfFukRid4IJ4w0W6EHuNwtWg==
+  dependencies:
+    "@generates/cli" "^2.0.1"
+    "@generates/dotter" "^2.0.0"
+    "@generates/merger" "^0.1.0"
+    "@generates/number-lines" "^0.0.1"
+    chalk "^4.1.0"
+    common-tags "^1.8.0"
+    emphasize "^5.0.0"
+    has-ansi "^5.0.0"
+    has-emoji "^2.0.0"
+    is-obj "^3.0.0"
+    is-regexp "^3.0.0"
+    marked "^3.0.0"
+    marked-terminal "^4.1.0"
+    strip-ansi "^7.0.0"
+
 "@generates/merger@^0.1.0", "@generates/merger@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@generates/merger/-/merger-0.1.3.tgz#6808e51767b45bf75a8354f739d645826de85677"
@@ -1528,12 +1548,12 @@
   resolved "https://registry.yarnpkg.com/@generates/number-lines/-/number-lines-0.0.1.tgz#794a6899d2c7180e953477cf46243880a818b210"
   integrity sha512-oTVUBNkvqjue0A6vypGr3Vx2fqBbgSAOx6KS0rsNeUNrUxGb/n15SRC+XSE3AAul8X096vblfBifGqRrBsAlCQ==
 
-"@generates/plug@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-1.0.1.tgz#1d20851bf0c5bb96ee4222cab00a5ee26f7a1680"
-  integrity sha512-s8rcFo41fizjgBoMh1XKTwJGFyo9OIXQhBXfjq8aDE214H0tUh1JHcaTJhMnB8qeOn6AqFd8OHYDfAGUQgishw==
+"@generates/plug@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@generates/plug/-/plug-1.0.2.tgz#1f3efc4acfe64b2f81783e99130790a3bbae5464"
+  integrity sha512-YfkCqcS/XswgTylZw0ne2xQkjUB4K+IEHamsc+FM/D5adBgGvAAivRhLgBSwEJZHVVVNq8YJBbnRjBTj9gAZYw==
   dependencies:
-    "@generates/logger" "^2.0.0"
+    "@generates/logger" "^2.0.4"
     koa-compose "^4.1.0"
 
 "@ianwalter/chromafi@^1.0.1":
