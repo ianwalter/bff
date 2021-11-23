@@ -1,5 +1,12 @@
 # @ianwalter/bff
 
+## 11.2.2
+
+### Patch Changes
+
+- 9ed47c9: Update dependency @generates/plug to ^1.0.2
+- a15e4b6: Update dependency @generates/logger to ^2.0.4
+
 ## 11.2.1
 
 ### Patch Changes
