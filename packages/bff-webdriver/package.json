@@ -47,7 +47,7 @@
     "webdriverio": "^7.16.9"
   },
   "devDependencies": {
-    "@ianwalter/nrg": "^0.26.1",
+    "@ianwalter/nrg": "^0.27.0",
     "@ianwalter/url": "^2.0.0",
     "dotenv": "^10.0.0"
   },
