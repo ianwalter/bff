@@ -5632,10 +5632,10 @@ eslint@^8.2.0:
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
 
-esm-to-cjs@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/esm-to-cjs/-/esm-to-cjs-1.2.0.tgz#cedd0af44c36ee1eb9fdf2042a8fd1d42c6b8774"
-  integrity sha512-pVKBUyde11DZ9fezHtcvX2Ha1hh48GaoVvTxsDkgukPFQ9fvJL/x1RIINU5qkpdW4evN338Wg97qItq8qedsKw==
+esm-to-cjs@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/esm-to-cjs/-/esm-to-cjs-1.2.1.tgz#4f5a0c347ab73e9330131c4a5d34172386d1c41f"
+  integrity sha512-5zzepH0eV7F3LOz+p3Hn8iTaszfqVu9ueGcLltcuCz2kNe7Dbu9p2hePzi3xN+0S/m/d0WCC1IjIEP2UoHbmuQ==
 
 esm@^3.2.25:
   version "3.2.25"
