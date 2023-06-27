@@ -16,7 +16,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@changesets/cli": "2.18.0",
+    "@changesets/cli": "2.26.2",
     "@ianwalter/eslint-config": "^7.0.1",
     "@ianwalter/renovate-config": "^1.4.6",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
