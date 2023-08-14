@@ -20,7 +20,7 @@
     "@ianwalter/eslint-config": "^7.0.1",
     "@ianwalter/renovate-config": "^1.4.6",
     "@ianwalter/vuepress-theme-brooks": "^1.2.0",
-    "vuepress": "^1.8.0"
+    "vuepress": "^1.9.10"
   },
   "eslintConfig": {
     "root": true,
