@@ -3661,12 +3661,12 @@ callsites@^4.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-4.0.0.tgz#8014cea4fedfe681a30e2f7d2d557dd95808a92a"
   integrity sha512-y3jRROutgpKdz5vzEhWM34TidDU8vkJppF8dszITeb1PQmSqV3DTxyV8G/lyO/DNvtE1YTedehmw9MPZsCBHxQ==
 
-camaro@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/camaro/-/camaro-6.1.0.tgz#d56694a19b54c257f3e020d3c1ee4822c8d11e97"
-  integrity sha512-Aa9q2fxR+9i90Z8BOH3JBt2TCa+JZbhaqj0Mmx4zsTUe8G1UyA4djLXjQimcp2+WByZWTYVEK7TPPzmdi7MObw==
+camaro@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/camaro/-/camaro-6.2.1.tgz#1e97d51310e5844f2ab5a6dccd7a1af2fbbd1591"
+  integrity sha512-VZw/bIe+17BMgnX5f6AT/UOJCBTNOQ7nX3m7Yk4zn+ILDmFfQ0o7k8tuNUxhInWHxBT70fuQ2AAkdlSLxp0S/Q==
   dependencies:
-    piscina "^2.1.0"
+    piscina "^3.2.0"
 
 camel-case@3.0.x:
   version "3.0.0"
@@ -9976,10 +9976,10 @@ pirates@^4.0.1:
   dependencies:
     node-modules-regexp "^1.0.0"
 
-piscina@^2.1.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/piscina/-/piscina-2.2.0.tgz#8fd5236f07aaa9676c4100a3e4d90b6b7aaabf4c"
-  integrity sha512-CQb0DfyTdC9FBIMYkVV/00fXRLKDjmWKA8S0N1zDg2JGEc5z3P9qHXtoq8OkJQ+vjCfXySkVonTNMqskMFOW/w==
+piscina@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/piscina/-/piscina-3.2.0.tgz#f5a1dde0c05567775690cccefe59d9223924d154"
+  integrity sha512-yn/jMdHRw+q2ZJhFhyqsmANcbF6V2QwmD84c6xRau+QpQOmtrBCoRGdvTfeuFDYXB5W2m6MfLkjkvQa9lUSmIA==
   dependencies:
     eventemitter-asyncresource "^1.0.0"
     hdr-histogram-js "^2.0.1"
