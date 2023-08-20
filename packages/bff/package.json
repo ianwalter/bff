@@ -59,7 +59,7 @@
     "@ianwalter/timer": "^2.0.2",
     "array-shuffle": "^3.0.0",
     "callsites": "^4.0.0",
-    "camaro": "^6.1.0",
+    "camaro": "^6.2.1",
     "common-tags": "^1.8.2",
     "esm-to-cjs": "^1.2.0",
     "expect": "^27.2.5",
