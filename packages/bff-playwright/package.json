@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@generates/logger": "^2.0.4",
-    "playwright": "^1.14.1"
+    "playwright": "^1.39.0"
   },
   "bff": {
     "plugins": [
